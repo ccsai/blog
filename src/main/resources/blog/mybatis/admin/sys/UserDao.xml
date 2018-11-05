@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenchuan.admin.sys.dao.UserDao">
+    <sql id="userObject">
+		u.user_id			AS userId,
+		u.login_name		AS loginName,
+		u.password			AS password,
+		u.phone				AS phone,
+		u.email				AS email,
+		u.last_login_time	AS lastLoginTime,
+		u.login_type		AS loginType,
+		u.status			AS status,
+		u.create_user		AS createUser,
+		u.create_time		AS createTime,
+		u.modify_user		AS modifyUser,
+		u.modify_time		AS modifyTime
+	</sql>
+
+    <!-- 根据条件查询用户 -->
+    <select id="findUserByLoginNameAndPassword" parameterType="com.chenchuan.admin.sys.vo.UserVo"
+            resultType="com.chenchuan.admin.sys.po.UserPo">
+        SELECT
+        <include refid="userObject"/>
+        FROM `user` AS u
+        <where>
+			<if test="loginName != null and loginName != ''">
+				AND u.login_name = #{loginName}
+			</if>
+			<if test="password != null and password != ''">
+				AND u.password = #{password}
+			</if>
+			<if test="loginType != null and loginType != ''">
+				AND u.login_type = #{loginType}
+			</if>
+			<if test="status != null and status != ''">
+				AND u.status = #{status}
+			</if>
+        </where>
+    </select>
+
+</mapper>

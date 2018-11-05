@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenchuan.admin.sys.dao.PermissionDao">
+    <sql id="permissionObject">
+		p.permission_id		AS permissionId,
+		p.permission_name	AS permissionName,
+		p.permission_des	AS permissionDes,
+		p.url				AS url,
+		p.menu_id			AS menuId,
+		p.create_user		AS createUser,
+		p.create_time		AS createTime,
+		p.modify_user		AS modifyUser,
+		p.modify_time		AS modifyTime
+	</sql>
+
+    <!-- 查询权限列表 -->
+    <select id="findPermissionsList" parameterType="com.chenchuan.admin.sys.vo.PermissionVo"
+            resultType="com.chenchuan.admin.sys.po.PermissionPo">
+        SELECT
+        <include refid="permissionObject"/>
+        FROM permission as p
+    </select>
+
+    <!-- 通过角色查询对应权限 -->
+    <select id="findPermissionsByRole" parameterType="com.chenchuan.admin.sys.vo.RoleVo"
+            resultType="com.chenchuan.admin.sys.po.PermissionPo">
+        SELECT
+        <include refid="permissionObject"/>
+        FROM permission AS p
+        LEFT JOIN role_permission_auth AS rpa
+        ON p.permission_id = rpa.permission_id
+        LEFT JOIN role AS r
+        ON rpa.role_id = r.role_id
+        <where>
+            r.role_id = #{roleId}
+        </where>
+    </select>
+</mapper>

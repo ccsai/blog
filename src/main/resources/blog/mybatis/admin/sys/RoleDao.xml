@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenchuan.admin.sys.dao.RoleDao">
+    <sql id="roleObject">
+		r.role_id			AS roleId,
+		r.role_name			AS roleName,
+		r.role_des			AS roleDes,
+		r.create_user		AS createUser,
+		r.create_time		AS createTime,
+		r.modify_user		AS modifyUser,
+		r.modify_time		AS modifyTime
+	</sql>
+
+    <!-- 根据用户查询角色 -->
+    <select id="findRolesByUser" parameterType="com.chenchuan.admin.sys.vo.UserVo"
+            resultType="com.chenchuan.admin.sys.po.RolePo">
+        SELECT
+        <include refid="roleObject"/>
+        FROM role AS r
+        LEFT JOIN user_role_auth AS ura
+        ON r.role_id = ura.role_id
+        LEFT JOIN `user` AS u
+        ON ura.user_id = u.user_id
+        <where>
+            u.login_name = #{loginName}
+        </where>
+    </select>
+</mapper>

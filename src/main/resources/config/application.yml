@@ -1,0 +1,24 @@
+spring:
+  ## 数据源配置
+  datasource:
+    url: jdbc:mysql://localhost:3307/chenchuan_blog
+    username: root
+    password: 123
+    driver-class-name: com.mysql.jdbc.Driver
+
+  ## freemarker配置
+  freemarker:
+    cache: false #是否允许缓存
+    charset: UTF-8 #模板编码
+    content-type: text/html #Content-Type value
+    expose-request-attributes: true #设置在与模板合并之前是否应该向模型添加所有请求属性
+    expose-session-attributes: true #设置在与模板合并之前是否应该将所有HttpSession属性添加到模型中
+    check-template-location: true #Check that the templates location exists
+    prefer-file-system-access: true #对于模板加载，更喜欢文件系统访问;文件系统访问允许热检测模板更改
+    suffix: .ftl #模板文件后缀
+    request-context-attribute: request #所有视图的RequestContext属性的名称
+
+
+mybatis:
+  ## mybatis扫描xml路径
+  mapper-locations: classpath:blog/mybatis/**/*.xml
