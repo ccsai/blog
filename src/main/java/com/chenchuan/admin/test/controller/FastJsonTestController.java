@@ -22,4 +22,5 @@ public class FastJsonTestController {
         System.out.println(userVo);
         return userVo;
     }
+
 }
