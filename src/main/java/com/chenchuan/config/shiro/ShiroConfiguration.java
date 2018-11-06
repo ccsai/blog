@@ -5,6 +5,7 @@ import com.chenchuan.admin.sys.service.PermissionService;
 import com.chenchuan.admin.sys.vo.PermissionVo;
 import com.chenchuan.common.shiro.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -96,6 +97,7 @@ public class ShiroConfiguration {
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(myShiroRealm());
+        securityManager.setCacheManager(ehCacheManager());
         return securityManager;
     }
 
@@ -113,6 +115,18 @@ public class ShiroConfiguration {
         //散列次数
         hashedCredentialsMatcher.setHashIterations(securityConfig.getHashIterations());
         return hashedCredentialsMatcher;
+    }
+
+    /**
+     * shiro缓存管理器
+     *
+     * @return
+     */
+    @Bean
+    public EhCacheManager ehCacheManager() {
+        EhCacheManager ehCacheManager = new EhCacheManager();
+        ehCacheManager.setCacheManagerConfigFile("classpath:config/ehcache-shiro.xml");
+        return ehCacheManager;
     }
 
     /**

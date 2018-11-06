@@ -16,8 +16,8 @@ public class RoleController extends BaseController {
 
     @GetMapping("/index")
     @ResponseBody
-    public void index() {
-        System.out.println("角色主頁");
+    public String index() {
+        return "角色首页";
     }
 
     @GetMapping("/roleList")

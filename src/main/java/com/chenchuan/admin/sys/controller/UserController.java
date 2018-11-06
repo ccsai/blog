@@ -19,8 +19,8 @@ public class UserController extends BaseController {
 
     @GetMapping("/userList")
     @ResponseBody
-    public void userList() {
-        System.out.println("用户列表");
+    public String userList() {
+        return "用户列表";
     }
 
     @PostMapping("/addUser")

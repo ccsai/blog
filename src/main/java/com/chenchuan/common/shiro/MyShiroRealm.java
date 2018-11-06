@@ -7,6 +7,7 @@ import com.chenchuan.admin.sys.po.UserPo;
 import com.chenchuan.admin.sys.service.RoleService;
 import com.chenchuan.admin.sys.vo.UserVo;
 import com.chenchuan.config.shiro.SecurityConfig;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -17,6 +18,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.List;
 
@@ -26,12 +28,15 @@ import java.util.List;
 public class MyShiroRealm extends AuthorizingRealm {
 
     @Autowired
+    @Lazy
     private UserDao userDao;
 
     @Autowired
+    @Lazy
     private RoleService roleService;
 
     @Autowired
+    @Lazy
     private SecurityConfig securityConfig;
 
 
@@ -79,6 +84,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         String loginName = (String) authenticationToken.getPrincipal();
         UserVo userVo = new UserVo();
         userVo.setLoginName(loginName);
+        userVo.setStatus(1);
         UserPo userPo = userDao.findUserByLoginNameAndPassword(userVo);
 
         //如果没有用户
@@ -92,5 +98,12 @@ public class MyShiroRealm extends AuthorizingRealm {
                 ByteSource.Util.bytes(loginName + securityConfig.getSaltSuffix()),
                 getName()
         );
+    }
+
+    /**
+     * 清理权限缓存
+     */
+    public void clearCachedAuthorizationInfo() {
+        clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
     }
 }
