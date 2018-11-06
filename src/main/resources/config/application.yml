@@ -22,3 +22,14 @@ spring:
 mybatis:
   ## mybatis扫描xml路径
   mapper-locations: classpath:blog/mybatis/**/*.xml
+
+
+## 安全配置
+security:
+  hash_algorithm_name: md5 #加密方式
+  hash_iterations: 10 #加密散列次数
+  salt_suffix: salt #盐加的后缀
+  #游客可访问的路径
+  anon_url_path: /css/**,/img/**,/js/**,/plugin/**,/admin/guest/login/index,/guest/**,/login,/logOut
+
+

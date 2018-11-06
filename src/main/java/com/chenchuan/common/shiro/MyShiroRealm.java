@@ -6,6 +6,7 @@ import com.chenchuan.admin.sys.po.RolePo;
 import com.chenchuan.admin.sys.po.UserPo;
 import com.chenchuan.admin.sys.service.RoleService;
 import com.chenchuan.admin.sys.vo.UserVo;
+import com.chenchuan.config.shiro.SecurityConfig;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -14,6 +15,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -28,6 +30,9 @@ public class MyShiroRealm extends AuthorizingRealm {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private SecurityConfig securityConfig;
 
 
     /**
@@ -81,6 +86,11 @@ public class MyShiroRealm extends AuthorizingRealm {
             return null;
         }
 
-        return new SimpleAuthenticationInfo(userPo, userPo.getPassword(), getName());
+        return new SimpleAuthenticationInfo(
+                userPo,
+                userPo.getPassword(),
+                ByteSource.Util.bytes(loginName + securityConfig.getSaltSuffix()),
+                getName()
+        );
     }
 }

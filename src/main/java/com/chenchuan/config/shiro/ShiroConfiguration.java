@@ -4,11 +4,13 @@ import com.chenchuan.admin.sys.po.PermissionPo;
 import com.chenchuan.admin.sys.service.PermissionService;
 import com.chenchuan.admin.sys.vo.PermissionVo;
 import com.chenchuan.common.shiro.MyShiroRealm;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,11 +24,20 @@ import java.util.Map;
 @Configuration
 public class ShiroConfiguration {
 
-//    @Autowired(required = false)
-//    private PermissionService permissionService;
+    @Autowired
+    private SecurityConfig securityConfig;
 
+
+    /**
+     * shiro过滤链
+     *
+     * @param securityManager
+     * @param permissionService
+     * @param securityConfig    安全配置
+     * @return
+     */
     @Bean
-    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager, PermissionService permissionService) {
+    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager, PermissionService permissionService, SecurityConfig securityConfig) {
         //定义shiroFactoryBean
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         //设置securityManager
@@ -42,13 +53,11 @@ public class ShiroConfiguration {
         //顺序拦截器配置,LinkedHashMap是有序的
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         //anon:所有url都都可以匿名访问
-        filterChainDefinitionMap.put("/admin/guest/login/index", "anon");
-        filterChainDefinitionMap.put("/login", "anon");
-        filterChainDefinitionMap.put("/guest/**", "anon");
-        filterChainDefinitionMap.put("/css/**", "anon");
-        filterChainDefinitionMap.put("/img/**", "anon");
-        filterChainDefinitionMap.put("/js/**", "anon");
-        filterChainDefinitionMap.put("/plugin/**", "anon");
+        //获取匿名访问地址数组
+        String[] annoUrlPathArray = securityConfig.getAnonUrlPath();
+        for (String annoUrlPath : annoUrlPathArray) {
+            filterChainDefinitionMap.put(annoUrlPath, "anon");
+        }
         //配置url访问权限
         //获取所有权限
         List<PermissionPo> permissionList = permissionService.findPermissionsList(new PermissionVo());
@@ -72,7 +81,10 @@ public class ShiroConfiguration {
      */
     @Bean
     public MyShiroRealm myShiroRealm() {
-        return new MyShiroRealm();
+        MyShiroRealm myShiroRealm = new MyShiroRealm();
+        //加密
+        myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher(securityConfig));
+        return myShiroRealm;
     }
 
     /**
@@ -85,6 +97,22 @@ public class ShiroConfiguration {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(myShiroRealm());
         return securityManager;
+    }
+
+    /**
+     * 凭证匹配器（SimpleAuthenticationInfo处理）
+     *
+     * @param securityConfig 安全配置
+     * @return
+     */
+    @Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcher(SecurityConfig securityConfig) {
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+        //加密方式
+        hashedCredentialsMatcher.setHashAlgorithmName(securityConfig.getHashAlgorithmName());
+        //散列次数
+        hashedCredentialsMatcher.setHashIterations(securityConfig.getHashIterations());
+        return hashedCredentialsMatcher;
     }
 
     /**
