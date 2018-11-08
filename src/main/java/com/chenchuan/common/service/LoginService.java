@@ -12,7 +12,7 @@ public interface LoginService {
      *
      * @return 登录是否成功
      */
-    String login(UserVo userVo);
+    void login(UserVo userVo);
 
     /**
      * 登出

@@ -1,0 +1,10 @@
+<!DOCTYPE>
+<html>
+<head>
+    <meta>
+    <title>异常访问</title>
+</head>
+<body>
+<h1>${notice}</h1>
+</body>
+</html>

@@ -14,14 +14,13 @@ import org.springframework.stereotype.Service;
 public class LoginServiceImpl implements LoginService {
 
     @Override
-    public String login(UserVo userVo) {
+    public void login(UserVo userVo) {
         //添加用户认证信息
         Subject subject = SecurityUtils.getSubject();
         //收集用户登录凭证
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userVo.getLoginName(), userVo.getPassword());
         //认证
         subject.login(usernamePasswordToken);
-        return "success";
     }
 
     @Override
