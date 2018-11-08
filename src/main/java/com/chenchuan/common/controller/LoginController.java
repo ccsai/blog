@@ -49,10 +49,15 @@ public class LoginController extends BaseController {
 
     /**
      * 登出
+     *
+     * @return 登录成功标识
      */
     @GetMapping("/logOut")
     @ResponseBody
-    public void logOut() {
+    public Map<String, Object> logOut() {
+        Map<String, Object> resultMap = new HashMap<>();
         loginService.logOut();
+        resultMap.put("resultCode", 1);
+        return resultMap;
     }
 }

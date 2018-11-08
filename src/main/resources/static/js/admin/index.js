@@ -32,8 +32,8 @@ $(function () {
      */
     $(document).on('click', '#logOutBtn', function () {
         $.get('/logOut', function (result) {
-            if (!result) {
-
+            if (result.resultCode == 1) {
+                window.location.href = '/admin/guest/login/index';
             } else if (result.resultCode == -1) {
                 $.messager.alert('注销提示', '登录失败，请稍后重试或联系管理员！', 'warning');
             }
