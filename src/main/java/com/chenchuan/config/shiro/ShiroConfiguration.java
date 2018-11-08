@@ -46,8 +46,6 @@ public class ShiroConfiguration {
 
         //如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/admin/guest/login/index");
-        //登录成功后要跳转的链接
-        shiroFilterFactoryBean.setSuccessUrl("/admin/index");//------删除，项目不打算用
         //未授权界面
         shiroFilterFactoryBean.setUnauthorizedUrl("/common/index");
 

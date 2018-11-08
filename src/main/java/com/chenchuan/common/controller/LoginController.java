@@ -28,7 +28,7 @@ public class LoginController extends BaseController {
      * 登录
      *
      * @param userVo
-     * @return
+     * @return 登录结果
      */
     @PostMapping("login")
     @ResponseBody
@@ -47,8 +47,12 @@ public class LoginController extends BaseController {
         return resultMap;
     }
 
+    /**
+     * 登出
+     */
     @GetMapping("/logOut")
-    public String logOut() {
-        return loginService.logOut();
+    @ResponseBody
+    public void logOut() {
+        loginService.logOut();
     }
 }

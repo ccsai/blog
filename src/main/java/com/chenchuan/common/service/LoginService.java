@@ -16,8 +16,6 @@ public interface LoginService {
 
     /**
      * 登出
-     *
-     * @return
      */
-    String logOut();
+    void logOut();
 }

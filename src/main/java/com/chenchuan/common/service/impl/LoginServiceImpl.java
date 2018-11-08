@@ -24,11 +24,10 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String logOut() {
+    public void logOut() {
         Subject subject = SecurityUtils.getSubject();
         //登出
         subject.logout();
-        return "已退出";
     }
 
 

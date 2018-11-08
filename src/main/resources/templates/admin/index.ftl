@@ -19,9 +19,9 @@
     <div data-options="region:'center'"
          style="background: rgb(149, 184, 231);display: table-cell;vertical-align: middle">
         <div style="float: right;padding: 0 50px;vertical-align: center">
-            欢迎你【XXX】&nbsp;&nbsp;&nbsp;
+            欢迎你【<@shiro.principal property="loginName" />】&nbsp;&nbsp;&nbsp;
             <div id="loginOutIcon" style="float: right">
-                <a id="dd" href="javascript:void(0)">
+                <a id="tips" href="javascript:void(0)">
                     <img src="${basePath}/plugin/easyui/themes/icons/more.png">
                 </a>
             </div>
