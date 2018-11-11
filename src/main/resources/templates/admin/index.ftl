@@ -34,14 +34,7 @@
 
 <#-- 目录 -->
 <div id="navMenu" data-options="region:'west',split:true,title:'菜单导航'" style="width: 200px">
-    <div id="aa" class="easyui-accordion" data-options="fit:true">
-        <div data-options="title:'模块一'" style="height: 100%">
-            <ul id="tree"></ul>
-        </div>
-        <div data-options="title:'模块二'" style="height: 100%">
-            树
-        </div>
-    </div>
+    <div id="menuAccordion" class="easyui-accordion" data-options="fit:true"></div>
 </div>
 
 <#-- 主体 -->

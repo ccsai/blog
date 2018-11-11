@@ -3,7 +3,6 @@
 <head>
     <meta>
      <#include '../../depend/_head.ftl'>
-    <script src="${basePath}/js/common/allmayneed/Utils.js"></script>
     <script src="${basePath}/js/admin/guest/login/index.js"></script>
     <title>系統后台登录</title>
 </head>

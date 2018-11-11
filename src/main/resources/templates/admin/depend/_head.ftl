@@ -10,3 +10,5 @@
 <script src="${basePath!}/plugin/easyui/jquery.easyui.min.js"></script>
 <#-- jQuery easyui中文包文件 -->
 <script src="${basePath!}/plugin/easyui/locale/easyui-lang-zh_CN.js"></script>
+<#-- 表单序列化成json对象 -->
+<script src="${basePath}/plugin/jquery/jquery.serializejson.min.js"></script>

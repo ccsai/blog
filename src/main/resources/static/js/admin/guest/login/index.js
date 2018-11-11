@@ -7,7 +7,7 @@ $(function () {
         $.ajax({
             url: '/login',
             type: 'post',
-            data: Utils.serializeFormObject($('#loginForm')),
+            data: $('#loginForm').serializeJSON(),
             success: function (result) {
                 if (result.resultCode == 1) {
                     //登录成功

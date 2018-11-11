@@ -23,12 +23,12 @@ public class HomeTest1 {
         System.out.println("shiroTest1");
     }
 
-    @GetMapping("md5Test")
+    @GetMapping("/md5Test")
     @ResponseBody
     public void md5() {
         SimpleHash simpleHash = HashedUtil.getSimpleHash("admin", "111111", securityConfig.getHashAlgorithmName(), securityConfig.getHashIterations());
         SimpleHash b = HashedUtil.getSimpleHash("userTest", "333333", securityConfig.getHashAlgorithmName(), securityConfig.getHashIterations());
-        System.out.println(simpleHash);
-        System.out.println(b);
+        SimpleHash c = HashedUtil.getSimpleHash("frontTest", "000000", securityConfig.getHashAlgorithmName(), securityConfig.getHashIterations());
+        System.out.println(c);
     }
 }

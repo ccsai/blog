@@ -1,10 +1,68 @@
 $(function () {
 
+    //首页组件加载
+    $.ajax({
+        url: '/admin/loadIndexPageData',
+        type: 'get',
+        success: function (result) {
+            if (result.resultCode == -1) {
+                $.messager.alert('错误提示', '首页组件加载出错，请稍后重试或联系管理员！', 'error');
+                return false;
+            }
+            //菜单树
+            var menuTree = result.menuTree;
+            if (!(menuTree && menuTree.length == 0)) {
+                $.each(menuTree, function (index, topMenu) {
+                    //添加顶级菜单面板
+                    $('#menuAccordion').accordion('add', {
+                        title: topMenu.menuName,
+                        content: "<ul id='" + topMenu.menuId + "ChildrenMenu'></ul>"
+                    });
+                    if (topMenu.children.length > 0) {
+                        //加载二级及以下菜单树
+                        $('#' + topMenu.menuId + 'ChildrenMenu').tree({
+                            data: topMenu.children,
+                            onSelect: function (node) {
+                                //如果是叶子菜单页面主体弹出tab
+                                if ($(this).tree('isLeaf', node.target)) {
+                                    //如果对应tab已经存在于主体就打开对应tab；否则在主体添加tab
+                                    if ($('#contentTabs').tabs('exists', node.text)) {
+                                        $('#contentTabs').tabs('select', node.text);
+                                    } else {
+                                        $('#contentTabs').tabs('add', {
+                                            title: node.text,
+                                            href: node.url,
+                                            closable: true,
+                                            tools: [{
+                                                iconCls: 'icon-reload',
+                                                handler: function () {
+                                                    //刷新当前打开tab
+                                                    var curTab = $('#contentTabs').tabs('getSelected');
+                                                    curTab.panel('refresh')
+                                                },
+                                            }]
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+                //顶级菜单滑块第一个默认选中打开
+                $('#menuAccordion').accordion('select', 0);
+            }
+        },
+        error: function () {
+            $.messager.alert('错误提示', '首页组件加载出错，请稍后重试或联系管理员！', 'error');
+        }
+    });
+
     /**
      * 首页头部提示悬浮框
      */
     $('#tips').tooltip({
         content: '<a id="logOutBtn" href="javascript:void(0)" style="color: black;text-decoration-line: none " >[注销]</a>',
+        //鼠标移开图标提示框不消失
         onShow: function () {
             var t = $(this);
             t.tooltip('tip').unbind().bind('mouseenter', function () {
@@ -35,51 +93,8 @@ $(function () {
             if (result.resultCode == 1) {
                 window.location.href = '/admin/guest/login/index';
             } else if (result.resultCode == -1) {
-                $.messager.alert('注销提示', '登录失败，请稍后重试或联系管理员！', 'warning');
+                $.messager.alert('注销提示', '登录失败，请稍后重试或联系管理员！', 'error');
             }
         });
-    });
-
-
-    $('#tree').tree({
-        data: [{
-            "id": 1,
-            "text": "Node 1",
-            "state": "closed",
-            "children": [{
-                "id": 11,
-                "text": "跳转",
-                "href": "/getVisitedSuccessNum"
-            }, {
-                "id": 12,
-                "text": "Node 12"
-            }]
-        }, {
-            "id": 2,
-            "text": "Node 2",
-            "state": "closed"
-        }],
-        onSelect: function (node) {
-            if ($(this).tree('isLeaf', node.target)) {
-                if ($('#contentTabs').tabs('exists', node.text)) {
-                    $('#contentTabs').tabs('select', node.text);
-                } else {
-                    $('#contentTabs').tabs('add', {
-                        title: node.text,
-                        href: node.href,
-                        closable: true,
-                        //toolPosition:'left',//始终不生效
-                        tools: [{
-                            iconCls: 'icon-reload',
-                            handler: function () {
-                                var curTab = $('#contentTabs').tabs('getSelected');
-                                curTab.panel('refresh')
-                            },
-                        }]
-                    });
-                }
-            }
-        }
-
     });
 });
