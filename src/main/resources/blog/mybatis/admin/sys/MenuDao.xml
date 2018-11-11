@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenchuan.admin.sys.dao.MenuDao">
+    <sql id="menuObject">
+		m.menu_id       AS menuId,
+		m.menu_name     AS menuName,
+		m.p_menu_id     AS pMenuId,
+		m.menu_des      AS menuDes,
+		m.sort_no       AS sortNo,
+		m.`status`      AS `status`,
+		m.create_user   AS createUser,
+		m.create_time   AS createTime,
+		m.modify_user   AS modifyUser,
+		m.modify_time   AS modifyTime
+	</sql>
+
+    <!-- 查询菜单树 -->
+    <select id="findMenuTreebyUser" parameterType="com.chenchuan.admin.sys.vo.UserVo"
+            resultType="com.chenchuan.admin.sys.vo.MenuVo">
+        SELECT
+        m.menu_id AS menuId,
+        m.menu_id AS id,
+        m.menu_name AS menuName,
+        m.menu_name AS text,
+        m.p_menu_id AS pMenuId,
+        p.url AS url,
+        IFNULL( children.childrenNumber, 0 ) AS childrenNumber
+        FROM menu AS m
+        LEFT JOIN (
+        SELECT
+        m1.p_menu_id AS pMenuId,
+        COUNT(DISTINCT rma1.menu_id) AS childrenNumber
+        FROM `user` AS u1
+        LEFT JOIN user_role_auth AS ura1
+        ON u1.user_id = ura1.user_id
+        LEFT JOIN role AS r1
+        ON r1.role_id = ura1.role_id
+        LEFT JOIN role_menu_auth AS rma1
+        ON rma1.role_id = r1.role_id
+        LEFT JOIN menu AS m1
+        ON rma1.menu_id = m1.menu_id AND m1.`status` = 1
+        <where>
+            <if test="loginName != null and loginName != ''">
+                u1.login_name = #{loginName}
+            </if>
+        </where>
+        GROUP BY m1.p_menu_id
+        ) AS children
+        ON m.menu_id = children.pMenuId AND m.`status` = 1
+        LEFT JOIN permission AS P
+        ON m.menu_id = p.menu_id AND p.url_type ='bm'
+        WHERE m.menu_id IN
+        (SELECT
+        DISTINCT rma.menu_id
+        FROM `user` AS u
+        LEFT JOIN user_role_auth AS ura
+        ON u.user_id = ura.user_id
+        LEFT JOIN role AS r
+        ON r.role_id = ura.role_id
+        LEFT JOIN role_menu_auth AS rma
+        ON rma.role_id = r.role_id
+        <where>
+            <if test="loginName != null and loginName != ''">
+                u.login_name = #{loginName}
+            </if>
+        </where>
+        )
+        ORDER BY m.sort_no
+    </select>
+</mapper>
