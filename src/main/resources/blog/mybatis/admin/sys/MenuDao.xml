@@ -14,7 +14,7 @@
 		m.modify_time   AS modifyTime
 	</sql>
 
-    <!-- 查询菜单树 -->
+    <!-- 根据用户查询菜单树 -->
     <select id="findMenuTreebyUser" parameterType="com.chenchuan.admin.sys.vo.UserVo"
             resultType="com.chenchuan.admin.sys.vo.MenuVo">
         SELECT
@@ -67,4 +67,80 @@
         )
         ORDER BY m.sort_no
     </select>
+
+    <!-- 查询所有菜单树 -->
+    <select id="findAllMenuTree" resultType="com.chenchuan.admin.sys.vo.MenuVo">
+        SELECT
+        <include refid="menuObject"/>,
+        m.menu_id AS id,
+        m.menu_name AS text,
+        IFNULL(children.childrenNumber,0) AS childrenNumber
+        FROM menu m
+        LEFT JOIN (
+        SELECT COUNT(m1.p_menu_id) AS childrenNumber,m1.p_menu_id AS pMenuId FROM menu m1 GROUP BY m1.p_menu_id
+        ) children
+        ON m.menu_id = children.pMenuId
+        ORDER BY m.sort_no
+    </select>
+
+    <!-- 添加菜单 -->
+    <insert id="addMenu" parameterType="com.chenchuan.admin.sys.vo.MenuVo">
+        INSERT INTO menu(
+          menu_id,
+          menu_name,
+          p_menu_id,
+          menu_des,
+          sort_no,
+          status,
+          create_user,
+          create_time,
+          modify_user,
+          modify_time
+        )VALUES (
+          #{menuId},
+          #{menuName},
+          #{pMenuId},
+          #{menuDes},
+          #{sortNo},
+          #{status},
+          #{createUser},
+          NOW(),
+          #{modifyUser},
+          NOW()
+        )
+    </insert>
+
+    <!-- 根据菜单编号查询菜单详情 -->
+    <select id="findMenuByMenuId" parameterType="String" resultType="com.chenchuan.admin.sys.po.MenuPo">
+        SELECT
+        <include refid="menuObject"/>
+        FROM menu m
+        WHERE m.menu_id = #{menuId}
+    </select>
+
+    <!-- 根据菜单编号修改菜单 -->
+    <update id="editMenuByMenuId" parameterType="com.chenchuan.admin.sys.vo.MenuVo">
+        UPDATE menu
+        <set>
+            <if test="menuName != null and menuName != ''">menu_name = #{menuName},</if>
+            <if test="pMenuId != null and pMenuId != ''">p_menu_id = #{pMenuId},</if>
+            <if test="menuDes != null and menuDes != ''">menu_des = #{menuDes},</if>
+            <if test="sortNo != null and sortNo != ''">sort_no = #{sortNo},</if>
+            <if test="status == 0 or (status != null and status != '')">status = #{status},</if>
+            <if test="modifyUser != null and modifyUser != ''">modify_user = #{modifyUser},</if>
+            modify_time = NOW()
+        </set>
+        WHERE menu_id = #{menuId}
+    </update>
+
+    <!-- 查看当前菜单子菜单数量 -->
+    <select id="findChildrenMenuByMenuId" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) FROM menu m LEFT JOIN menu m1 ON m.p_menu_id = m1.menu_id
+        WHERE m1.menu_id = #{menuId}
+    </select>
+
+    <!-- 根据菜单编号删除菜单 -->
+    <delete id="removeMenuByMenuId" parameterType="String">
+        DELETE FROM menu WHERE menu_id = #{menuId}
+    </delete>
 </mapper>

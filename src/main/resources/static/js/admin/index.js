@@ -74,16 +74,9 @@ $(function () {
     });
 
     /**
-     * 首页菜单伸缩是主体宽度自适应
+     * 隐藏导航菜单伸缩按钮
      */
-    $(document.body).layout({
-        onCollapse: function () {
-            $('#contentTabs').tabs({width: 'auto'});
-        },
-        onExpand: function () {
-            $('#contentTabs').tabs({width: 'auto'});
-        }
-    });
+    $(document.body).layout('setRegionToolVisableState', {region: 'west', visible: false});
 
     /**
      * 登出操作
@@ -97,4 +90,31 @@ $(function () {
             }
         });
     });
+});
+
+/**
+ * layout扩展方法
+ */
+$.extend($.fn.layout.methods, {
+    /**
+     * 设置region的收缩按钮是否可见
+     * @param {[type]} jq     [description]
+     * @param {[type]} params [description]
+     */
+    setRegionToolVisableState: function (jq, params) {//就是调用这个方法，其他方法也可以删掉
+        return jq.each(function () {
+            if (params.region == "center")
+                return;
+            var panels = $.data(this, 'layout').panels;
+            var panel = panels[params.region];
+            var tool = panel.panel('header').find('>div.panel-tool');
+            tool.css({display: params.visible ? 'block' : 'none'});
+            var first = params.region.substring(0, 1);
+            var others = params.region.substring(1);
+            var expand = 'expand' + first.toUpperCase() + others;
+            if (panels[expand]) {
+                panels[expand].panel('header').find('>div.panel-tool').css({display: params.visible ? 'block' : 'none'});
+            }
+        });
+    }
 });

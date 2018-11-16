@@ -1,5 +1,4 @@
-<#-- 项目根目录 -->
-<#assign basePath=request.contextPath>
+<#include '_base.ftl'/>
 <#-- JQuery easyui默认css样式 -->
 <link href="${basePath!}/plugin/easyui/themes/default/easyui.css" type="text/css" rel="stylesheet"/>
 <#-- JQuery easyui -->

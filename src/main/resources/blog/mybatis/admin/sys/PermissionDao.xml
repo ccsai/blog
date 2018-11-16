@@ -35,4 +35,11 @@
             r.role_id = #{roleId}
         </where>
     </select>
+
+    <!-- 根据菜单查询对应菜单权限数量 -->
+    <select id="findPermissionNumberByMemu" parameterType="String" resultType="Integer">
+      SELECT COUNT(*) FROM permission p LEFT JOIN menu m ON m.menu_id = p.menu_id
+      WHERE m.menu_id = #{menuId}
+    </select>
+
 </mapper>

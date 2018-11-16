@@ -53,7 +53,11 @@ public class SysTests {
         UserVo userVo = new UserVo();
         userVo.setLoginName("admin");
         userVo.setPassword("333333");
-        System.out.println(JSON.toJSONString(menuService.findMenuTreebyUser(userVo)));
+        MenuVo menuVo = new MenuVo();
+        menuVo.setMenuId("aaaaa");menuVo.setStatus(0);menuVo.setpMenuId("cc");menuVo.setMenuDes("descc");
+        menuVo.setSortNo(121);menuVo.setCreateUser("cccc");menuVo.setModifyUser("ccc");menuVo.setMenuName("ccc");
+        System.out.println(menuService.removeMenuByMenuId("aaaaa"));
+//        System.out.println(JSON.toJSONString(menuService.findMenuByMenuId("aaaaa")));
 //        RoleVo roleVo = new RoleVo();
 //        roleVo.setRoleId("726d177a-9674-4d5f-af9b-083a6e399c3e");
 //        System.out.println(JSON.toJSONString(roleService.findRolesPermissionsByUser(userVo)));

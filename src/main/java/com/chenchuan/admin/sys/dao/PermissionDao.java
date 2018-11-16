@@ -30,4 +30,12 @@ public interface PermissionDao {
      * @return 角色对应的权限集合
      */
     List<PermissionPo> findPermissionsByRole(RoleVo roleVo);
+
+    /**
+     * 根据菜单查询对应菜单权限数量
+     *
+     * @param menuId 菜单编号
+     * @return 对应菜单相关权限数量
+     */
+    int findPermissionNumberByMemu(String menuId);
 }

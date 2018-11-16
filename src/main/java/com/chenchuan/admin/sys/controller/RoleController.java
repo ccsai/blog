@@ -20,9 +20,9 @@ public class RoleController extends BaseController {
         return "角色首页";
     }
 
-    @GetMapping("/roleList")
+    @GetMapping("/findRoleList")
     @ResponseBody
-    public void roleList() {
+    public void findRoleList() {
         System.out.println("角色列表");
     }
 
@@ -32,21 +32,21 @@ public class RoleController extends BaseController {
         System.out.println("角色添加");
     }
 
-    @GetMapping("/findRoleByRoleId")
+    @GetMapping("/findRoleByRoleVo")
     @ResponseBody
-    public void findRoleByRoleId() {
+    public void findRoleByRoleVo() {
         System.out.println("角色详情");
     }
 
-    @PostMapping("/editRoleByRoleId")
+    @PostMapping("/editRoleByRoleVo")
     @ResponseBody
-    public void editRoleByRoleId() {
+    public void editRoleByRoleVo() {
         System.out.println("角色修改");
     }
 
-    @PostMapping("/removeRoleByRoleId")
+    @PostMapping("/removeRoleByRoleVo")
     @ResponseBody
-    public void removeRoleByRoleId() {
+    public void removeRoleByRoleVo() {
         System.out.println("角色删除");
     }
 }
