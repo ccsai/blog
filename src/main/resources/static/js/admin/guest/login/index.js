@@ -21,5 +21,14 @@ $(function () {
                 $('#loginFailMessageTd').text('请求出错，登录失败！');
             }
         });
-    })
+    });
+
+    /**
+     * 回车提交登录表单
+     */
+    $('#loginForm input').bind('keyup', function (event) {
+        if (event.keyCode == '13') {
+            $('#loginBtn').trigger('click');
+        }
+    });
 });

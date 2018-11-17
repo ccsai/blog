@@ -95,6 +95,15 @@ $(function () {
     });
 
     /**
+     * 回车提交菜单详情表单
+     */
+    $('#menuDetailForm input').bind('keyup', function (event) {
+        if (event.keyCode == '13') {
+            $('#menuDetailDlgToolBar .save-btn').trigger('click');
+        }
+    });
+
+    /**
      * 点击关闭菜单详情对话框
      */
     $(document).on('click', '#menuDetailDlgToolBar .cancel-btn', function () {
@@ -179,18 +188,4 @@ function removeMenuByMenuId(menuId) {
  */
 function formatterMenuTreegridMenuIsShow(value) {
     return value == 1 ? "是" : "否";
-}
-
-/**
- * 格式化菜单操作栏
- * @param val
- * @param row
- * @return {string}
- */
-function formatterMenuTreegridOper(value, row) {
-    var strArr = [];
-    strArr.push("<a href='javascript:void(0)' onclick='openMenuDetailDlgOfEdit(\"" + row.menuId + "\")'>修改</a>");
-    strArr.push("<a href='javascript:void(0)' onclick='openMenuDetailDlgOfDetail(\"" + row.menuId + "\")'>详情</a>");
-    strArr.push("<a href='javascript:void(0)' onclick='removeMenuByMenuId(\"" + row.menuId + "\")'>删除</a>");
-    return strArr.join(' ');
 }
