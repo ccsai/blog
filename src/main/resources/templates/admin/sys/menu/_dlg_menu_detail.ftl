@@ -30,7 +30,7 @@
             <tr>
                 <td>排序号</td>
                 <td>
-                    <input class="easyui-textbox" name="sortNo"/>
+                    <input class="easyui-textbox" name="sortNo" data-options="required:true,validType:'checkSortNo'"/>
                 </td>
             </tr>
             <tr>

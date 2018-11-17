@@ -54,7 +54,12 @@ public class MenuServiceImpl implements MenuService {
         String loginName = ((UserPo) SecurityUtils.getSubject().getPrincipal()).getLoginName();
         menuVo.setCreateUser(loginName);
         menuVo.setModifyUser(loginName);
-        return menuDao.addMenu(menuVo) > 0 ? 1 : -1;
+        //添加菜单
+        int result = menuDao.addMenu(menuVo);
+        if (result == 0) {
+            throw new BaseException("未添加菜单，请稍后重试或联系管理员！");
+        }
+        return result;
     }
 
     @Override
@@ -66,19 +71,29 @@ public class MenuServiceImpl implements MenuService {
     @Transactional
     public int editMenuByMenuId(MenuVo menuVo) {
         menuVo.setModifyUser(((UserPo) SecurityUtils.getSubject().getPrincipal()).getLoginName());
-        return menuDao.editMenuByMenuId(menuVo);
+        //修改菜单
+        int result = menuDao.editMenuByMenuId(menuVo);
+        if (result == 0) {
+            throw new BaseException("未修改菜单，请稍后重试或联系管理员！");
+        }
+        return result;
     }
 
     @Override
     @Transactional
     public int removeMenuByMenuId(String menuId) {
-        if (menuDao.findChildrenMenuByMenuId(menuId) > 0){
+        if (menuDao.findChildrenMenuByMenuId(menuId) > 0) {
             throw new BaseException("有子菜单不可删除！");
         }
-        if (permissionDao.findPermissionNumberByMemu(menuId) > 0){
+        if (permissionDao.findPermissionNumberByMemu(menuId) > 0) {
             throw new BaseException("该菜单和菜单下的功能已授权，不可删除！");
         }
-        return menuDao.removeMenuByMenuId(menuId) == 1 ? 1 : -1;
+        //删除菜单
+        int result = menuDao.removeMenuByMenuId(menuId);
+        if (result == 0) {
+            throw new BaseException("未删除菜单！");
+        }
+        return result;
     }
 
     /**

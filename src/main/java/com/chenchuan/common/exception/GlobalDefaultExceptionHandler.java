@@ -28,14 +28,24 @@ public class GlobalDefaultExceptionHandler {
         if (AjaxUtil.isAjax(request)) {
             //ajax请求异常处理
             Map<String, Object> map = new HashMap<>();
-            map.put("resultCode", -1);
+            if (e instanceof BaseException) {//自定义异常处理
+                map.put("resultCode", 0);
+                map.put("notice", e.getMessage());
+            } else {//系统异常处理
+                map.put("resultCode", -1);
+                map.put("notice", "服务器异常，请稍后重试或联系管理员！");
+            }
             map.put("message", e.getMessage());
             return map;
         } else {
             //web请求异常出处理
             ModelAndView modelAndView = new ModelAndView();
+            if (e instanceof BaseException) {//自定义异常处理
+                modelAndView.addObject("notice", e.getMessage());
+            } else {//系统异常处理
+                modelAndView.addObject("notice", "服务器异常，请稍后重试或联系管理员!");
+            }
             modelAndView.addObject("message", e.getMessage());
-            modelAndView.addObject("notice", "服务器繁忙!");
             modelAndView.setViewName("/common/exception/webRequestExceptionHandlerPage");
             return modelAndView;
         }

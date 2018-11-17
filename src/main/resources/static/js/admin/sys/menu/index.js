@@ -4,11 +4,14 @@ $(function () {
      */
     $('#menuTreegrid').treegrid({
         url: '/admin/sys/menu/findAllMenuTree',
+        method: 'get',
         loadFilter: function (data) {
             if (data.menuTree != null && data.resultCode == 1) {
                 return data.menuTree;
-            } else {
-                $.messager.alert('错误提示', '菜单列表出错，请稍后重试或联系管理员！', 'error');
+            } else if (data.menuTree != null && (data.resultCode == 0 || data.resultCode == -1)) {
+                $.messager.alert('错误提示', data.notice, 'error');
+            } else if (data.menuTree == null && data.menuTree.length == 0) {
+                return [];
             }
         }
     });
@@ -23,14 +26,19 @@ $(function () {
             //加载父级菜单选择下拉框
             $('#menuDetailFormPMenuId').combotree({
                 url: '/admin/sys/menu/findAllMenuTree',
+                method: 'get',
                 loadFilter: function (data) {
-                    var menuTree = data.menuTree;
-                    var root = [{
-                        id: 'root',
-                        text: '一级目录',
-                        children: menuTree
-                    }];
-                    return root;
+                    if (data.resultCode == 1) {
+                        var menuTree = data.menuTree;
+                        var root = [{
+                            id: 'root',
+                            text: '一级目录',
+                            children: menuTree
+                        }];
+                        return root;
+                    } else {
+                        $.messager.alert('错误提示', '父级菜单选择下拉列表加载出错！</br>' + data.notice, 'error');
+                    }
                 }
             });
         }
@@ -59,11 +67,11 @@ $(function () {
                 },
                 success: function (data) {
                     if (JSON.parse(data).resultCode == 1) {
-                        $.messager.alert('返回通知', '保存成功', 'info');
+                        $.messager.alert('消息通知', '保存成功', 'info');
                         $('#menuDetailDlg').dialog('close');
                         $('#menuTreegrid').treegrid('reload');
                     } else {
-                        $.messager.alert('错误提示', '保存失败，请稍后重试或联系管理员！', 'warning');
+                        $.messager.alert('错误提示', data.notice, 'error');
                     }
                 }
             });
@@ -75,11 +83,11 @@ $(function () {
                 },
                 success: function (data) {
                     if (JSON.parse(data).resultCode == 1) {
-                        $.messager.alert('返回通知', '保存成功', 'info');
+                        $.messager.alert('消息提示', '保存成功', 'info');
                         $('#menuDetailDlg').dialog('close');
                         $('#menuTreegrid').treegrid('reload');
-                    } else {
-                        $.messager.alert('错误提示', '保存失败，请稍后重试或联系管理员！', 'warning');
+                    } else if (JSON.parse(data).resultCode == 0) {
+                        $.messager.alert('错误提示', data.notice, 'error');
                     }
                 }
             });
@@ -129,7 +137,7 @@ function openMenuDetailDlg(menuId) {
                 //回显
                 $('#menuDetailForm').form('load', data.menuDetail);
             } else {
-                $.messager.alert('错误提示', '获取菜单详情失败，请稍后重试或联系管理员！', 'error');
+                $.messager.alert('错误提示', '获取菜单详情失败！</br>' + data.notice, 'error');
             }
         },
         error: function () {
@@ -143,19 +151,23 @@ function openMenuDetailDlg(menuId) {
  * @param menuId
  */
 function removeMenuByMenuId(menuId) {
-    $.ajax({
-        url: '/admin/sys/menu/removeMenuByMenuId',
-        type: 'post',
-        data: {menuId: menuId},
-        success: function (data) {
-            if (data.resultCode == 1) {
-                $('#menuTreegrid').treegrid('reload');
-            } else {
-                $.messager.alert('错误提示', data.message, 'error');
-            }
-        },
-        error: function () {
-            $.messager.alert('错误提示', '删除菜单失败，请稍后重试或联系管理员！', 'error');
+    $.messager.confirm('删除提示', '确认删除？', function (r) {
+        if (r) {
+            $.ajax({
+                url: '/admin/sys/menu/removeMenuByMenuId',
+                type: 'post',
+                data: {menuId: menuId},
+                success: function (data) {
+                    if (data.resultCode == 1) {
+                        $('#menuTreegrid').treegrid('reload');
+                    } else {
+                        $.messager.alert('错误提示', data.notice, 'error');
+                    }
+                },
+                error: function () {
+                    $.messager.alert('错误提示', '删除菜单失败，请稍后重试或联系管理员！', 'error');
+                }
+            });
         }
     });
 }

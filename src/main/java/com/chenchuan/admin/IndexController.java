@@ -40,6 +40,7 @@ public class IndexController extends BaseController {
     public Map<String, Object> loadIndexPageData() {
         //页面所需组件和数据
         Map<String, Object> map = indexService.loadIndexPageData();
+        map.put("resultCode", 1);
         return map;
     }
 }

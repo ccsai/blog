@@ -47,7 +47,7 @@
         GROUP BY m1.p_menu_id
         ) AS children
         ON m.menu_id = children.pMenuId AND m.`status` = 1
-        LEFT JOIN permission AS P
+        LEFT JOIN permission AS p
         ON m.menu_id = p.menu_id AND p.url_type ='bm'
         WHERE m.menu_id IN
         (SELECT

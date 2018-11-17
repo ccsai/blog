@@ -30,7 +30,7 @@ public class MenuController extends BaseController {
      *
      * @return 菜单树
      */
-    @PostMapping("/findAllMenuTree")
+    @GetMapping("/findAllMenuTree")
     @ResponseBody
     public Map<String, Object> findAllMenuTree() {
         Map<String, Object> map = new HashMap<>();

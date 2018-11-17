@@ -14,7 +14,7 @@ $(function () {
                     window.location.href = '/admin/index'
                 } else {
                     //登录失败
-                    $('#loginFailMessageTd').text(result.message);
+                    $('#loginFailMessageTd').text(result.notice);
                 }
             },
             error: function () {

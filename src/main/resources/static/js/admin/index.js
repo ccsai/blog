@@ -5,8 +5,8 @@ $(function () {
         url: '/admin/loadIndexPageData',
         type: 'get',
         success: function (result) {
-            if (result.resultCode == -1) {
-                $.messager.alert('错误提示', '首页组件加载出错，请稍后重试或联系管理员！', 'error');
+            if (result.resultCode != 1) {
+                $.messager.alert('错误提示', '首页组件加载失败！</br>' + result.notice, 'error');
                 return false;
             }
             //菜单树
@@ -53,7 +53,7 @@ $(function () {
             }
         },
         error: function () {
-            $.messager.alert('错误提示', '首页组件加载出错，请稍后重试或联系管理员！', 'error');
+            $.messager.alert('错误提示', '首页组件加载出错！</br>' + result.notice, 'error');
         }
     });
 
@@ -85,8 +85,8 @@ $(function () {
         $.get('/logOut', function (result) {
             if (result.resultCode == 1) {
                 window.location.href = '/admin/guest/login/index';
-            } else if (result.resultCode == -1) {
-                $.messager.alert('注销提示', '登录失败，请稍后重试或联系管理员！', 'error');
+            } else {
+                $.messager.alert('错误提示', '注销失败！</br>' + result.notice, 'error');
             }
         });
     });
@@ -116,5 +116,18 @@ $.extend($.fn.layout.methods, {
                 panels[expand].panel('header').find('>div.panel-tool').css({display: params.visible ? 'block' : 'none'});
             }
         });
+    }
+});
+
+/**
+ * 表单控件验证框验证
+ */
+$.extend($.fn.validatebox.defaults.rules, {
+    checkSortNo: {
+        validator: function (value) {
+            var reg = /^\d+$/;
+            return reg.test(value);
+        },
+        message: '请填写整数'
     }
 });
