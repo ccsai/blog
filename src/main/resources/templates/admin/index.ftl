@@ -4,7 +4,6 @@
     <meta>
     <title>系統管理</title>
     <#include 'depend/_head.ftl'>
-    <link href="${basePath}/css/admin/index.css" rel="stylesheet" type="text/css">
     <script src="${basePath}/js/admin/index.js"></script>
 </head>
 <body class="easyui-layout">
@@ -38,7 +37,7 @@
 </div>
 
 <#-- 主体 -->
-<div id="contentTabs" class="easyui-tabs" data-options="region:'center',animate:true,tabWidth:'auto'"
+<div id="contentTabs" class="easyui-tabs" data-options="region:'center',animate:true,cache:false,tabWidth:'auto'"
      style="border: none">
     <div title="Tab1">
         hellow

@@ -6,6 +6,7 @@
 		p.permission_name	AS permissionName,
 		p.permission_des	AS permissionDes,
 		p.url				AS url,
+		p.url_type          AS urlType,
 		p.menu_id			AS menuId,
 		p.create_user		AS createUser,
 		p.create_time		AS createTime,
@@ -13,12 +14,33 @@
 		p.modify_time		AS modifyTime
 	</sql>
 
-    <!-- 查询权限列表 -->
-    <select id="findPermissionsList" parameterType="com.chenchuan.admin.sys.vo.PermissionVo"
-            resultType="com.chenchuan.admin.sys.po.PermissionPo">
+    <!-- 查询所有权限（用于配置） -->
+    <select id="findAllPermissions" resultType="com.chenchuan.admin.sys.po.PermissionPo">
         SELECT
         <include refid="permissionObject"/>
-        FROM permission as p
+        FROM permission p
+    </select>
+
+    <!-- 查询权限列表 -->
+    <select id="findPermissionsList" parameterType="com.chenchuan.admin.sys.vo.PermissionVo"
+            resultType="com.chenchuan.admin.sys.vo.PermissionVo">
+        SELECT
+        <include refid="permissionObject"/>,
+        m.menu_name AS menuName
+        FROM permission p
+        LEFT JOIN menu m
+        ON p.menu_id = m.menu_id
+        <where>
+            <if test="menuId != null and menuId != ''">
+                AND p.menu_id = #{menuId}
+            </if>
+            <if test="keyWord != null and keyWord != ''">
+                AND (p.permission_name LIKE '%${keyWord}%'
+                OR p.url LIKE '%${keyWord}%'
+                OR p.url_type LIKE '%${keyWord}%')
+            </if>
+        </where>
+        ORDER BY p.url,p.url_type
     </select>
 
     <!-- 通过角色查询对应权限 -->
@@ -42,4 +64,64 @@
       WHERE m.menu_id = #{menuId}
     </select>
 
+    <!-- 添加权限 -->
+    <insert id="addPermission" parameterType="com.chenchuan.admin.sys.vo.PermissionVo">
+        INSERT INTO permission(
+          permission_id,
+          permission_name,
+          permission_des,
+          url,
+          url_type,
+          menu_id,
+          create_user,
+          create_time,
+          modify_user,
+          modify_time
+        )VALUES (
+          #{permissionId},
+          #{permissionName},
+          #{permissionDes},
+          #{url},
+          #{urlType},
+          #{menuId},
+          #{createUser},
+          NOW(),
+          #{modifyUser},
+          NOW()
+        )
+    </insert>
+
+    <!-- 根据权限编号查看权限详情 -->
+    <select id="findPermissionByPermissionId" parameterType="String"
+            resultType="com.chenchuan.admin.sys.po.PermissionPo">
+        SELECT
+        <include refid="permissionObject"/>
+        FROM permission p
+        WHERE p.permission_id = #{permissionId}
+    </select>
+
+    <!-- 根据权限编号修改权限 -->
+    <update id="editPermissionByPermissionId" parameterType="com.chenchuan.admin.sys.vo.PermissionVo">
+        UPDATE permission
+        <set>
+            <if test="permissionName != null and permissionName!= ''">permission_name = #{permissionName},</if>
+            <if test="permissionDes != null and permissionDes != ''">permission_des = #{permissionDes},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+            <if test="urlType != null and urlType != ''">url_type = #{urlType},</if>
+            <if test="menuId != null and menuId != ''">menu_id = #{menuId},</if>
+            <if test="modifyUser != null and modifyUser != ''">modify_user = #{modifyUser},</if>
+            modify_time = #{modifyTime}
+        </set>
+        WHERE permission_id = #{permissionId}
+    </update>
+
+    <!-- 根据权限编号删除权限 -->
+    <delete id="removePermissionByPermissionId" parameterType="String">
+        DELETE FROM permission WHERE permission_id = #{permissionId}
+    </delete>
+
+    <!-- 根据权限编号删除角色和权限关联表 -->
+    <delete id="removeRolePermissionAuthByPermissionId" parameterType="String">
+        DELETE FROM role_permission_auth WHERE permission_id = #{permissionId}
+    </delete>
 </mapper>

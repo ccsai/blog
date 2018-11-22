@@ -69,4 +69,12 @@ public interface MenuDao {
      * @return 影响行数
      */
     int removeMenuByMenuId(String menuId);
+
+    /**
+     * 根据菜单编号删除角色菜单关联
+     *
+     * @param menuId 菜单编号
+     * @return 影响行数
+     */
+    int removeRoleMenuAuthByMenuId(String menuId);
 }

@@ -93,6 +93,8 @@ public class MenuServiceImpl implements MenuService {
         if (result == 0) {
             throw new BaseException("未删除菜单！");
         }
+        //删除菜单角色关联
+        menuDao.removeRoleMenuAuthByMenuId(menuId);
         return result;
     }
 

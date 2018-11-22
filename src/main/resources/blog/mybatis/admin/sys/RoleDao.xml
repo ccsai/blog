@@ -5,6 +5,7 @@
 		r.role_id			AS roleId,
 		r.role_name			AS roleName,
 		r.role_des			AS roleDes,
+		r.role_type         AS roleType,
 		r.create_user		AS createUser,
 		r.create_time		AS createTime,
 		r.modify_user		AS modifyUser,

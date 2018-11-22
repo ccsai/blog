@@ -1,8 +1,7 @@
 package com.chenchuan.config.shiro;
 
+import com.chenchuan.admin.sys.dao.PermissionDao;
 import com.chenchuan.admin.sys.po.PermissionPo;
-import com.chenchuan.admin.sys.service.PermissionService;
-import com.chenchuan.admin.sys.vo.PermissionVo;
 import com.chenchuan.common.shiro.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
@@ -33,12 +32,12 @@ public class ShiroConfiguration {
      * shiro过滤链
      *
      * @param securityManager
-     * @param permissionService
-     * @param securityConfig    安全配置
+     * @param permissionDao
+     * @param securityConfig  安全配置
      * @return
      */
     @Bean
-    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager, PermissionService permissionService, SecurityConfig securityConfig) {
+    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager, PermissionDao permissionDao, SecurityConfig securityConfig) {
         //定义shiroFactoryBean
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         //设置securityManager
@@ -59,7 +58,7 @@ public class ShiroConfiguration {
         }
         //配置url访问权限
         //获取所有权限
-        List<PermissionPo> permissionList = permissionService.findPermissionsList(new PermissionVo());
+        List<PermissionPo> permissionList = permissionDao.findAllPermissions();
         if (!(permissionList == null && permissionList.size() == 0)) {
             for (PermissionPo p : permissionList) {
                 filterChainDefinitionMap.put(p.getUrl(), "perms[" + p.getUrl() + ":request]");

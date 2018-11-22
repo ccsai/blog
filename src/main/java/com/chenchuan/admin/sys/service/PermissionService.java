@@ -2,8 +2,7 @@ package com.chenchuan.admin.sys.service;
 
 import com.chenchuan.admin.sys.po.PermissionPo;
 import com.chenchuan.admin.sys.vo.PermissionVo;
-
-import java.util.List;
+import com.github.pagehelper.PageInfo;
 
 /**
  * 权限service接口
@@ -11,10 +10,42 @@ import java.util.List;
 public interface PermissionService {
 
     /**
-     * 查询权限列表
+     * 分页查询权限列表
      *
      * @param permissionVo
-     * @return 权限集合
+     * @return 权限分页信息
      */
-    List<PermissionPo> findPermissionsList(PermissionVo permissionVo);
+    PageInfo<PermissionVo> findPermissionsListByPage(PermissionVo permissionVo);
+
+    /**
+     * 添加权限
+     *
+     * @param permissionVo
+     * @return 添加结果状态
+     */
+    int addPermission(PermissionVo permissionVo);
+
+    /**
+     * 根据权限编号查看权限详情
+     *
+     * @param permissionId 权限编号
+     * @return 权限详情
+     */
+    PermissionPo findPermissionByPermissionId(String permissionId);
+
+    /**
+     * 根据权限编号修改权限
+     *
+     * @param permissionVo
+     * @return 修改结果状态
+     */
+    int editPermissionByPermissionId(PermissionVo permissionVo);
+
+    /**
+     * 根据权限编号删除权限
+     *
+     * @param permissionId 权限编号
+     * @return 删除返回状态
+     */
+    int removePermissionByPermissionId(String permissionId);
 }

@@ -17,6 +17,8 @@ public class RolePo extends BasePo {
 
     private String roleDes;
 
+    private String roleType;
+
     private String createUser;
 
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
@@ -52,6 +54,14 @@ public class RolePo extends BasePo {
 
     public void setRoleDes(String roleDes) {
         this.roleDes = roleDes;
+    }
+
+    public String getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(String roleType) {
+        this.roleType = roleType;
     }
 
     public String getCreateUser() {

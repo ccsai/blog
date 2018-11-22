@@ -30,15 +30,18 @@ $(function () {
                                         $('#contentTabs').tabs('select', node.text);
                                     } else {
                                         $('#contentTabs').tabs('add', {
+                                            id: node.id,
                                             title: node.text,
-                                            href: node.url,
+                                            content: '<iframe scrolling="auto" src="'+node.url+'" name="test" style="height: 100%;width: 100%;border: none"></iframe>',
                                             closable: true,
                                             tools: [{
                                                 iconCls: 'icon-reload',
                                                 handler: function () {
                                                     //刷新当前打开tab
                                                     var curTab = $('#contentTabs').tabs('getSelected');
-                                                    curTab.panel('refresh')
+                                                    curTab.panel({
+                                                        content: '<iframe scrolling="auto" src="'+node.url+'" name="test" style="height: 100%;width: 100%;border: none"></iframe>'
+                                                    });
                                                 },
                                             }]
                                         });
@@ -116,18 +119,5 @@ $.extend($.fn.layout.methods, {
                 panels[expand].panel('header').find('>div.panel-tool').css({display: params.visible ? 'block' : 'none'});
             }
         });
-    }
-});
-
-/**
- * 表单控件验证框验证
- */
-$.extend($.fn.validatebox.defaults.rules, {
-    checkSortNo: {
-        validator: function (value) {
-            var reg = /^\d+$/;
-            return reg.test(value);
-        },
-        message: '请填写整数'
     }
 });

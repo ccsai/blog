@@ -24,7 +24,7 @@
             <tr>
                 <td>菜单说明</td>
                 <td>
-                    <input class="easyui-textbox" name="menuDes" data-options="required:true"/>
+                    <input class="easyui-textbox" name="menuDes"/>
                 </td>
             </tr>
             <tr>

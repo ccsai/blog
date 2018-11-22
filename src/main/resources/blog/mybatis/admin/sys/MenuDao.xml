@@ -143,4 +143,9 @@
     <delete id="removeMenuByMenuId" parameterType="String">
         DELETE FROM menu WHERE menu_id = #{menuId}
     </delete>
+
+    <!-- 根据菜单编号删除角色菜单关联 -->
+    <delete id="removeRoleMenuAuthByMenuId" parameterType="String">
+        DELETE FROM role_menu_auth WHERE menu_id = #{menuId}
+    </delete>
 </mapper>

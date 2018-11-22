@@ -127,6 +127,7 @@ function openMenuDetailDlgOfEdit(menuId) {
  * @param menuId
  */
 function openMenuDetailDlgOfDetail(menuId) {
+    $('#menuDetailForm input[name=operation]').val('');
     $('#menuDetailDlgToolBar .save-btn').hide();//隐藏保存按钮
     openMenuDetailDlg(menuId);//弹出菜单详情表单
 }
@@ -189,3 +190,16 @@ function removeMenuByMenuId(menuId) {
 function formatterMenuTreegridMenuIsShow(value) {
     return value == 1 ? "是" : "否";
 }
+/**
+ * 表单控件验证框验证
+ */
+$.extend($.fn.validatebox.defaults.rules, {
+    //排序号
+    checkSortNo: {
+        validator: function (value) {
+            var reg = /^\d+$/;
+            return reg.test(value);
+        },
+        message: '请填写整数'
+    }
+});

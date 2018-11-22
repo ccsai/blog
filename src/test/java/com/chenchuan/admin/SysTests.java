@@ -8,6 +8,7 @@ import com.chenchuan.admin.sys.dao.RoleDao;
 import com.chenchuan.admin.sys.dao.UserDao;
 import com.chenchuan.admin.sys.po.UserPo;
 import com.chenchuan.admin.sys.service.MenuService;
+import com.chenchuan.admin.sys.service.PermissionService;
 import com.chenchuan.admin.sys.service.RoleService;
 import com.chenchuan.admin.sys.vo.MenuVo;
 import com.chenchuan.admin.sys.vo.PermissionVo;
@@ -34,6 +35,9 @@ public class SysTests {
     private PermissionDao permissionDao;
 
     @Autowired
+    private PermissionService permissionService;
+
+    @Autowired
     private RoleDao roleDao;
 
     @Autowired
@@ -50,19 +54,13 @@ public class SysTests {
 
     @Test
     public void testPermissionDao() {
-        UserVo userVo = new UserVo();
-        userVo.setLoginName("admin");
-        userVo.setPassword("333333");
-        MenuVo menuVo = new MenuVo();
-        menuVo.setMenuId("aaaaa");menuVo.setStatus(0);menuVo.setpMenuId("cc");menuVo.setMenuDes("descc");
-        menuVo.setSortNo(121);menuVo.setCreateUser("cccc");menuVo.setModifyUser("ccc");menuVo.setMenuName("ccc");
-        System.out.println(menuService.removeMenuByMenuId("aaaaa"));
-//        System.out.println(JSON.toJSONString(menuService.findMenuByMenuId("aaaaa")));
-//        RoleVo roleVo = new RoleVo();
-//        roleVo.setRoleId("726d177a-9674-4d5f-af9b-083a6e399c3e");
-//        System.out.println(JSON.toJSONString(roleService.findRolesPermissionsByUser(userVo)));
-        //System.out.println(permissionDao.findPermissionByUser(userVo));
-        //System.out.println(JSON.toJSONString(permissionDao.findPermissionList(new PermissionVo())));
+        System.out.println(JSON.toJSONString(permissionDao.findAllPermissions()));
+//        PermissionVo permissionVo = new PermissionVo();
+//        permissionVo.setPermissionName("1");permissionVo.setPermissionDes("1");
+//        permissionVo.setUrl("/1/1");permissionVo.setUrlType("/1");
+//        permissionVo.setMenuId("s1111-11111");permissionVo.setPermissionId("a5d0b2fe-7291-4a09-b39d-b0d2d8db5582");
+//        System.out.println(permissionService.removePermissionByPermissionId("a5d0b2fe-7291-4a09-b39d-b0d2d8db5582"));
+        //System.out.println(JSON.toJSONString(permissionService.findPermissionByPermissionId("7f9a3463-7ec2-4439-9770-0899c4795683")));
     }
 
     //@Test

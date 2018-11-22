@@ -18,6 +18,8 @@ public class PermissionPo extends BasePo {
 
     private String url;
 
+    private String urlType;
+
     private String menuId;
 
     private String createUser;
@@ -61,6 +63,14 @@ public class PermissionPo extends BasePo {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getUrlType() {
+        return urlType;
+    }
+
+    public void setUrlType(String urlType) {
+        this.urlType = urlType;
     }
 
     public String getMenuId() {
