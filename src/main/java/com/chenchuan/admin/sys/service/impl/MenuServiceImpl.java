@@ -98,6 +98,14 @@ public class MenuServiceImpl implements MenuService {
         return result;
     }
 
+    @Override
+    public List<MenuVo> findRoleMenuPermissionAuthTree(String roleId) {
+        //角色与菜单权限关系树的的菜单树
+        List<MenuVo> menuList = menuDao.findRoleMenuPermissionAuthTree(roleId);
+        //生成菜单树
+        return createMenuTree(menuList);
+    }
+
     /**
      * 根据菜单列表生成树
      *

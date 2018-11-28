@@ -17,6 +17,11 @@ public class PermissionVo extends PermissionPo {
      */
     private String keyWord;
 
+    /**
+     * 权限是否选中
+     */
+    private Integer permissionChecked;
+
 
     public String getMenuName() {
         return menuName;
@@ -32,5 +37,13 @@ public class PermissionVo extends PermissionPo {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
+    }
+
+    public Integer getPermissionChecked() {
+        return permissionChecked;
+    }
+
+    public void setPermissionChecked(Integer permissionChecked) {
+        this.permissionChecked = permissionChecked;
     }
 }

@@ -54,7 +54,7 @@ public class SysTests {
 
     @Test
     public void testPermissionDao() {
-        System.out.println(JSON.toJSONString(permissionDao.findAllPermissions()));
+        System.out.println(JSON.toJSONString(menuService.findRoleMenuPermissionAuthTree("c57c2eca-bc2a-4e16-893a-7698a427195f")));
 //        PermissionVo permissionVo = new PermissionVo();
 //        permissionVo.setPermissionName("1");permissionVo.setPermissionDes("1");
 //        permissionVo.setUrl("/1/1");permissionVo.setUrlType("/1");

@@ -77,4 +77,12 @@ public interface MenuDao {
      * @return 影响行数
      */
     int removeRoleMenuAuthByMenuId(String menuId);
+
+    /**
+     * 根据角色编号展示与菜单权限的关系（菜单树形的数据）
+     *
+     * @param roleId 角色编号
+     * @return 菜单集合
+     */
+    List<MenuVo> findRoleMenuPermissionAuthTree(String roleId);
 }

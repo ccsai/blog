@@ -26,4 +26,84 @@
             u.login_name = #{loginName}
         </where>
     </select>
+
+    <!-- 查询所有角色列表 -->
+    <select id="findRoleList" parameterType="com.chenchuan.admin.sys.vo.RoleVo"
+            resultType="com.chenchuan.admin.sys.po.RolePo">
+        SELECT
+        <include refid="roleObject"/>
+        FROM role r
+        <where>
+            <if test="keyWord != null and keyWord != ''">
+                AND r.role_name LIKE '%${keyWord}%'
+                OR r.role_type LIKE '%${keyWord}%'
+                OR r.role_des LIKE '%${keyWord}%'
+            </if>
+        </where>
+    </select>
+
+    <!-- 添加角色 -->
+    <insert id="addRole" parameterType="com.chenchuan.admin.sys.vo.RoleVo">
+        INSERT INTO role(
+          role_id,
+          role_name,
+          role_des,
+          role_type,
+          create_user,
+          create_time,
+          modify_user,
+          modify_time
+        )VALUES (
+          #{roleId},
+          #{roleName},
+          #{roleDes},
+          #{roleType},
+          #{createUser},
+          NOW(),
+          #{modifyUser},
+          NOW()
+        )
+    </insert>
+
+    <!-- 根据角色编号查询角色详情 -->
+    <select id="findRoleByRoleId" parameterType="String" resultType="com.chenchuan.admin.sys.po.RolePo">
+        SELECT
+        <include refid="roleObject"/>
+        FROM role r
+        WHERE r.role_id = #{roleId}
+    </select>
+
+    <!-- 根据角色编号修改角色 -->
+    <update id="editRoleByRoleId" parameterType="com.chenchuan.admin.sys.vo.RoleVo">
+        UPDATE role
+        <set>
+            <if test="roleName != null and roleName != ''">role_name=#{roleName},</if>
+            <if test="roleDes != null and roleDes != ''">role_des=#{roleDes},</if>
+            <if test="roleType != null and roleType != ''">role_type=#{roleType},</if>
+            <if test="modifyUser != null and modifyUser != ''">modify_user=#{modifyUser},</if>
+            modify_time = NOW()
+        </set>
+        WHERE role_id = #{roleId}
+    </update>
+
+    <!-- 根据角色编号删除角色 -->
+    <delete id="removeRoleByRoleId" parameterType="String">
+        DELETE FROM role WHERE role_id = #{roleId}
+    </delete>
+
+    <!-- 根据角色编号删除角色权限关联 -->
+    <delete id="removeRolePermissionAuthByRoleId" parameterType="String">
+        DELETE FROM role_permission_auth WHERE role_id = #{roleId}
+    </delete>
+
+    <!-- 根据角色编号删除角色菜单关联 -->
+    <delete id="removeRoleMenuAuthByRoleId" parameterType="String">
+        DELETE FROM role_menu_auth WHERE role_id = #{roleId}
+    </delete>
+
+    <!-- 根据角色编号删除用户角色关联 -->
+    <delete id="removeUserRoleAuthByRoleId" parameterType="String">
+        DELETE FROM user_role_auth WHERE role_id = #{roleId}
+    </delete>
+    
 </mapper>

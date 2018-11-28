@@ -1,6 +1,6 @@
 <div id="permissionDetailDlg" class="easyui-dialog" title="权限详情"
      data-options="buttons:'#permissionDetailDlgToolBar',closed:true,modal:true,inline:true" style="padding: 10px">
-<#-- 菜单详情表单 -->
+<#-- 权限详情表单 -->
     <form id="permissionDetailForm" method="post">
     <#-- 判断权限修改或添加 -->
         <input type="hidden" name="operation">
@@ -48,7 +48,7 @@
     </form>
 </div>
 
-<#-- 菜单详情工具栏 -->
+<#-- 权限详情工具栏 -->
 <div id="permissionDetailDlgToolBar">
     <a class="easyui-linkbutton save-btn" data-options="iconCls:'icon-save'">保存</a>
     <a class="easyui-linkbutton cancel-btn" data-options="iconCls:'icon-cancel'">关闭</a>

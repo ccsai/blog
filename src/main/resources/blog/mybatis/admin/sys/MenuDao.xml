@@ -148,4 +148,52 @@
     <delete id="removeRoleMenuAuthByMenuId" parameterType="String">
         DELETE FROM role_menu_auth WHERE menu_id = #{menuId}
     </delete>
+
+
+    <!-- 根据角色编号展示与菜单权限的关系（菜单树形的数据） -->
+    <resultMap id="findResultMapOfRoleMenuPermissionAuthTree" type="com.chenchuan.admin.sys.vo.MenuVo">
+        <id property="menuId" column="menuId"/>
+        <result property="id" column="id"/>
+        <result property="menuName" column="menuName"/>
+        <result property="text" column="text"/>
+        <result property="pMenuId" column="pMenuId"/>
+        <result property="childrenNumber" column="childrenNumber"/>
+        <result property="menuChecked" column="menuChecked"/>
+        <collection property="permissionList" ofType="com.chenchuan.admin.sys.vo.PermissionVo">
+            <id property="permissionId" column="permissionId"/>
+            <result property="permissionName" column="permissionName"/>
+            <result property="permissionChecked" column="permissionChecked"/>
+        </collection>
+    </resultMap>
+    <select id="findRoleMenuPermissionAuthTree" parameterType="String"
+            resultMap="findResultMapOfRoleMenuPermissionAuthTree">
+        SELECT
+            m.menu_id       AS menuId,
+            m.menu_id       AS id,
+            m.menu_name     AS menuName,
+            m.menu_name     AS text,
+            m.p_menu_id     AS pMenuId,
+            IFNULL(menuChildren.childrenNumber,0)	AS childrenNumber,
+            (CASE WHEN rma1.role_id is NULL THEN NULL ELSE	1 END) AS menuChecked,
+            p.permission_id		AS permissionId,
+            p.permission_name	AS permissionName,
+            (CASE WHEN rpa.permission_id is NULL THEN NULL ELSE	1 END) AS permissionChecked
+        FROM menu m
+        LEFT JOIN (
+            SELECT
+            COUNT(menu_id) AS childrenNumber,
+            p_menu_id
+            FROM menu
+            GROUP BY p_menu_id
+        ) AS menuChildren
+        ON m.menu_id = menuChildren.p_menu_id
+        LEFT JOIN permission p
+        ON m.menu_id = p.menu_id
+        LEFT JOIN role_menu_auth rma1
+        ON m.menu_id = rma1.menu_id AND rma1.role_id = #{roleId}
+        LEFT JOIN role_permission_auth rpa
+        ON p.permission_id = rpa.permission_id AND rpa.role_id = #{roleId}
+        GROUP BY m.menu_id,m.menu_name,m.p_menu_id ,p.permission_id,p.permission_name
+        ORDER BY m.sort_no,p.url_type
+    </select>
 </mapper>

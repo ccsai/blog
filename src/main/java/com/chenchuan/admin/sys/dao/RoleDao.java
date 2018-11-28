@@ -1,6 +1,7 @@
 package com.chenchuan.admin.sys.dao;
 
 import com.chenchuan.admin.sys.po.RolePo;
+import com.chenchuan.admin.sys.vo.RoleVo;
 import com.chenchuan.admin.sys.vo.UserVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -23,4 +24,67 @@ public interface RoleDao {
      */
     List<RolePo> findRolesByUser(UserVo userVo);
 
+    /**
+     * 查询所有角色列表
+     *
+     * @param roleVo
+     * @return 角色列表
+     */
+    List<RolePo> findRoleList(RoleVo roleVo);
+
+    /**
+     * 添加角色
+     *
+     * @param roleVo
+     * @return 影响行数
+     */
+    int addRole(RoleVo roleVo);
+
+    /**
+     * 根据角色编号查询角色详情
+     *
+     * @param roleId 角色编号
+     * @return 角色详情
+     */
+    RolePo findRoleByRoleId(String roleId);
+
+    /**
+     * 根据角色编号修改角色
+     *
+     * @param roleVo
+     * @return 影响行数
+     */
+    int editRoleByRoleId(RoleVo roleVo);
+
+    /**
+     * 根据角色编号删除角色
+     *
+     * @param roleId 角色编号
+     * @return 影响行数
+     */
+    int removeRoleByRoleId(String roleId);
+
+    /**
+     * 根据角色编号删除角色权限关联
+     *
+     * @param roleId 角色编号
+     * @return 影响行数
+     */
+    int removeRolePermissionAuthByRoleId(String roleId);
+
+    /**
+     * 根据角色编号删除角色菜单关联
+     *
+     * @param roleId 角色编号
+     * @return 影响行数
+     */
+    int removeRoleMenuAuthByRoleId(String roleId);
+
+    /**
+     * 根据角色编号删除用户角色关联
+     *
+     * @param roleId 角色编号
+     * @return 影响行数
+     */
+    int removeUserRoleAuthByRoleId(String roleId);
 }

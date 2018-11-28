@@ -110,7 +110,7 @@
             <if test="urlType != null and urlType != ''">url_type = #{urlType},</if>
             <if test="menuId != null and menuId != ''">menu_id = #{menuId},</if>
             <if test="modifyUser != null and modifyUser != ''">modify_user = #{modifyUser},</if>
-            modify_time = #{modifyTime}
+            modify_time = NOW()
         </set>
         WHERE permission_id = #{permissionId}
     </update>

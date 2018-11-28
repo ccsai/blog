@@ -4,7 +4,7 @@
     <meta>
     <title>菜单管理</title>
     <#include '../../depend/_head.ftl'/>
-    <script src="${basePath}/js/admin/sys/menu/index.js"></script>
+    <script src="${basePath!}/js/admin/sys/menu/index.js"></script>
 </head>
 <body>
 <@shiro.hasPermission name="/admin/sys/menu/findAllMenuTree:request">

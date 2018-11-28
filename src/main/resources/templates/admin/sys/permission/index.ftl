@@ -5,7 +5,7 @@
     <title>权限管理</title>
     <#include '../../depend/_head.ftl'/>
     <#include '../../depend/_jquery_serializejson.ftl'/>
-    <script src="${basePath}/js/admin/sys/permission/index.js"></script>
+    <script src="${basePath!}/js/admin/sys/permission/index.js"></script>
 </head>
 <body>
 <@shiro.hasPermission name="/admin/sys/permission/findPermissionsListByPage:request">

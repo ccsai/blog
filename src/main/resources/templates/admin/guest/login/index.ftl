@@ -5,7 +5,7 @@
     <title>系統后台登录</title>
     <#include '../../depend/_head.ftl'>
     <#include '../../depend/_jquery_serializejson.ftl'/>
-    <script src="${basePath}/js/admin/guest/login/index.js"></script>
+    <script src="${basePath!}/js/admin/guest/login/index.js"></script>
 </head>
 <body>
 

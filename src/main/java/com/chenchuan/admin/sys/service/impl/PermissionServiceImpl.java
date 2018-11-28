@@ -31,7 +31,7 @@ public class PermissionServiceImpl implements PermissionService {
         PageHelper.startPage(permissionVo.getPage(), permissionVo.getRows());
         //权限列表
         List<PermissionVo> permissionList = permissionDao.findPermissionsList(permissionVo);
-        return new PageInfo<PermissionVo>(permissionList);
+        return new PageInfo<>(permissionList);
     }
 
     @Override
