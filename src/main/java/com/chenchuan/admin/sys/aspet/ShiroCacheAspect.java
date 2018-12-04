@@ -19,7 +19,12 @@ public class ShiroCacheAspect {
 
     @Pointcut("execution(* com.chenchuan.admin.sys.controller.PermissionController.addPermission(..)) || " +
             "execution(* com.chenchuan.admin.sys.controller.PermissionController.editPermissionByPermissionId(..)) ||" +
-            "execution(* com.chenchuan.admin.sys.controller.PermissionController.removePermissionByPermissionId(..))")
+            "execution(* com.chenchuan.admin.sys.controller.PermissionController.removePermissionByPermissionId(..))||" +
+            "execution(* com.chenchuan.admin.sys.controller.RoleController.addRole(..)) ||" +
+            "execution(* com.chenchuan.admin.sys.controller.RoleController.editRoleByRoleId(..)) ||" +
+            "execution(* com.chenchuan.admin.sys.controller.RoleController.removeRoleByRoleId(..)) ||" +
+            "execution(* com.chenchuan.admin.sys.controller.RoleController.authorizationMenuPermission(..)) ||" +
+            "execution(* com.chenchuan.admin.sys.controller.RoleController.addRoleCommonPermissionAuth(..))")
     public void shiroCacheClearPointCut() {
     }
 
