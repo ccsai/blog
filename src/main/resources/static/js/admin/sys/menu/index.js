@@ -6,10 +6,10 @@ $(function () {
         url: '/admin/sys/menu/findAllMenuTree',
         method: 'get',
         loadFilter: function (data) {
-            if (data.menuTree != null && data.resultCode == 1) {
-                return data.menuTree;
-            } else if (data.menuTree != null && (data.resultCode == 0 || data.resultCode == -1)) {
+            if (data.resultCode == 0 || data.resultCode == -1) {
                 $.messager.alert('错误提示', data.notice, 'error');
+            } else if (data.resultCode == 1) {
+                return data.menuTree;
             } else if (data.menuTree == null && data.menuTree.length == 0) {
                 return [];
             }
@@ -28,7 +28,9 @@ $(function () {
                 url: '/admin/sys/menu/findAllMenuTree',
                 method: 'get',
                 loadFilter: function (data) {
-                    if (data.resultCode == 1) {
+                    if (data.resultCode == -1 || data.resultCode == 0) {
+                        $.messager.alert('错误提示', '父级菜单选择下拉列表加载出错！</br>' + data.notice, 'error');
+                    } else if (data.resultCode == 1) {
                         var menuTree = data.menuTree;
                         var root = [{
                             id: 'root',
@@ -36,8 +38,6 @@ $(function () {
                             children: menuTree
                         }];
                         return root;
-                    } else {
-                        $.messager.alert('错误提示', '父级菜单选择下拉列表加载出错！</br>' + data.notice, 'error');
                     }
                 }
             });
@@ -59,36 +59,33 @@ $(function () {
     $(document).on('click', '#menuDetailDlgToolBar .save-btn', function () {
         //判断添加或修改
         var oper = $('#menuDetailForm input[name=operation]').val();
-        if (oper == 'add') {//添加
-            $('#menuDetailForm').form('submit', {
-                url: '/admin/sys/menu/addMenu',
-                onSubmit: function () {
-                    return $(this).form('validate');
-                },
+        //非删除或修改时不提交表单
+        if (oper == '') {
+            return false;
+        }
+        if ($('#menuDetailForm').form('validate')) {
+            //添加或修改的url
+            var url;
+            if (oper == 'add') {//添加url
+                url = '/admin/sys/menu/addMenu';
+            } else if (oper == 'edit') {//修改url
+                url = '/admin/sys/menu/editMenuByMenuId';
+            }
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: $('#menuDetailForm').serializeJSON(),
                 success: function (data) {
-                    if (JSON.parse(data).resultCode == 1) {
+                    if (data.resultCode == -1 || data.resultCode == 0) {
+                        $.messager.alert('错误提示', data.notice, 'error');
+                    } else if (data.resultCode == 1) {
                         $.messager.alert('消息通知', '保存成功', 'info');
                         $('#menuDetailDlg').dialog('close');
                         $('#menuTreegrid').treegrid('reload');
-                    } else {
-                        $.messager.alert('错误提示', data.notice, 'error');
                     }
-                }
-            });
-        } else if (oper == 'edit') {//修改
-            $('#menuDetailForm').form('submit', {
-                url: '/admin/sys/menu/editMenuByMenuId',
-                onSubmit: function () {
-                    return $(this).form('validate');
                 },
-                success: function (data) {
-                    if (JSON.parse(data).resultCode == 1) {
-                        $.messager.alert('消息提示', '保存成功', 'info');
-                        $('#menuDetailDlg').dialog('close');
-                        $('#menuTreegrid').treegrid('reload');
-                    } else if (JSON.parse(data).resultCode == 0) {
-                        $.messager.alert('错误提示', data.notice, 'error');
-                    }
+                error: function () {
+                    $.messager.alert('错误提示', '保存菜单失败，请稍后重试或联系管理员！', 'error');
                 }
             });
         }
@@ -143,11 +140,12 @@ function openMenuDetailDlg(menuId) {
         type: 'get',
         data: {menuId: menuId},
         success: function (data) {
+            if (data.resultCode == -1 || data.resultCode == 0) {
+                $.messager.alert('错误提示', '获取菜单详情失败！</br>' + data.notice, 'error');
+            }
             if (data.resultCode == 1) {
                 //回显
                 $('#menuDetailForm').form('load', data.menuDetail);
-            } else {
-                $.messager.alert('错误提示', '获取菜单详情失败！</br>' + data.notice, 'error');
             }
         },
         error: function () {
@@ -168,10 +166,10 @@ function removeMenuByMenuId(menuId) {
                 type: 'post',
                 data: {menuId: menuId},
                 success: function (data) {
-                    if (data.resultCode == 1) {
-                        $('#menuTreegrid').treegrid('reload');
-                    } else {
+                    if (data.resultCode == -1 || data.resultCode == 0) {
                         $.messager.alert('错误提示', data.notice, 'error');
+                    } else if (data.resultCode == 1) {
+                        $('#menuTreegrid').treegrid('reload');
                     }
                 },
                 error: function () {
@@ -190,6 +188,7 @@ function removeMenuByMenuId(menuId) {
 function formatterMenuTreegridMenuIsShow(value) {
     return value == 1 ? "是" : "否";
 }
+
 /**
  * 表单控件验证框验证
  */

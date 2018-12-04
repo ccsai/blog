@@ -57,11 +57,11 @@ public class MyShiroRealm extends AuthorizingRealm {
         userVo.setLoginName(userPo.getLoginName());
         List<RolePo> roleList = roleService.findRolesPermissionsByUser(userVo);
         //完成授权
-        if (!(roleList == null && roleList.size() == 0)) {
+        if (roleList != null && roleList.size() != 0) {
             for (RolePo r : roleList) {
                 simpleAuthenticationInfo.addRole(r.getRoleName());
                 List<PermissionPo> permissionList = r.getPermissionList();
-                if (!(permissionList == null && permissionList.size() == 0)) {
+                if (permissionList != null && permissionList.size() != 0) {
                     for (PermissionPo p : permissionList) {
                         simpleAuthenticationInfo.addStringPermission(p.getUrl() + ":request");
                     }

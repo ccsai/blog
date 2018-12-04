@@ -7,7 +7,9 @@ $(function () {
         url: '/admin/sys/permission/findPermissionsListByPage',
         method: 'get',
         loadFilter: function (data) {
-            if (data.resultCode == 1) {
+            if (data.resultCode == -1 || data.resultCode == 0) {
+                $.messager.alert('错误提示', data.notice, 'error');
+            } else if (data.resultCode == 1) {
                 var permissionPageInfo = data.permissionPageInfo;
                 //分页数据
                 var pageData = {
@@ -15,8 +17,6 @@ $(function () {
                     rows: permissionPageInfo.list
                 };
                 return pageData;
-            } else {
-                $.messager.alert('错误提示', data.notice, 'error');
             }
         }
     });
@@ -80,36 +80,33 @@ $(function () {
     $(document).on('click', '#permissionDetailDlgToolBar .save-btn', function () {
         //判断添加或修改
         var oper = $('#permissionDetailForm input[name=operation]').val();
-        if (oper == 'add') {//添加权限
-            $('#permissionDetailForm').form('submit', {
-                url: '/admin/sys/permission/addPermission',
-                onSubmit: function () {
-                    return $(this).form('validate');
-                },
+        //非删除或修改时不提交表单
+        if (oper == '') {
+            return false;
+        }
+        if ($('#permissionDetailForm').form('validate')) {
+            //添加或修改的url
+            var url;
+            if (oper == 'add') {//添加url
+                url = '/admin/sys/permission/addPermission';
+            } else if (oper == 'edit') {//修改url
+                url = '/admin/sys/permission/editPermissionByPermissionId';
+            }
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: $('#permissionDetailForm').serializeJSON(),
                 success: function (data) {
-                    if (JSON.parse(data).resultCode == 1) {
+                    if (data.resultCode == -1 || data.resultCode == 0) {
+                        $.messager.alert('错误提示', data.notice, 'error');
+                    } else if (data.resultCode == 1) {
                         $.messager.alert('消息通知', '保存成功', 'info');
                         $('#permissionDetailDlg').dialog('close');
                         $('#permissionDatagrid').datagrid('reload');
-                    } else {
-                        $.messager.alert('错误提示', data.notice, 'error');
                     }
-                }
-            });
-        } else if (oper == 'edit') {//修改权限
-            $('#permissionDetailForm').form('submit', {
-                url: '/admin/sys/permission/editPermissionByPermissionId',
-                onSubmit: function () {
-                    return $(this).form('validate');
                 },
-                success: function (data) {
-                    if (JSON.parse(data).resultCode == 1) {
-                        $.messager.alert('消息通知', '保存成功', 'info');
-                        $('#permissionDetailDlg').dialog('close');
-                        $('#permissionDatagrid').datagrid('reload');
-                    } else {
-                        $.messager.alert('错误提示', data.notice, 'error');
-                    }
+                error: function () {
+                    $.messager.alert('错误提示', '保存权限失败，请稍后重试或联系管理员！', 'error');
                 }
             });
         }
@@ -132,7 +129,9 @@ function createMenuTreeOfcombotree() {
         url: '/admin/sys/menu/findAllMenuTree',
         method: 'get',
         loadFilter: function (data) {
-            if (data.resultCode == 1) {
+            if (data.resultCode == -1 || data.resultCode == 0) {
+                $.messager.alert('错误提示', '菜单选择下拉列表加载出错！</br>' + data.notice, 'error');
+            } else if (data.resultCode == 1) {
                 var menuTree = data.menuTree;
                 var root = [{
                     id: '',
@@ -140,8 +139,6 @@ function createMenuTreeOfcombotree() {
                     children: menuTree
                 }];
                 return root;
-            } else {
-                $.messager.alert('错误提示', '菜单选择下拉列表加载出错！</br>' + data.notice, 'error');
             }
         }
     }
@@ -181,11 +178,11 @@ function openPermissionDetailDlg(permissionId) {
         type: 'get',
         data: {permissionId: permissionId},
         success: function (data) {
-            if (data.resultCode == 1) {
+            if (data.resultCode == -1 || data.resultCode == 0) {
+                $.messager.alert('错误提示', data.notice, 'error');
+            } else if (data.resultCode == 1) {
                 //回显
                 $('#permissionDetailForm').form('load', data.permissionDetail);
-            } else {
-                $.messager.alert('错误提示', data.notice, 'error');
             }
         },
         error: function () {
@@ -206,10 +203,10 @@ function removePermissionByPermissionId(permissionId) {
                 type: 'post',
                 data: {permissionId: permissionId},
                 success: function (data) {
-                    if (data.resultCode == 1) {
-                        $('#permissionDatagrid').datagrid('reload');
-                    } else {
+                    if (data.resultCode == -1 || data.resultCode == 0) {
                         $.messager.alert('错误提示', data.notice, 'error');
+                    } else if (data.resultCode == 1) {
+                        $('#permissionDatagrid').datagrid('reload');
                     }
                 },
                 error: function () {

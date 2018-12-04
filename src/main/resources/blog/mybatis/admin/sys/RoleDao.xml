@@ -105,5 +105,49 @@
     <delete id="removeUserRoleAuthByRoleId" parameterType="String">
         DELETE FROM user_role_auth WHERE role_id = #{roleId}
     </delete>
-    
+
+    <!-- 授权部分：根据角色编号删除角色权限关联 -->
+    <delete id="removeRolePermissionAuthByRoleIdOfAuth" parameterType="java.util.Map">
+        DELETE FROM role_permission_auth
+        <where>
+            role_id = #{roleId}
+            <if test="authType == 'menu'">
+                AND permission_id IN (SELECT p.permission_id FROM permission p WHERE p.url_type = 'bm' OR p.url_type =
+                'bd')
+            </if>
+            <if test="authType == 'common'">
+                AND permission_id IN (SELECT p.permission_id FROM permission p WHERE p.menu_id IS NULL OR p.menu_id =
+                '')
+            </if>
+        </where>
+    </delete>
+
+    <!-- 添加角色菜单关联 -->
+    <insert id="addRoleMenuAuth" parameterType="java.util.Map">
+        INSERT INTO role_menu_auth(
+        role_id,
+        menu_id
+        )VALUES
+        <foreach collection="menuIds" separator="," item="menu">
+            (
+            #{roleId},
+            #{menu}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 添加角色权限关联 -->
+    <insert id="addRolePermissionAuth" parameterType="java.util.Map">
+        INSERT INTO role_permission_auth(
+        role_id,
+        permission_id
+        )VALUES
+        <foreach collection="permissionIds" separator="," item="permission">
+            (
+            #{roleId},
+            #{permission}
+            )
+        </foreach>
+    </insert>
+
 </mapper>

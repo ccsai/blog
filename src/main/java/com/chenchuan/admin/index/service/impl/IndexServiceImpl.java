@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 后台首页service实现
+ */
 @Service
 public class IndexServiceImpl implements IndexService {
 

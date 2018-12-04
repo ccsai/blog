@@ -85,4 +85,12 @@ public interface PermissionDao {
      * @return 影响行数
      */
     int removeRolePermissionAuthByPermissionId(String permissionId);
+
+    /**
+     * 通过角色编号查询角色与通用权限关联的权限列表
+     *
+     * @param roleId 角色编号
+     * @return 权限集合
+     */
+    List<PermissionVo> findRoleCommonPermissionAuthListByRole(String roleId);
 }

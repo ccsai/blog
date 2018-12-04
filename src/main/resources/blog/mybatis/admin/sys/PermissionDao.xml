@@ -124,4 +124,15 @@
     <delete id="removeRolePermissionAuthByPermissionId" parameterType="String">
         DELETE FROM role_permission_auth WHERE permission_id = #{permissionId}
     </delete>
+
+    <!-- 通过角色编号查询角色与通用权限关联的权限列表 -->
+    <select id="findRoleCommonPermissionAuthListByRole" parameterType="String" resultType="com.chenchuan.admin.sys.vo.PermissionVo">
+        SELECT
+        <include refid="permissionObject"/>,
+        (CASE WHEN rpa.permission_id IS NULL THEN NULL ELSE 1 END) AS permissionChecked
+        FROM permission p
+        LEFT JOIN role_permission_auth rpa
+        ON p.permission_id = rpa.permission_id AND rpa.role_id = #{roleId}
+        WHERE p.menu_id = '' OR p.menu_id IS NULL
+    </select>
 </mapper>

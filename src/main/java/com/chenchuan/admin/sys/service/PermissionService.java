@@ -4,6 +4,8 @@ import com.chenchuan.admin.sys.po.PermissionPo;
 import com.chenchuan.admin.sys.vo.PermissionVo;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 /**
  * 权限service接口
  */
@@ -48,4 +50,12 @@ public interface PermissionService {
      * @return 删除返回状态
      */
     int removePermissionByPermissionId(String permissionId);
+
+    /**
+     * 通过角色编号查询角色与通用权限关联的权限列表
+     *
+     * @param roleId 角色编号
+     * @return 权限集合
+     */
+    List<PermissionVo> findRoleCommonPermissionAuthListByRole(String roleId);
 }

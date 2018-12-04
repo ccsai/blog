@@ -21,6 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SysTests {
@@ -54,7 +59,13 @@ public class SysTests {
 
     @Test
     public void testPermissionDao() {
-        System.out.println(JSON.toJSONString(menuService.findRoleMenuPermissionAuthTree("c57c2eca-bc2a-4e16-893a-7698a427195f")));
+        Map<String,Object> map = new HashMap<>();
+        map.put("roleId","aa");
+        List<String> list = new ArrayList<>();
+        list.add("bb");list.add("cc");
+        map.put("menuIds",list);
+        roleDao.addRoleMenuAuth(map);
+        //System.out.println(JSON.toJSONString(menuService.findRoleMenuPermissionAuthTree("c57c2eca-bc2a-4e16-893a-7698a427195f")));
 //        PermissionVo permissionVo = new PermissionVo();
 //        permissionVo.setPermissionName("1");permissionVo.setPermissionDes("1");
 //        permissionVo.setUrl("/1/1");permissionVo.setUrlType("/1");

@@ -1,5 +1,7 @@
 package com.chenchuan.admin.sys.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.chenchuan.admin.sys.dao.PermissionDao;
 import com.chenchuan.admin.sys.dao.RoleDao;
 import com.chenchuan.admin.sys.po.RolePo;
@@ -16,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色service实现
@@ -108,5 +112,72 @@ public class RoleServiceImpl implements RoleService {
         //根据角色编号删除用户角色关联
         roleDao.removeUserRoleAuthByRoleId(roleId);
         return result;
+    }
+
+    @Override
+    @Transactional
+    public int addRoleMenuAuth(Map<String, Object> roleMenuPermissionObj) {
+        //角色编号
+        String roleId = (String) roleMenuPermissionObj.get("roleId");
+        //删除历史角色菜单关联
+        roleDao.removeRoleMenuAuthByRoleId(roleId);
+        //角色编号和授权类型关联集合
+        Map<String, String> roleIdAuthType = new HashMap<>();
+        roleIdAuthType.put("authType", "menu");
+        roleIdAuthType.put("roleId", roleId);
+        //删除历史角色权限关联
+        roleDao.removeRolePermissionAuthByRoleIdOfAuth(roleIdAuthType);
+        //菜单编号集合
+        JSONArray menuIds = JSON.parseArray((String) roleMenuPermissionObj.get("menuIds"));
+        if (menuIds != null && menuIds.size() != 0) {
+            //角色菜单关联
+            Map<String, Object> roleIdMenuIdAuth = new HashMap<>();
+            roleIdMenuIdAuth.put("roleId", roleId);
+            roleIdMenuIdAuth.put("menuIds", menuIds);
+            //添加角色菜单关联
+            roleDao.addRoleMenuAuth(roleIdMenuIdAuth);
+        }
+        //权限编号集合
+        JSONArray permissionIds = JSON.parseArray((String) roleMenuPermissionObj.get("permissionIds"));
+        if (permissionIds != null && permissionIds.size() != 0) {
+            //添加角色权限关联
+            addRolePermissionAuth(roleId, permissionIds);
+        }
+        return 1;
+    }
+
+    @Override
+    @Transactional
+    public int addRoleCommonPermissionAuth(Map<String, Object> roleMenuPermissionObj) {
+        //角色编号
+        String roleId = (String) roleMenuPermissionObj.get("roleId");
+        //角色编号和授权类型关联集合
+        Map<String, String> roleIdAuthType = new HashMap<>();
+        roleIdAuthType.put("authType", "common");
+        roleIdAuthType.put("roleId", roleId);
+        //删除历史角色权限关联
+        roleDao.removeRolePermissionAuthByRoleIdOfAuth(roleIdAuthType);
+        //权限编号集合
+        JSONArray permissionIds = JSON.parseArray((String) roleMenuPermissionObj.get("permissionIds"));
+        if (permissionIds != null && permissionIds.size() != 0) {
+            //添加角色权限关联
+            addRolePermissionAuth(roleId, permissionIds);
+        }
+        return 1;
+    }
+
+    /**
+     * 添加角色与权限关联
+     *
+     * @param roleId        角色编号
+     * @param permissionIds 权限编号集合
+     */
+    private void addRolePermissionAuth(String roleId, JSONArray permissionIds) {
+        //角色权限关联
+        Map<String, Object> roleIdPermissionIdAuth = new HashMap<>();
+        roleIdPermissionIdAuth.put("roleId", roleId);
+        roleIdPermissionIdAuth.put("permissionIds", permissionIds);
+        //添加角色权限关联
+        roleDao.addRolePermissionAuth(roleIdPermissionIdAuth);
     }
 }

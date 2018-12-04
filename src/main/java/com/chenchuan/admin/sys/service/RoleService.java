@@ -6,6 +6,7 @@ import com.chenchuan.admin.sys.vo.UserVo;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色service接口
@@ -59,4 +60,20 @@ public interface RoleService {
      * @return 删除结果状态
      */
     int removeRoleByRoleId(String roleId);
+
+    /**
+     * 菜单授权
+     *
+     * @param roleMenuPermissionObj 具有要添加的角色与菜单权限的关系对象
+     * @return 授权状态码
+     */
+    int addRoleMenuAuth(Map<String, Object> roleMenuPermissionObj);
+
+    /**
+     * 通用授权
+     *
+     * @param roleMenuPermissionObj 具有要添加的角色与菜单权限的关系对象
+     * @return 授权状态码
+     */
+    int addRoleCommonPermissionAuth(Map<String, Object> roleMenuPermissionObj);
 }

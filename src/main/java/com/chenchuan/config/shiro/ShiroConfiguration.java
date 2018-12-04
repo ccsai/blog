@@ -59,7 +59,7 @@ public class ShiroConfiguration {
         //配置url访问权限
         //获取所有权限
         List<PermissionPo> permissionList = permissionDao.findAllPermissions();
-        if (!(permissionList == null && permissionList.size() == 0)) {
+        if (permissionList != null && permissionList.size() != 0) {
             for (PermissionPo p : permissionList) {
                 filterChainDefinitionMap.put(p.getUrl(), "perms[" + p.getUrl() + ":request]");
             }

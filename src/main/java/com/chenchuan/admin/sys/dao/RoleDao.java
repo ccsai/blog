@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色dao
@@ -87,4 +88,29 @@ public interface RoleDao {
      * @return 影响行数
      */
     int removeUserRoleAuthByRoleId(String roleId);
+
+    /**
+     * 授权部分：根据角色编号删除角色权限关联
+     *
+     * @param roleIdAuthType 角色编号和授权类型
+     * @return 影响行数
+     */
+    int removeRolePermissionAuthByRoleIdOfAuth(Map<String, String> roleIdAuthType);
+
+    /**
+     * 添加角色菜单关联
+     *
+     * @param roleIdMemuIdAuthObj 角色菜单关系集合
+     * @return 影响行数
+     */
+    int addRoleMenuAuth(Map<String, Object> roleIdMemuIdAuthObj);
+
+    /**
+     * 添加角色权限关联
+     *
+     * @param roleIdPermissionIdAuthObj 角色权限关系集合
+     * @return 影响行数
+     */
+    int addRolePermissionAuth(Map<String, Object> roleIdPermissionIdAuthObj);
+
 }

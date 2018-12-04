@@ -194,6 +194,6 @@
         LEFT JOIN role_permission_auth rpa
         ON p.permission_id = rpa.permission_id AND rpa.role_id = #{roleId}
         GROUP BY m.menu_id,m.menu_name,m.p_menu_id ,p.permission_id,p.permission_name
-        ORDER BY m.sort_no,p.url_type
+        ORDER BY m.sort_no,CASE WHEN p.url_type = 'bm' THEN 0 ELSE 1 END
     </select>
 </mapper>

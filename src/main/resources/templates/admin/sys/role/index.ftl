@@ -48,6 +48,8 @@
 <#include '_dlg_role_detail.ftl'/>
 <#-- 菜单权限授权对话框 -->
 <#include  '_dlg_role_menu_permission_dlg.ftl'/>
+<#-- 通用权限授权 -->
+<#include  '_dlg_role_common_permission_dlg.ftl'/>
 
 <script>
     /**
@@ -62,6 +64,9 @@
                 "</@shiro.hasPermission>");
         strArr.push("<@shiro.hasPermission name='/admin/sys/role/findRoleByRoleId:request'>" +
                 "<a href='javascript:void(0)' onclick='openRoleDetailDlgOfDetail(\"" + row.roleId + "\")'>详情</a>" +
+                "</@shiro.hasPermission>");
+        strArr.push("<@shiro.hasPermission name='/admin/sys/role/findRoleCommonPermissionAuthListByRole:request'>" +
+                "<a href='javascript:void(0)' onclick='openRoleCommonPermissionAuthDlg(\"" + row.roleId + "\")'>通用授权</a>" +
                 "</@shiro.hasPermission>");
         strArr.push("<@shiro.hasPermission name='/admin/sys/role/findRoleMenuPermissionAuthTree:request'>" +
                 "<a href='javascript:void(0)' onclick='openRoleMenuPermissionAuthDlg(\"" + row.roleId + "\")'>菜单授权</a>" +

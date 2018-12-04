@@ -115,7 +115,7 @@ public class MenuServiceImpl implements MenuService {
     private List<MenuVo> createMenuTree(List<MenuVo> menuList) {
         //所有一级菜单
         List<MenuVo> rootMenuList = new ArrayList<>();
-        if (!(menuList == null && menuList.size() == 0)) {
+        if (menuList != null && menuList.size() != 0) {
             for (MenuVo m : menuList) {
                 if (m.getpMenuId().equals("root")) {
                     //加载一级目录所有菜单

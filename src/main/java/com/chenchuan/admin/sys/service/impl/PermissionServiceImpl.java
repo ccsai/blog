@@ -79,4 +79,9 @@ public class PermissionServiceImpl implements PermissionService {
         permissionDao.removeRolePermissionAuthByPermissionId(permissionId);
         return result;
     }
+
+    @Override
+    public List<PermissionVo> findRoleCommonPermissionAuthListByRole(String roleId) {
+        return permissionDao.findRoleCommonPermissionAuthListByRole(roleId);
+    }
 }
