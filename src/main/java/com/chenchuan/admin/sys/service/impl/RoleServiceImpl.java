@@ -64,9 +64,9 @@ public class RoleServiceImpl implements RoleService {
     public int addRole(RoleVo roleVo) {
         roleVo.setRoleId(UuidUtil.getUuid());//主键
         //当前登录用户
-        String loginName = ((UserPo) SecurityUtils.getSubject().getPrincipal()).getLoginName();
-        roleVo.setCreateUser(loginName);
-        roleVo.setModifyUser(loginName);
+        String userId = ((UserPo) SecurityUtils.getSubject().getPrincipal()).getUserId();
+        roleVo.setCreateUser(userId);
+        roleVo.setModifyUser(userId);
         //添加角色
         int result = roleDao.addRole(roleVo);
         if (result == 0) {
@@ -88,7 +88,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public int editRoleByRoleId(RoleVo roleVo) {
-        roleVo.setModifyUser(((UserPo) SecurityUtils.getSubject().getPrincipal()).getLoginName());
+        roleVo.setModifyUser(((UserPo) SecurityUtils.getSubject().getPrincipal()).getUserId());
         //修改角色
         int result = roleDao.editRoleByRoleId(roleVo);
         if (result == 0) {
@@ -164,6 +164,11 @@ public class RoleServiceImpl implements RoleService {
             addRolePermissionAuth(roleId, permissionIds);
         }
         return 1;
+    }
+
+    @Override
+    public List<RoleVo> findUserRoleAuthByUserId(String userId) {
+        return roleDao.findUserRoleAuthByUserId(userId);
     }
 
     /**

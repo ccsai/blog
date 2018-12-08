@@ -113,4 +113,12 @@ public interface RoleDao {
      */
     int addRolePermissionAuth(Map<String, Object> roleIdPermissionIdAuthObj);
 
+    /**
+     * 根据用户编号查询用户角色关联的角色列表
+     *
+     * @param userId 用户编号
+     * @return 具有用户角色关系的角色列表
+     */
+    List<RoleVo> findUserRoleAuthByUserId(String userId);
+
 }

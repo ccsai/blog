@@ -150,4 +150,14 @@
         </foreach>
     </insert>
 
+    <!-- 根据用户编号查询用户角色关联的角色列表 -->
+    <select id="findUserRoleAuthByUserId" parameterType="String" resultType="com.chenchuan.admin.sys.vo.RoleVo">
+        SELECT
+        <include refid="roleObject"/>,
+        (CASE WHEN ura.role_id IS NULL THEN NULL ELSE 1 END) AS roleChecked
+        FROM role r
+        LEFT JOIN user_role_auth ura
+        ON r.role_id = ura.role_id AND ura.user_id = #{userId}
+    </select>
+
 </mapper>

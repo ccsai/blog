@@ -51,9 +51,9 @@ public class MenuServiceImpl implements MenuService {
     public int addMenu(MenuVo menuVo) {
         menuVo.setMenuId(UuidUtil.getUuid());//主键
         //当前登录用户名
-        String loginName = ((UserPo) SecurityUtils.getSubject().getPrincipal()).getLoginName();
-        menuVo.setCreateUser(loginName);
-        menuVo.setModifyUser(loginName);
+        String userId = ((UserPo) SecurityUtils.getSubject().getPrincipal()).getUserId();
+        menuVo.setCreateUser(userId);
+        menuVo.setModifyUser(userId);
         //添加菜单
         int result = menuDao.addMenu(menuVo);
         if (result == 0) {
@@ -70,7 +70,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Transactional
     public int editMenuByMenuId(MenuVo menuVo) {
-        menuVo.setModifyUser(((UserPo) SecurityUtils.getSubject().getPrincipal()).getLoginName());
+        menuVo.setModifyUser(((UserPo) SecurityUtils.getSubject().getPrincipal()).getUserId());
         //修改菜单
         int result = menuDao.editMenuByMenuId(menuVo);
         if (result == 0) {

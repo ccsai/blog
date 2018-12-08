@@ -39,9 +39,9 @@ public class PermissionServiceImpl implements PermissionService {
     public int addPermission(PermissionVo permissionVo) {
         //主键
         permissionVo.setPermissionId(UuidUtil.getUuid());//当前登录用户名
-        String loginName = ((UserPo) SecurityUtils.getSubject().getPrincipal()).getLoginName();
-        permissionVo.setCreateUser(loginName);
-        permissionVo.setModifyUser(loginName);
+        String userId = ((UserPo) SecurityUtils.getSubject().getPrincipal()).getUserId();
+        permissionVo.setCreateUser(userId);
+        permissionVo.setModifyUser(userId);
         //添加权限
         int result = permissionDao.addPermission(permissionVo);
         if (result == 0) {
@@ -58,7 +58,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     @Transactional
     public int editPermissionByPermissionId(PermissionVo permissionVo) {
-        permissionVo.setModifyUser(((UserPo) SecurityUtils.getSubject().getPrincipal()).getLoginName());
+        permissionVo.setModifyUser(((UserPo) SecurityUtils.getSubject().getPrincipal()).getUserId());
         //修改权限
         int result = permissionDao.editPermissionByPermissionId(permissionVo);
         if (result == 0) {

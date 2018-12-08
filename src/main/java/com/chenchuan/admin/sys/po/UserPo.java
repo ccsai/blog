@@ -15,6 +15,8 @@ public class UserPo extends BasePo {
 
     private String loginName;
 
+    private String realName;
+
     private String password;
 
     private String phone;
@@ -55,6 +57,14 @@ public class UserPo extends BasePo {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     public String getPassword() {

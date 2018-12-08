@@ -17,14 +17,15 @@ import java.util.Map;
 @Component
 public class ShiroCacheAspect {
 
-    @Pointcut("execution(* com.chenchuan.admin.sys.controller.PermissionController.addPermission(..)) || " +
-            "execution(* com.chenchuan.admin.sys.controller.PermissionController.editPermissionByPermissionId(..)) ||" +
-            "execution(* com.chenchuan.admin.sys.controller.PermissionController.removePermissionByPermissionId(..))||" +
-            "execution(* com.chenchuan.admin.sys.controller.RoleController.addRole(..)) ||" +
-            "execution(* com.chenchuan.admin.sys.controller.RoleController.editRoleByRoleId(..)) ||" +
-            "execution(* com.chenchuan.admin.sys.controller.RoleController.removeRoleByRoleId(..)) ||" +
+    @Pointcut("execution(* com.chenchuan.admin.sys.controller.PermissionController.add*(..)) || " +
+            "execution(* com.chenchuan.admin.sys.controller.PermissionController.edit*(..)) ||" +
+            "execution(* com.chenchuan.admin.sys.controller.PermissionController.remove*(..))||" +
+            "execution(* com.chenchuan.admin.sys.controller.RoleController.add*(..)) ||" +
+            "execution(* com.chenchuan.admin.sys.controller.RoleController.edit*(..)) ||" +
+            "execution(* com.chenchuan.admin.sys.controller.RoleController.remove*(..)) ||" +
             "execution(* com.chenchuan.admin.sys.controller.RoleController.authorizationMenuPermission(..)) ||" +
-            "execution(* com.chenchuan.admin.sys.controller.RoleController.addRoleCommonPermissionAuth(..))")
+            "execution(* com.chenchuan.admin.sys.controller.RoleController.addRoleCommonPermissionAuth(..)) ||" +
+            "execution(* com.chenchuan.admin.sys.controller.UserController.addUserRoleAuth(..))")
     public void shiroCacheClearPointCut() {
     }
 

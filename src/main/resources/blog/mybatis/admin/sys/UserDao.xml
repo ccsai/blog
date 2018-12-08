@@ -4,38 +4,149 @@
     <sql id="userObject">
 		u.user_id			AS userId,
 		u.login_name		AS loginName,
-		u.password			AS password,
+		u.real_name			AS realName,
+		u.`password`		AS `password`,
 		u.phone				AS phone,
 		u.email				AS email,
 		u.last_login_time	AS lastLoginTime,
 		u.login_type		AS loginType,
-		u.status			AS status,
+		u.`status`			AS `status`,
 		u.create_user		AS createUser,
 		u.create_time		AS createTime,
 		u.modify_user		AS modifyUser,
 		u.modify_time		AS modifyTime
 	</sql>
 
-    <!-- 根据条件查询用户 -->
+    <!-- 根据条件查询用户（唯一用户） -->
     <select id="findUserByLoginNameAndPassword" parameterType="com.chenchuan.admin.sys.vo.UserVo"
             resultType="com.chenchuan.admin.sys.po.UserPo">
         SELECT
         <include refid="userObject"/>
-        FROM `user` AS u
+        FROM `user` u
         <where>
-			<if test="loginName != null and loginName != ''">
-				AND u.login_name = #{loginName}
-			</if>
-			<if test="password != null and password != ''">
-				AND u.password = #{password}
-			</if>
-			<if test="loginType != null and loginType != ''">
-				AND u.login_type = #{loginType}
-			</if>
-			<if test="status != null and status != ''">
-				AND u.status = #{status}
-			</if>
+            <if test="loginName != null and loginName != ''">
+                AND u.login_name = #{loginName}
+            </if>
+            <if test="password != null and password != '' or password == '0'">
+                AND u.`password` = #{password}
+            </if>
+            <if test="loginType != null and loginType != ''">
+                AND u.login_type = #{loginType}
+            </if>
+            <if test="status != null and status != ''">
+                AND u.`status` = #{status}
+            </if>
         </where>
     </select>
+
+    <!-- 查询所有用户列表 -->
+    <select id="findUserList" parameterType="com.chenchuan.admin.sys.vo.UserVo"
+            resultType="com.chenchuan.admin.sys.po.UserPo">
+        SELECT
+        <include refid="userObject"/>
+        FROM `user` u
+        <where>
+            <if test="loginType == 0 or loginType != null and loginType != ''">
+                AND u.login_type = #{loginType}
+            </if>
+            <if test="status == 0 or status != null and status != ''">
+                AND u.`status` = #{status}
+            </if>
+            <if test="keyWord != null and keyWord != ''">
+                AND (u.login_name LIKE '%${keyWord}%'
+                OR u.real_name LIKE '%${keyWord}%'
+                OR u.phone LIKE '%${keyWord}%'
+                OR u.email LIKE '%${keyWord}%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 得到对应用户名是否存在 -->
+    <select id="findLoginNameNumberByLoginName" parameterType="com.chenchuan.admin.sys.vo.UserVo" resultType="Integer">
+        SELECT COUNT(*) FROM `user` WHERE login_name = #{loginName} AND user_id != #{userId}
+    </select>
+
+    <!-- 添加用户 -->
+    <insert id="addUser" parameterType="com.chenchuan.admin.sys.vo.UserVo">
+        INSERT INTO `user`(
+          user_id,
+          login_name,
+          real_name,
+          `password`,
+          phone,
+          email,
+          last_login_time,
+          login_type,
+          `status`,
+          create_user,
+          create_time,
+          modify_user,
+          modify_time
+        )VALUES (
+          #{userId},
+          #{loginName},
+          #{realName},
+          #{password},
+          #{phone},
+          #{email},
+          #{lastLoginTime},
+          #{loginType},
+          #{status},
+          #{createUser},
+          NOW(),
+          #{modifyUser},
+          NOW()
+        )
+    </insert>
+
+    <!-- 根据用户编号查询用户信息 -->
+    <select id="findUserByUserId" parameterType="String" resultType="com.chenchuan.admin.sys.vo.UserVo">
+        SELECT
+        <include refid="userObject"/>
+        FROM `user` u
+        WHERE u.user_id = #{userId}
+    </select>
+
+    <!-- 根据用户编号修改用户 -->
+    <update id="editUserByUserId" parameterType="com.chenchuan.admin.sys.vo.UserVo">
+        UPDATE `user`
+        <set>
+            <if test="loginName != null and loginName != ''">login_name = #{loginName},</if>
+            <if test="realName != null and realName != ''">real_name = #{realName},</if>
+            <if test="password != null and password != '' or password == '0'">`password` = #{password},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="lastLoginTime != null and lastLoginTime != ''">last_login_time = #{lastLoginTime},</if>
+            <if test="loginType == 0 or loginType != null and loginType != ''">login_type = #{loginType},</if>
+            <if test="status == 0 or status != null and status != ''">`status` = #{status},</if>
+            <if test="modifyUser != null and modifyUser != ''">modify_user = #{modifyUser},</if>
+            modify_time = NOW()
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- 根据用户编号删除用户 -->
+    <delete id="removeUserByUserId" parameterType="String">
+        DELETE FROM `user` WHERE user_id = #{userId}
+    </delete>
+
+    <!-- 根据用户编号删除用户角色关联 -->
+    <delete id="removeUserRoleAuthByUserId" parameterType="String">
+        DELETE FROM user_role_auth WHERE user_id = #{userId}
+    </delete>
+
+    <!-- 添加用户角色关联 -->
+    <insert id="addUserRoleAuth" parameterType="java.util.Map">
+        INSERT INTO user_role_auth(
+        user_id,
+        role_id
+        )VALUES
+        <foreach collection="roleIds" separator="," item="roleId">
+            (
+            #{userId},
+            #{roleId}
+            )
+        </foreach>
+    </insert>
 
 </mapper>
