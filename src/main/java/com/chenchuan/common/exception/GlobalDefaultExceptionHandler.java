@@ -1,6 +1,8 @@
 package com.chenchuan.common.exception;
 
 import com.chenchuan.common.util.AjaxUtil;
+import com.chenchuan.config.exception.ExceptionConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,6 +16,9 @@ import java.util.Map;
  */
 @RestControllerAdvice
 public class GlobalDefaultExceptionHandler {
+
+    @Autowired
+    private ExceptionConfig exceptionConfig;
 
     /**
      * 全局异常处理程序
@@ -46,7 +51,7 @@ public class GlobalDefaultExceptionHandler {
                 modelAndView.addObject("notice", "服务器异常，请稍后重试或联系管理员!");
             }
             modelAndView.addObject("message", e.getMessage());
-            modelAndView.setViewName("/common/exception/webRequestExceptionHandlerPage");
+            modelAndView.setViewName(exceptionConfig.getGlobalDefaultExceptionHandlerPage());
             return modelAndView;
         }
     }

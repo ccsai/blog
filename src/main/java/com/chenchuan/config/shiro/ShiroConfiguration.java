@@ -44,9 +44,9 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
         //如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
-        shiroFilterFactoryBean.setLoginUrl("/admin/guest/login/index");
+        shiroFilterFactoryBean.setLoginUrl(securityConfig.getAdminLoginPageUrl());
         //未授权界面
-        shiroFilterFactoryBean.setUnauthorizedUrl("/common/index");
+        shiroFilterFactoryBean.setUnauthorizedUrl(securityConfig.getUnauthorizedUrl());
 
         //顺序拦截器配置,LinkedHashMap是有序的
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
@@ -94,7 +94,7 @@ public class ShiroConfiguration {
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(myShiroRealm());
-        securityManager.setCacheManager(ehCacheManager());
+        securityManager.setCacheManager(ehCacheManager(securityConfig));
         return securityManager;
     }
 
@@ -120,9 +120,9 @@ public class ShiroConfiguration {
      * @return
      */
     @Bean
-    public EhCacheManager ehCacheManager() {
+    public EhCacheManager ehCacheManager(SecurityConfig securityConfig) {
         EhCacheManager ehCacheManager = new EhCacheManager();
-        ehCacheManager.setCacheManagerConfigFile("classpath:config/ehcache-shiro.xml");
+        ehCacheManager.setCacheManagerConfigFile(securityConfig.getCacheManagerConfigFile());
         return ehCacheManager;
     }
 
