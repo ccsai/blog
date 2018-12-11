@@ -42,3 +42,11 @@ security:
   anon_url_path: /css/**,/img/**,/js/**,/plugin/**,/admin/guest/login/index,/guest/**,/login,/logOut
 
 
+## 七牛云配置
+qiniu:
+  # 密钥
+  access_key: fxjvFewQRrpZFUpxsGHQ5H6LeeU5nKSmrcEXJSMN
+  secret_key: Avn-cR32Zwg_CRNL-8RhMJCzShugy4fS_21gg_Wc
+  bucket: blog #空间
+  cdn_prefix: pjh0li70j.bkt.clouddn.com #外链访问路径
+  up_expire_seconds: 3600 #上传token过期时间（暂时未使用）

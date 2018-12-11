@@ -39,7 +39,7 @@ public class RoleServiceImpl implements RoleService {
     public List<RolePo> findRolesPermissionsByUser(UserVo userVo) {
         //获取对应用户的角色
         List<RolePo> roleList = roleDao.findRolesByUser(userVo);
-        if (roleList == null && roleList.size() == 0) {
+        if (roleList == null || roleList.size() == 0) {
             return null;
         }
         //获取角色对应权限

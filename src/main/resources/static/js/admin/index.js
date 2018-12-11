@@ -11,7 +11,7 @@ $(function () {
             }
             //菜单树
             var menuTree = result.menuTree;
-            if (!(menuTree && menuTree.length == 0)) {
+            if (menuTree && menuTree.length != 0) {
                 $.each(menuTree, function (index, topMenu) {
                     //添加顶级菜单面板
                     $('#menuAccordion').accordion('add', {

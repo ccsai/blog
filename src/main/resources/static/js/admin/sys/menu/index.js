@@ -10,7 +10,7 @@ $(function () {
                 $.messager.alert('错误提示', data.notice, 'error');
             } else if (data.resultCode == 1) {
                 return data.menuTree;
-            } else if (data.menuTree == null && data.menuTree.length == 0) {
+            } else if (data.menuTree == null || data.menuTree.length == 0) {
                 return [];
             }
         }

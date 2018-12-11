@@ -296,7 +296,7 @@ function openRoleMenuPermissionAuthDlg(roleId) {
         loadFilter: function (data) {
             if (data.resultCode == -1 || data.resultCode == 0) {
                 $.messager.alert('错误提示', data.notice, 'error');
-            } else if (data.menuTree == null && data.menuTree.length == 0) {
+            } else if (data.menuTree == null || data.menuTree.length == 0) {
                 return [];
             } else if (data.resultCode == 1) {
                 return data.menuTree;
@@ -447,7 +447,7 @@ function openRoleCommonPermissionAuthDlg(roleId) {
         loadFilter: function (data) {
             if (data.resultCode == -1 || data.resultCode == 0) {
                 $.messager.alert('错误提示', data.notice, 'error');
-            } else if (data.permissionList == null && data.permissionList.length == 0) {
+            } else if (data.permissionList == null || data.permissionList.length == 0) {
                 return [];
             } else if (data.resultCode == 1) {
                 return data.permissionList;
