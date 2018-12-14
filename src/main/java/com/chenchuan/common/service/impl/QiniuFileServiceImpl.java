@@ -47,6 +47,12 @@ public class QiniuFileServiceImpl implements QiniuFileService {
     private Long upExpireSeconds;
 
     /**
+     * 七牛CDN前缀
+     */
+    @Value("${qiniu.cdn_prefix}")
+    private String cdnPrefix;
+
+    /**
      * 定义七牛云上传的相关策略
      */
     private StringMap putPolicy;
@@ -54,7 +60,7 @@ public class QiniuFileServiceImpl implements QiniuFileService {
 
     @Override
     @Transactional
-    public JSONObject uploadFile(MultipartFile file) {
+    public JSONObject uploadFile(MultipartFile file) throws IOException {
         //判断文件是否为空
         if (file == null || file.getSize() == 0 || file.isEmpty()) {
             throw new BaseException("请选择上传文件！");
@@ -71,10 +77,15 @@ public class QiniuFileServiceImpl implements QiniuFileService {
                     null);
             //解析上传成功的结果
             resultOfPolicy = JSON.parseObject(response.bodyString());
-        } catch (QiniuException e) {
+        } catch (QiniuException e) {//异常要删除已经上传的文件
+            deleteFile(resultOfPolicy.getString("key"));
             throw new BaseException("文件上传失败！<br>" + e.response.toString());
         } catch (IOException e) {
-            throw new BaseException("文件上传失败!");
+            deleteFile(resultOfPolicy.getString("key"));
+            throw new BaseException("文件上传失败！");
+        } catch (Exception e) {
+            deleteFile(resultOfPolicy.getString("key"));
+            throw new BaseException("文件上传失败！");
         }
         return resultOfPolicy;
     }
@@ -82,6 +93,9 @@ public class QiniuFileServiceImpl implements QiniuFileService {
     @Override
     @Transactional
     public int deleteFile(String key) {
+        if (key == null) {
+            throw new BaseException("请选择要删除的文件");
+        }
         //上传结果状态
         int result = 0;
         Response response = null;
@@ -130,7 +144,7 @@ public class QiniuFileServiceImpl implements QiniuFileService {
      */
     private StringMap uploadPolicy() {
         putPolicy = new StringMap();
-        putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\",\"imageInfo\":$(imageInfo)}");
+        putPolicy.put("returnBody", "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\",\"imageInfo\":$(imageInfo),\"cdnPrefix\":\"" + cdnPrefix + "\"}");
         return putPolicy;
     }
 }

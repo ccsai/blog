@@ -24,7 +24,12 @@ public class UploadFileTestController {
     @PostMapping("/upFile")
     @ResponseBody
     public JSONObject upFile(MultipartFile file) throws IOException {
-        return qiniuFileService.uploadFile(file);
+        try {
+            return qiniuFileService.uploadFile(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @PostMapping("/removeFile")

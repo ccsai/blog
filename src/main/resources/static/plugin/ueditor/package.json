@@ -1,0 +1,22 @@
+{
+  "name": "ueditor-utf8-jsp",
+  "version": "1.4.3",
+  "description": "An npm version for ueditor",
+  "main": "ueditor.all.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kidnes/ueditor-utf8-jsp.git"
+  },
+  "keywords": [
+    "ueditor"
+  ],
+  "author": "ueditor",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kidnes/ueditor-utf8-jsp/issues"
+  },
+  "homepage": "https://github.com/kidnes/ueditor-utf8-jsp#readme"
+}

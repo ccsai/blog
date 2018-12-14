@@ -3,7 +3,7 @@ package com.chenchuan.common.service;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.io.IOException;
 
 /**
  * 七牛oos Service
@@ -16,7 +16,7 @@ public interface QiniuFileService {
      * @param file
      * @return 上传返回信息
      */
-    JSONObject uploadFile(MultipartFile file);
+    JSONObject uploadFile(MultipartFile file) throws IOException;
 
     /**
      * 单文件删除文件
