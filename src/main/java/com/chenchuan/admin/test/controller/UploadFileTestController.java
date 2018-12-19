@@ -25,7 +25,7 @@ public class UploadFileTestController {
     @ResponseBody
     public JSONObject upFile(MultipartFile file) throws IOException {
         try {
-            return qiniuFileService.uploadFile(file);
+            return qiniuFileService.uploadFile(file.getInputStream());
         } catch (Exception e) {
             e.printStackTrace();
         }

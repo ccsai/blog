@@ -2,6 +2,7 @@ package com.chenchuan.admin.sys.controller;
 
 import com.chenchuan.admin.sys.service.PermissionService;
 import com.chenchuan.admin.sys.vo.PermissionVo;
+import com.chenchuan.common.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/admin/sys/permission")
-public class PermissionController {
+public class PermissionController extends BaseController {
 
     @Autowired
     private PermissionService permissionService;

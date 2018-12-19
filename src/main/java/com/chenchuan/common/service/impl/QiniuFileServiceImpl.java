@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 public class QiniuFileServiceImpl implements QiniuFileService {
@@ -60,9 +60,9 @@ public class QiniuFileServiceImpl implements QiniuFileService {
 
     @Override
     @Transactional
-    public JSONObject uploadFile(MultipartFile file) throws IOException {
+    public JSONObject uploadFile(InputStream inputStream) throws IOException {
         //判断文件是否为空
-        if (file == null || file.getSize() == 0 || file.isEmpty()) {
+        if (inputStream == null || inputStream.available() == 0) {
             throw new BaseException("请选择上传文件！");
         }
         //返回设置
@@ -70,7 +70,7 @@ public class QiniuFileServiceImpl implements QiniuFileService {
         Response response = null;
         try {
             //上传文件
-            response = uploadManager.put(file.getInputStream(),
+            response = uploadManager.put(inputStream,
                     UuidUtil.getUuid(),
                     getUploadToken(),
                     null,
@@ -80,9 +80,6 @@ public class QiniuFileServiceImpl implements QiniuFileService {
         } catch (QiniuException e) {//异常要删除已经上传的文件
             deleteFile(resultOfPolicy.getString("key"));
             throw new BaseException("文件上传失败！<br>" + e.response.toString());
-        } catch (IOException e) {
-            deleteFile(resultOfPolicy.getString("key"));
-            throw new BaseException("文件上传失败！");
         } catch (Exception e) {
             deleteFile(resultOfPolicy.getString("key"));
             throw new BaseException("文件上传失败！");

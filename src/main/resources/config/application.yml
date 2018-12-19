@@ -19,6 +19,12 @@ spring:
     suffix: .ftl #模板文件后缀
     request-context-attribute: request #所有视图的RequestContext属性的名称
 
+  servlet:
+    multipart:
+      max-file-size: 102400KB
+      max-request-size: 102400KB
+
+
 
 mybatis:
   ## mybatis扫描xml路径

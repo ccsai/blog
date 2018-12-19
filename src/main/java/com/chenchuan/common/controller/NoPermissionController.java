@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/common")
-public class NoPermissionController {
+public class NoPermissionController extends BaseController {
 
     @GetMapping("/index")
     public String index() {
