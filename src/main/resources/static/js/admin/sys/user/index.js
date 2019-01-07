@@ -38,6 +38,7 @@ $(function () {
         onOpen: function () {
             //清空表单
             $('#userDetailForm').form('reset');
+            $('#userDetailForm input[name=userId]').val('');
         }
     });
 

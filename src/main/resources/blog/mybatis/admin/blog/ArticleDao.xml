@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenchuan.admin.blog.dao.ArticleDao">
+    <sql id="articleObject">
+      a.article_id      AS articleId,
+      a.title           AS title,
+      a.content         AS content,
+      a.class_id        AS classId,
+      a.sort_no         AS sortNo,
+      a.is_private      AS isPrivate,
+      IFNULL(a.visited_number,0)  AS visitedNumber,
+      IFNULL(a.support_number,0)  AS supportNumber,
+      a.create_user     AS createUser,
+      a.create_time     AS createTime,
+      a.modify_user     AS modifyUser,
+      a.modify_time     AS modifyTime
+	</sql>
+
+    <!-- 查询文章列表（label标签名称拼接） -->
+    <select id="findArticleList" parameterType="com.chenchuan.admin.blog.vo.ArticleVo"
+            resultType="com.chenchuan.admin.blog.vo.ArticleVo">
+        SELECT
+        <include refid="articleObject"/>,
+        GROUP_CONCAT(l.label) AS label
+        FROM article a
+        LEFT JOIN article_label_auth ala
+        ON a.article_id = ala.article_id
+        LEFT JOIN label l
+        ON ala.label_id = l.label_id
+        <where>
+            <if test="title != null and title != ''">
+                AND a.title LIKE '%${title}%'
+            </if>
+            <if test="isPrivate != null and isPrivate != '' or isPrivate == 0">
+                AND a.is_private = #{isPrivate}
+            </if>
+            <if test="label != null and label != ''">
+                AND l.label LIKE '%${label}%'
+            </if>
+        </where>
+        GROUP BY a.article_id
+        ORDER BY a.sort_no
+    </select>
+
+    <!-- 查看文章标题是否重复 -->
+    <select id="findarticleTitleIsExists" parameterType="com.chenchuan.admin.blog.vo.ArticleVo" resultType="Integer">
+        SELECT COUNT(*) FROM article WHERE title = #{title}
+        <if test="articleId != null and articleId != ''">
+            AND article_id != #{articleId}
+        </if>
+    </select>
+
+    <!-- 添加文章 -->
+    <insert id="addArticle" parameterType="com.chenchuan.admin.blog.vo.ArticleVo">
+        INSERT INTO article(
+          article_id,
+          title,
+          content,
+          class_id,
+          sort_no,
+          is_private,
+          visited_number,
+          support_number,
+          create_user,
+          create_time,
+          modify_user,
+          modify_time
+        )VALUES (
+          #{articleId},
+          #{title},
+          #{content},
+          #{classId},
+          #{sortNo},
+          #{isPrivate},
+          0,
+          0,
+          #{createUser},
+          NOW(),
+          #{modifyUser},
+          NOW()
+        )
+    </insert>
+
+    <!-- 添加文章标签关联 -->
+    <insert id="addArticleLabelAuth" parameterType="java.util.List">
+        INSERT INTO article_label_auth(
+        article_id,
+        label_id
+        )VALUES
+        <foreach collection="list" item="articleLabel" separator=",">
+            (
+            #{articleLabel.articleId},
+            #{articleLabel.labelId}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 根据文章编号查看文章详情 -->
+    <select id="findArticleDetailByArticleId" parameterType="String" resultType="com.chenchuan.admin.blog.vo.ArticleVo">
+        SELECT
+        <include refid="articleObject"/>,
+        GROUP_CONCAT(l.label_id) AS label
+        FROM article a
+        LEFT JOIN article_label_auth ala
+        ON a.article_id = ala.article_id
+        LEFT JOIN label l
+        ON ala.label_id = l.label_id
+        WHERE a.article_id = #{articleId}
+        GROUP BY a.article_id
+    </select>
+
+    <!-- 根据文章编号修改文章 -->
+    <update id="editArticleByArticleId" parameterType="com.chenchuan.admin.blog.vo.ArticleVo">
+        UPDATE article
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="classId != null and classId != ''">class_id = #{classId},</if>
+            <if test="sortNo != null and sortNo != ''">sort_no = #{sortNo},</if>
+            <if test="isPrivate != null and isPrivate != '' or isPrivate == 0">is_private = #{isPrivate},</if>
+            <if test="visitedNumber != null and visitedNumber != ''">visited_number = #{visitedNumber},</if>
+            <if test="supportNumber != null and supportNumber != ''">support_number = #{supportNumber},</if>
+            <if test="modifyUser != null and modifyUser != ''">modify_user = #{modifyUser},</if>
+            modify_time = NOW()
+        </set>
+        WHERE article_id = #{articleId}
+    </update>
+
+    <!-- 根据文章编号删除文章标签关联 -->
+    <delete id="removeArticleLabelAuthByArticleId">
+        DELETE FROM article_label_auth WHERE article_id = #{articleId}
+    </delete>
+
+    <!-- 根据文章编号删除文章 -->
+    <delete id="removeArticleByArticleId" parameterType="String">
+        DELETE FROM article WHERE article_id = #{articleId}
+    </delete>
+</mapper>

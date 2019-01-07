@@ -4,12 +4,20 @@ import com.chenchuan.admin.sys.po.UserPo;
 import com.chenchuan.admin.sys.vo.UserVo;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * 用户servica
  */
 public interface UserService {
+
+    /**
+     * 得到当前登录用户的基本信息
+     *
+     * @return 用户po
+     */
+    UserPo getCurrentLoginUserBaseInfo();
 
     /**
      * 分有查询所有用户
@@ -58,4 +66,12 @@ public interface UserService {
      * @return 添加结果状态
      */
     int addUserRoleAuth(Map<String, Object> userIdRoleIdsAuthObj);
+
+    /**
+     * 管理员查询所有用户以及是否有新留言
+     *
+     * @param userVo
+     * @return 带未读留言的用户集合
+     */
+    List<UserVo> findIsHaveNewLeaveMessageByManager(UserVo userVo);
 }

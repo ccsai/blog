@@ -87,4 +87,12 @@ public interface UserDao {
      * @return 影响行数
      */
     int addUserRoleAuth(Map<String, Object> userIdRoleIdsAuth);
+
+    /**
+     * 管理员查询所有用户以及是否有新留言
+     *
+     * @param userVo
+     * @return 带未读留言的用户集合
+     */
+    List<UserVo> findIsHaveNewLeaveMessageByManager(UserVo userVo);
 }

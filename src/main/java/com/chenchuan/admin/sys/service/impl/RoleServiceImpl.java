@@ -5,15 +5,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.chenchuan.admin.sys.dao.PermissionDao;
 import com.chenchuan.admin.sys.dao.RoleDao;
 import com.chenchuan.admin.sys.po.RolePo;
-import com.chenchuan.admin.sys.po.UserPo;
 import com.chenchuan.admin.sys.service.RoleService;
+import com.chenchuan.admin.sys.service.UserService;
 import com.chenchuan.admin.sys.vo.RoleVo;
 import com.chenchuan.admin.sys.vo.UserVo;
 import com.chenchuan.common.exception.BaseException;
 import com.chenchuan.common.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +32,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private PermissionDao permissionDao;
+
+    @Autowired
+    private UserService userService;
 
 
     @Override
@@ -64,7 +66,7 @@ public class RoleServiceImpl implements RoleService {
     public int addRole(RoleVo roleVo) {
         roleVo.setRoleId(UuidUtil.getUuid());//主键
         //当前登录用户
-        String userId = ((UserPo) SecurityUtils.getSubject().getPrincipal()).getUserId();
+        String userId = userService.getCurrentLoginUserBaseInfo().getUserId();
         roleVo.setCreateUser(userId);
         roleVo.setModifyUser(userId);
         //添加角色
@@ -88,7 +90,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public int editRoleByRoleId(RoleVo roleVo) {
-        roleVo.setModifyUser(((UserPo) SecurityUtils.getSubject().getPrincipal()).getUserId());
+        roleVo.setModifyUser(userService.getCurrentLoginUserBaseInfo().getUserId());
         //修改角色
         int result = roleDao.editRoleByRoleId(roleVo);
         if (result == 0) {

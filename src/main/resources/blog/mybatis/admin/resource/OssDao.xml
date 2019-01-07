@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenchuan.admin.resource.dao.OssDao">
+    <sql id="ossObject">
+      o.oss_key       AS ossKey,
+      o.oss_mime_type AS ossMimeType,
+      o.oss_size      AS ossSize,
+      o.create_user   AS createUser,
+      o.create_time   AS createTime,
+      o.modify_user   AS modifyUser,
+      o.modify_time   AS modifyTime
+	</sql>
+
+    <!-- 添加oss -->
+    <insert id="addOss" parameterType="com.chenchuan.admin.resource.vo.OssVo">
+        INSERT INTO oss(
+          oss_key,
+          oss_mime_type,
+          oss_size,
+          create_user,
+          create_time,
+          modify_user,
+          modify_time
+        )VALUES (
+          #{ossKey},
+          #{ossMimeType},
+          #{ossSize},
+          #{createUser},
+          NOW(),
+          #{modifyUser},
+          NOW()
+        )
+    </insert>
+
+    <!-- 添加模块对象关联 -->
+    <insert id="addModuleOssAuth" parameterType="java.util.List">
+        INSERT INTO module_oss_auth(
+        module_id,
+        oss_key,
+        module_type
+        )VALUES
+        <foreach collection="moduleOssAuths" separator="," item="moduleOssAuth">
+            (
+            #{moduleOssAuth.moduleId},
+            #{moduleOssAuth.ossKey},
+            #{moduleOssAuth.moduleType}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 根据模块删除模块对象存储关联（批量删除） -->
+    <delete id="removeModuleOssAuthByModule" parameterType="java.util.List">
+        DELETE FROM module_oss_auth WHERE(module_id,module_type) IN
+        <foreach collection="list" open="(" close=")" separator="," item="moduleInfo">
+            (
+            #{moduleInfo.moduleId},
+            #{moduleInfo.moduleType}
+            )
+        </foreach>
+    </delete>
+
+    <!-- 根据oss key删除oss -->
+    <delete id="removeModuleOssAuthByOssKeys" parameterType="java.util.List">
+        DELETE FROM module_oss_auth WHERE oss_key IN
+        <foreach collection="list" separator="," item="key" open="(" close=")">
+            #{key}
+        </foreach>
+    </delete>
+
+</mapper>

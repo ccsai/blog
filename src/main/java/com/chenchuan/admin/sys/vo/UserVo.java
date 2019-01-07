@@ -12,6 +12,11 @@ public class UserVo extends UserPo {
      */
     private String keyWord;
 
+    /**
+     * 未读留言
+     */
+    private Integer leaveMessageNumber;
+
 
     public String getKeyWord() {
         return keyWord;
@@ -19,5 +24,13 @@ public class UserVo extends UserPo {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
+    }
+
+    public Integer getLeaveMessageNumber() {
+        return leaveMessageNumber;
+    }
+
+    public void setLeaveMessageNumber(Integer leaveMessageNumber) {
+        this.leaveMessageNumber = leaveMessageNumber;
     }
 }

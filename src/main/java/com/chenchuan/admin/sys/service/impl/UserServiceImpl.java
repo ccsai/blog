@@ -13,6 +13,7 @@ import com.chenchuan.config.shiro.SecurityConfig;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.UnavailableSecurityManagerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,17 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    public UserPo getCurrentLoginUserBaseInfo() {
+        UserPo userPo;
+        try {
+            userPo = (UserPo) SecurityUtils.getSubject().getPrincipal();
+        } catch (UnavailableSecurityManagerException e) {
+            userPo = null;
+        }
+        return userPo;
+    }
+
+    @Override
     public PageInfo<UserPo> findUserListByPage(UserVo userVo) {
         PageHelper.startPage(userVo.getPage(), userVo.getRows());
         //用户列表
@@ -45,6 +57,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public int addUser(UserVo userVo) {
+        userVo.setUserId(null);//用于验证用户名重名
         //判断输入的用户明是否重复
         int loginNameIsUsed = userDao.findLoginNameNumberByLoginName(userVo);
         if (loginNameIsUsed > 0) {
@@ -53,7 +66,7 @@ public class UserServiceImpl implements UserService {
         //主键
         userVo.setUserId(UuidUtil.getUuid());
         //当前登录用户编号
-        String userId = ((UserPo) SecurityUtils.getSubject().getPrincipal()).getUserId();
+        String userId = getCurrentLoginUserBaseInfo().getUserId();
         userVo.setCreateUser(userId);
         userVo.setModifyUser(userId);
         //加密前密码
@@ -91,7 +104,7 @@ public class UserServiceImpl implements UserService {
             throw new BaseException("该用户名已经被占用，请重新输入！");
         }
         //当前用户
-        userVo.setModifyUser(((UserPo) SecurityUtils.getSubject().getPrincipal()).getUserId());
+        userVo.setModifyUser(getCurrentLoginUserBaseInfo().getUserId());
         //加密前密码
         String password = userVo.getPassword();
         //密码加密
@@ -136,5 +149,10 @@ public class UserServiceImpl implements UserService {
             userDao.addUserRoleAuth(userIdRoleIdsAuth);
         }
         return 1;
+    }
+
+    @Override
+    public List<UserVo> findIsHaveNewLeaveMessageByManager(UserVo userVo) {
+        return userDao.findIsHaveNewLeaveMessageByManager(userVo);
     }
 }

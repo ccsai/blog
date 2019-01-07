@@ -63,7 +63,10 @@
 
     <!-- 得到对应用户名是否存在 -->
     <select id="findLoginNameNumberByLoginName" parameterType="com.chenchuan.admin.sys.vo.UserVo" resultType="Integer">
-        SELECT COUNT(*) FROM `user` WHERE login_name = #{loginName} AND user_id != #{userId}
+        SELECT COUNT(*) FROM `user` WHERE login_name = #{loginName}
+        <if test="userId != null and userId != ''">
+            AND user_id != #{userId}
+        </if>
     </select>
 
     <!-- 添加用户 -->
@@ -148,5 +151,23 @@
             )
         </foreach>
     </insert>
+
+    <!-- 管理员查询所有用户以及是否有新留言 -->
+    <select id="findIsHaveNewLeaveMessageByManager" parameterType="com.chenchuan.admin.sys.vo.UserVo"
+            resultType="com.chenchuan.admin.sys.vo.UserVo">
+        SELECT
+        <include refid="userObject"/>,
+        COUNT(lm.send_user) AS leaveMessageNumber
+        FROM `user` u
+        LEFT JOIN leave_message lm
+        ON u.user_id = lm.send_user AND lm.is_read = 0
+        WHERE u.`status` = 1
+        <if test="keyWord != null and keyWord != ''">
+            AND u.login_name LIKE '%${keyWord}%'
+            OR u.realName LIKE '%${keyWord}%'
+        </if>
+        GROUP BY u.user_id
+        ORDER BY MAX(lm.create_time) DESC ,CASE WHEN COUNT(lm.send_user) > 0 THEN 1 ELSE 0 END
+    </select>
 
 </mapper>

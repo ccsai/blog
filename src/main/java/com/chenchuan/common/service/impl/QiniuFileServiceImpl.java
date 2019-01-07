@@ -109,6 +109,7 @@ public class QiniuFileServiceImpl implements QiniuFileService {
     }
 
     @Override
+    @Transactional
     public int deleteFiles(String[] keysList) {
         if (keysList == null || keysList.length == 0) {
             throw new BaseException("请选择要删除的文件");

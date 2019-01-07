@@ -3,13 +3,12 @@ package com.chenchuan.admin.sys.service.impl;
 import com.chenchuan.admin.sys.dao.MenuDao;
 import com.chenchuan.admin.sys.dao.PermissionDao;
 import com.chenchuan.admin.sys.po.MenuPo;
-import com.chenchuan.admin.sys.po.UserPo;
 import com.chenchuan.admin.sys.service.MenuService;
+import com.chenchuan.admin.sys.service.UserService;
 import com.chenchuan.admin.sys.vo.MenuVo;
 import com.chenchuan.admin.sys.vo.UserVo;
 import com.chenchuan.common.exception.BaseException;
 import com.chenchuan.common.util.UuidUtil;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +27,9 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     private PermissionDao permissionDao;
+
+    @Autowired
+    private UserService userService;
 
 
     @Override
@@ -51,7 +53,7 @@ public class MenuServiceImpl implements MenuService {
     public int addMenu(MenuVo menuVo) {
         menuVo.setMenuId(UuidUtil.getUuid());//主键
         //当前登录用户名
-        String userId = ((UserPo) SecurityUtils.getSubject().getPrincipal()).getUserId();
+        String userId = userService.getCurrentLoginUserBaseInfo().getUserId();
         menuVo.setCreateUser(userId);
         menuVo.setModifyUser(userId);
         //添加菜单
@@ -70,7 +72,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @Transactional
     public int editMenuByMenuId(MenuVo menuVo) {
-        menuVo.setModifyUser(((UserPo) SecurityUtils.getSubject().getPrincipal()).getUserId());
+        menuVo.setModifyUser(userService.getCurrentLoginUserBaseInfo().getUserId());
         //修改菜单
         int result = menuDao.editMenuByMenuId(menuVo);
         if (result == 0) {

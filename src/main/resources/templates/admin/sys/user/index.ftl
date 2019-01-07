@@ -4,7 +4,7 @@
     <meta>
     <title>角色管理</title>
     <#include '../../depend/_head.ftl'/>
-    <#include '../../depend/_jquery_serializejson.ftl'/>
+    <#include '../../../common/depend/_jquery_serializejson.ftl'/>
     <script src="${basePath!}/js/admin/sys/user/index.js"></script>
 </head>
 <body>

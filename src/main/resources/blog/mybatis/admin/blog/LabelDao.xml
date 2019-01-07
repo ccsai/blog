@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenchuan.admin.blog.dao.LabelDao">
+    <sql id="labelObject">
+      l.label_id    AS labelId,
+      l.label       AS label,
+      l.sort_no     AS sortNo,
+      l.create_user AS createUser,
+      l.create_time AS createTime,
+      l.modify_user AS modifyUser,
+      l.modify_time AS modifyTime
+	</sql>
+
+    <!-- 查询标签列表 -->
+    <select id="findLabelList" parameterType="com.chenchuan.admin.blog.vo.LabelVo"
+            resultType="com.chenchuan.admin.blog.po.LabelPo">
+        SELECT
+        <include refid="labelObject"/>
+        FROM label l
+        <where>
+            <if test="label != null and label != ''">
+                l.label LIKE '%${label}%'
+            </if>
+        </where>
+        ORDER BY l.sort_no
+    </select>
+
+    <!-- 添加标签 -->
+    <insert id="addLabel" parameterType="com.chenchuan.admin.blog.vo.LabelVo">
+        INSERT INTO label(
+          label_id,
+          label,
+          sort_no,
+          create_user,
+          create_time,
+          modify_user,
+          modify_time
+        )VALUES (
+          #{labelId},
+          #{label},
+          #{sortNo},
+          #{createUser},
+          NOW(),
+          #{modifyUser},
+          NOW()
+        )
+    </insert>
+
+    <!-- 根据编号查询标签 -->
+    <select id="findLabelByLabelId" parameterType="String" resultType="com.chenchuan.admin.blog.po.LabelPo">
+        SELECT
+        <include refid="labelObject"/>
+        FROM label l
+        WHERE l.label_id = #{labelId}
+    </select>
+
+    <!-- 根据编号修改标签 -->
+    <update id="editLabelByLabelId" parameterType="com.chenchuan.admin.blog.vo.LabelVo">
+        UPDATE label
+        <set>
+            <if test="label != null and label != ''">label = #{label},</if>
+            <if test="sortNo != null and sortNo != ''">sort_no = #{sortNo},</if>
+            <if test="modifyUser != null and modifyUser != ''">modify_user = #{modifyUser},</if>
+            modify_time = NOW()
+        </set>
+        WHERE label_id = #{labelId}
+    </update>
+
+    <!-- 根据标签编号删除文章标签关联 -->
+    <delete id="removeArticleLabelAuthByLabelId" parameterType="String">
+        DELETE FROM article_label_auth WHERE label_id = #{labelId}
+    </delete>
+
+    <!-- 根据编号删除标签 -->
+    <delete id="removeLabelByLabelId" parameterType="String">
+        DELETE FROM label WHERE label_id = #{labelId}
+    </delete>
+
+</mapper>

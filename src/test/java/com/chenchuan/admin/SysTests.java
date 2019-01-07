@@ -1,6 +1,15 @@
 package com.chenchuan.admin;
 
 import com.alibaba.fastjson.JSON;
+import com.chenchuan.admin.blog.dao.LeaveMessageDao;
+import com.chenchuan.admin.blog.service.ArticleCommentService;
+import com.chenchuan.admin.blog.service.FriendlyLinkServie;
+import com.chenchuan.admin.blog.service.LabelService;
+import com.chenchuan.admin.blog.service.LeaveMessageService;
+import com.chenchuan.admin.blog.vo.ArticleCommentVo;
+import com.chenchuan.admin.blog.vo.FriendlyLinkVo;
+import com.chenchuan.admin.blog.vo.LabelVo;
+import com.chenchuan.admin.blog.vo.LeaveMessageVo;
 import com.chenchuan.admin.index.service.IndexService;
 import com.chenchuan.admin.sys.dao.MenuDao;
 import com.chenchuan.admin.sys.dao.PermissionDao;
@@ -10,6 +19,7 @@ import com.chenchuan.admin.sys.po.UserPo;
 import com.chenchuan.admin.sys.service.MenuService;
 import com.chenchuan.admin.sys.service.PermissionService;
 import com.chenchuan.admin.sys.service.RoleService;
+import com.chenchuan.admin.sys.service.UserService;
 import com.chenchuan.admin.sys.vo.MenuVo;
 import com.chenchuan.admin.sys.vo.PermissionVo;
 import com.chenchuan.admin.sys.vo.RoleVo;
@@ -29,6 +39,9 @@ import java.util.Map;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SysTests {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private LoginService loginService;
@@ -57,21 +70,31 @@ public class SysTests {
     @Autowired
     private IndexService indexService;
 
+    @Autowired
+    private ArticleCommentService articleCommentService;
+
+    @Autowired
+    private FriendlyLinkServie friendlyLinkServie;
+
+    @Autowired
+    private LabelService labelService;
+
+    @Autowired
+    private LeaveMessageService leaveMessageService;
+
+    @Autowired
+    private LeaveMessageDao leaveMessageDao;
+
     @Test
     public void testPermissionDao() {
         Map<String,Object> map = new HashMap<>();
-        map.put("roleId","aa");
-        List<String> list = new ArrayList<>();
-        list.add("bb");list.add("cc");
-        map.put("menuIds",list);
-        roleDao.addRoleMenuAuth(map);
-        //System.out.println(JSON.toJSONString(menuService.findRoleMenuPermissionAuthTree("c57c2eca-bc2a-4e16-893a-7698a427195f")));
-//        PermissionVo permissionVo = new PermissionVo();
-//        permissionVo.setPermissionName("1");permissionVo.setPermissionDes("1");
-//        permissionVo.setUrl("/1/1");permissionVo.setUrlType("/1");
-//        permissionVo.setMenuId("s1111-11111");permissionVo.setPermissionId("a5d0b2fe-7291-4a09-b39d-b0d2d8db5582");
-//        System.out.println(permissionService.removePermissionByPermissionId("a5d0b2fe-7291-4a09-b39d-b0d2d8db5582"));
-        //System.out.println(JSON.toJSONString(permissionService.findPermissionByPermissionId("7f9a3463-7ec2-4439-9770-0899c4795683")));
+        map.put("targetUser","manager");
+        map.put("sendUser","36dad18b-ded4-42aa-96bc-e45de5afbd18");
+        map.put("isRead",0);
+        LeaveMessageVo leaveMessageVo = new LeaveMessageVo();
+        leaveMessageVo.setSendUser("manager");leaveMessageVo.setTargetUser("36dad18b-ded4-42aa-96bc-e45de5afbd18");
+        leaveMessageVo.setMessage("安达市多");leaveMessageVo.setIsRead(0);leaveMessageVo.setCreateUser("admin");
+        System.out.println(JSON.toJSONString(leaveMessageService.findLeaveMessageByUserId(map)));
     }
 
     //@Test

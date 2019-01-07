@@ -18,5 +18,58 @@ Utils = {
             formDataObject[obj.name] = obj.value;
         });
         return formDataObject;
+    },
+
+    /**
+     * 从ueditor中获取oss的key
+     * @param UEContent Ueditor的内容
+     * @return {Array} 所有oss的key
+     */
+    getOssKeyFromUE: function (UEContent) {
+        //七牛cdn_prefix
+        var cdnPrefix = 'http://pjh0li70j.bkt.clouddn.com/';
+        //内容转为dom对象
+        domObj = $(UEContent);
+        //获取文件上传到七牛的img标签
+        var imgs = domObj.find('img[src^="' + cdnPrefix + '"]');
+        //获取文件上传到七牛的video标签
+        var videos = domObj.find('video[src^="' + cdnPrefix + '"]');
+        //获取文件上传到七牛的a标签
+        var as = domObj.find('a[href^="' + cdnPrefix + '"]');
+        //所有oss的key
+        var ossKeys = [];
+        //七牛cdn_prefix字符串长度
+        var startIndex = cdnPrefix.length;
+        if (imgs.length > 0) {
+            $.each(imgs, function (i, img) {
+                //获取src
+                var src = img.src;
+                var ossKey = src.substring(startIndex, src.length);
+                if ($.inArray(ossKey, ossKeys) == -1) {
+                    ossKeys.push(ossKey);
+                }
+            });
+        }
+        if (videos.length > 0) {
+            $.each(videos, function (j, video) {
+                //获取src
+                var src = video.src;
+                var ossKey = src.substring(startIndex, src.length);
+                if ($.inArray(ossKey, ossKeys) == -1) {
+                    ossKeys.push(ossKey);
+                }
+            });
+        }
+        if (as.length > 0) {
+            $.each(as, function (k, a) {
+                //获取href
+                var href = a.href;
+                var ossKey = href.substring(startIndex, href.length);
+                if ($.inArray(ossKey, ossKeys) == -1) {
+                    ossKeys.push(ossKey);
+                }
+            });
+        }
+        return ossKeys;
     }
 }

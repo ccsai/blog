@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenchuan.admin.blog.dao.FriendlyLinkDao">
+    <sql id="friendlyLinkObject">
+      fl.friendly_link_id   AS friendlyLinkId,
+      fl.link_name          AS linkName,
+      fl.url                AS url,
+      fl.logo               AS logo,
+      fl.sort_no            AS sortNo,
+      fl.is_show            AS isShow,
+      fl.create_user        AS createUser,
+      fl.create_time        AS createTime,
+      fl.modify_user        AS modifyUser,
+      fl.modify_time        AS modifyTime
+	</sql>
+
+    <!-- 查询友链列表 -->
+    <select id="findFriendlyLinkList" parameterType="com.chenchuan.admin.blog.vo.FriendlyLinkVo" resultType="com.chenchuan.admin.blog.po.FriendlyLinkPo">
+        SELECT
+        <include refid="friendlyLinkObject"/>
+        FROM friendly_link fl
+        <where>
+            <if test="keyWord != null and keyWord != ''">
+                AND (fl.link_name LIKE '%${keyWord}%'
+                OR fl.url LIKE '%${keyWord}%')
+            </if>
+            <if test="isShow != null and isShow != '' or isShow == 0">
+                AND fl.is_show = #{isShow}
+            </if>
+        </where>
+        ORDER BY fl.sort_no
+    </select>
+
+    <!-- 添加友链 -->
+    <insert id="addFriendlyLink" parameterType="com.chenchuan.admin.blog.vo.FriendlyLinkVo">
+        INSERT INTO friendly_link(
+          friendly_link_id,
+          link_name,
+          url,
+          logo,
+          sort_no,
+          is_show,
+          create_user,
+          create_time,
+          modify_user,
+          modify_time
+        )VALUES (
+          #{friendlyLinkId},
+          #{linkName},
+          #{url},
+          #{logo},
+          #{sortNo},
+          #{isShow},
+          #{createUser},
+          NOW(),
+          #{modifyUser},
+          NOW()
+        )
+    </insert>
+
+    <!-- 根据编号查询友链详情 -->
+    <select id="findFriendlyLinkByFriendlyLinkId" parameterType="String"
+            resultType="com.chenchuan.admin.blog.po.FriendlyLinkPo">
+        SELECT
+        <include refid="friendlyLinkObject"/>
+        FROM friendly_link fl
+        WHERE fl.friendly_link_id = #{friendlyLinkId}
+    </select>
+
+    <!-- 根据编号修改友链 -->
+    <update id="editFriendlyLinkByFriendlyLinkId" parameterType="com.chenchuan.admin.blog.vo.FriendlyLinkVo">
+        UPDATE friendly_link
+        <set>
+            <if test="linkName != null and linkName != ''">link_name = #{linkName},</if>
+            <if test="url != null and url != ''">url = #{url},</if>
+            <if test="logo != null and logo != ''">logo = #{logo},</if>
+            <if test="sortNo != null and sortNo != ''">sort_no = #{sortNo},</if>
+            <if test="isShow != null and isShow != '' or isShow == 0">is_show = #{isShow},</if>
+            <if test="modifyUser != null and modifyUser != ''">modify_user = #{modifyUser},</if>
+            modify_time = NOW()
+        </set>
+        WHERE friendly_link_id = #{friendlyLinkId}
+    </update>
+
+    <!-- 根据编号删除友链 -->
+    <delete id="removeFriendlyLinkByFriendlyLinkId" parameterType="String">
+        DELETE FROM friendly_link WHERE friendly_link_id = #{friendlyLinkId}
+    </delete>
+
+</mapper>

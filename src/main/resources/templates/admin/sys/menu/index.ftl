@@ -4,7 +4,7 @@
     <meta>
     <title>菜单管理</title>
     <#include '../../depend/_head.ftl'/>
-    <#include '../../depend/_jquery_serializejson.ftl'/>
+    <#include '../../../common/depend/_jquery_serializejson.ftl'/>
     <script src="${basePath!}/js/admin/sys/menu/index.js"></script>
 </head>
 <body>

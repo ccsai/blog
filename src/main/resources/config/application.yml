@@ -6,7 +6,6 @@ spring:
     username: root
     password: 123
     driver-class-name: com.mysql.jdbc.Driver
-
   ## freemarker配置
   freemarker:
     cache: false #是否允许缓存
@@ -19,11 +18,16 @@ spring:
     suffix: .ftl #模板文件后缀
     request-context-attribute: request #所有视图的RequestContext属性的名称
 
+  ## 文件上传设置
   servlet:
     multipart:
       max-file-size: 102400KB
       max-request-size: 102400KB
+      #location: \upload_tmp #post缓存数据缓存目录
+      #location: /data/upload_tmp #post缓存数据缓存目录
 
+  jackson:
+    time-zone: GMT+8 #东八区
 
 
 mybatis:
@@ -54,5 +58,10 @@ qiniu:
   access_key: fxjvFewQRrpZFUpxsGHQ5H6LeeU5nKSmrcEXJSMN
   secret_key: Avn-cR32Zwg_CRNL-8RhMJCzShugy4fS_21gg_Wc
   bucket: blog #空间
-  cdn_prefix: http://pjh0li70j.bkt.clouddn.com #外链访问路径
+  cdn_prefix: http://pjh0li70j.bkt.clouddn.com/ #外链访问路径
   up_expire_seconds: 3600 #上传token过期时间（暂时未使用）
+
+
+server:
+  tomcat:
+    basedir: ${user.home}/tomcat/tmp #设置tomcat的basedir

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenchuan.admin.blog.dao.ArticleCommentDao">
+    <sql id="articleCommentObject">
+      ac.comment_id         AS commentId,
+      ac.`comment`          AS `comment`,
+      ac.article_id         AS articleId,
+      ac.is_checked         AS isChecked,
+	  IFNULL(ac.support_number,0)     AS supportNumber,
+	  IFNULL(ac.no_support_number,0)  AS noSupportNumber,
+	  ac.comment_user_id    AS commentUserId,
+      ac.create_user        AS createUser,
+      ac.create_time        AS createTime,
+      ac.modify_user        AS modifyUser,
+      ac.modify_time        AS modifyTime
+	</sql>
+
+    <!-- 查询所有文章评论列表 -->
+    <select id="findArticleCommentList" parameterType="com.chenchuan.admin.blog.vo.ArticleCommentVo"
+            resultType="com.chenchuan.admin.blog.vo.ArticleCommentVo">
+        SELECT
+        <include refid="articleCommentObject"/>,
+        a.title AS articleTitle,
+        CASE ac.comment_user_id WHEN 'manager' THEN '管理员' ELSE u.login_name END AS commentUser
+        FROM article_comment ac
+        LEFT JOIN article a
+        ON ac.article_id = a.article_id
+        LEFT JOIN `user` u
+        ON ac.comment_user_id = u.user_id
+        <where>
+            <if test="isChecked != null and isChecked != ''">
+                AND ac.is_checked = #{isChecked}
+            </if>
+            <if test="articleTitle != null and articleTitle != ''">
+                AND a.title = #{articleTitle}
+            </if>
+            <if test="comment != null and comment != ''">
+                AND ac.`comment` LIKE '%${comment}%'
+            </if>
+        </where>
+        ORDER BY ac.create_time DESC
+    </select>
+
+    <!-- 根据文章评论编号查询评论详情 -->
+    <select id="findArticleCommentDetailByArticleCommentId" parameterType="String"
+            resultType="com.chenchuan.admin.blog.vo.ArticleCommentVo">
+        SELECT
+        <include refid="articleCommentObject"/>,
+        a.title AS articleTitle,
+        CASE ac.comment_user_id WHEN 'manager' THEN '管理员' ELSE u.login_name END AS commentUser
+        FROM article_comment ac
+        LEFT JOIN article a
+        ON ac.article_id = a.article_id
+        LEFT JOIN `user` u
+        ON ac.comment_user_id = u.user_id
+        WHERE ac.comment_id = #{commentId}
+    </select>
+
+    <!-- 根据文章评论编号（逗号分隔的编号字符串）批量修改评论审核状态 -->
+    <update id="editArticleCommentIsCheckedByArticleCommentIds" parameterType="java.util.Map">
+        UPDATE article_comment
+        <set>
+            <if test="isChecked != null and isChecked != ''">is_checked = #{isChecked},</if>
+            <if test="modifyUser != null and modifyUser != ''">modify_user = #{modifyUser},</if>
+            modify_time = NOW()
+        </set>
+        WHERE comment_id IN (${commentIds})
+    </update>
+
+    <!-- 根据文章评论编号集合批量删除文章评论 -->
+    <delete id="removeArticleCommentByArticleCommentIds">
+        DELETE FROM article_comment WHERE comment_id IN
+        <foreach collection="array" item="commentId" separator="," open="(" close=")">
+            #{commentId}
+        </foreach>
+    </delete>
+
+    <!-- 根据文章编号删除评论（包含删除评论oss关联） -->
+    <delete id="removeArticleCommentByArticleId" parameterType="String">
+        DELETE ac,moa
+        FROM article_comment ac
+        LEFT JOIN module_oss_auth moa
+        ON ac.comment_id = moa.module_id AND moa.module_type = 3
+        WHERE ac.article_id = #{articleId}
+    </delete>
+
+    <!-- 添加文章品论 -->
+    <insert id="addarticleComment" parameterType="com.chenchuan.admin.blog.vo.ArticleCommentVo">
+        INSERT INTO article_comment(
+          comment_id,
+          comment,
+          article_id,
+          is_checked,
+          support_number,
+          no_support_number,
+          comment_user_id,
+          create_user,
+          create_time,
+          modify_user,
+          modify_time
+        )VALUES (
+          #{commentId},
+          #{comment},
+          #{articleId},
+          1,
+          0,
+          0,
+          #{commentUserId},
+          #{createUser},
+          NOW(),
+          #{modifyUser},
+          NOW()
+        )
+    </insert>
+
+</mapper>

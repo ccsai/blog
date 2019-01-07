@@ -1,5 +1,5 @@
 <#-- 项目根目录 -->
-<#include '_global.ftl'/>
+<#include '../../common/depend/_global.ftl'/>
 <#-- 初始化css -->
 <link href="${basePath}/css/admin/depend/index.css" rel="stylesheet" type="text/css">
 <#-- JQuery easyui默认css样式 -->
