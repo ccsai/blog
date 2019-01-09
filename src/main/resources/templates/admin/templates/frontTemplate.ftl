@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta>
-    <title>系統后台登录</title>
+    <title>模板</title>
     <#include '../depend/_head.ftl'/>
 </head>
 <body>

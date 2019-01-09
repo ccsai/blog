@@ -138,7 +138,6 @@ $(function () {
             if (ossKeys.length > 0) {
                 data.ossKeys = ossKeys;
             }
-            console.log(data)
             $.ajax({
                 url: url,
                 type: 'post',

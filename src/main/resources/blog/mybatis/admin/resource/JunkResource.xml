@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenchuan.admin.resource.dao.JunkResouceDao">
+
+    <!-- 安全垃圾数据清理 -->
+    <delete id="removeSecurityJunkData" statementType="CALLABLE">
+        CALL `sys_clear_security_data`()
+    </delete>
+
+    <!-- 博客业务垃圾数据清理 -->
+    <delete id="removeBlogBusiJunkData" statementType="CALLABLE">
+        CALL `blog_clear_busi_data`()
+    </delete>
+
+</mapper>

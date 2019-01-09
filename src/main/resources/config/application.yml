@@ -58,7 +58,7 @@ qiniu:
   access_key: fxjvFewQRrpZFUpxsGHQ5H6LeeU5nKSmrcEXJSMN
   secret_key: Avn-cR32Zwg_CRNL-8RhMJCzShugy4fS_21gg_Wc
   bucket: blog #空间
-  cdn_prefix: http://pjh0li70j.bkt.clouddn.com/ #外链访问路径
+  cdn_prefix: http://pkzoue8vo.bkt.clouddn.com/ #外链访问路径
   up_expire_seconds: 3600 #上传token过期时间（暂时未使用）
 
 

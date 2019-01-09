@@ -27,7 +27,7 @@ Utils = {
      */
     getOssKeyFromUE: function (UEContent) {
         //七牛cdn_prefix
-        var cdnPrefix = 'http://pjh0li70j.bkt.clouddn.com/';
+        var cdnPrefix = 'http://pkzoue8vo.bkt.clouddn.com/';
         //内容转为dom对象
         domObj = $(UEContent);
         //获取文件上传到七牛的img标签
@@ -69,6 +69,17 @@ Utils = {
                     ossKeys.push(ossKey);
                 }
             });
+        }
+        //去除重复的ossKey
+        if (ossKeys.length > 0){
+            //去重后的ossKeys数组
+            var ossKeysToHeavy = [];
+            $.each(ossKeys,function (i,o) {
+                if (ossKeysToHeavy.indexOf(o) == -1){
+                    ossKeysToHeavy.push(o);
+                }
+            });
+            ossKeys = ossKeysToHeavy;
         }
         return ossKeys;
     }

@@ -1,5 +1,6 @@
 package com.chenchuan.admin.resource.dao;
 
+import com.chenchuan.admin.resource.po.OssPo;
 import com.chenchuan.admin.resource.vo.OssVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -46,4 +47,19 @@ public interface OssDao {
      * @return 影响行数
      */
     int removeModuleOssAuthByOssKeys(List<String> ossKeys);
+
+    /**
+     * 查询oss表垃圾数据
+     *
+     * @return 垃圾数据列表
+     */
+    List<OssPo> findOssJunkData();
+
+    /**
+     * 删除oss表垃圾数据
+     *
+     * @param ossKeys 要删除的oss keys集合
+     * @return 影响行数
+     */
+    int removeOssJunkData(List<String> ossKeys);
 }

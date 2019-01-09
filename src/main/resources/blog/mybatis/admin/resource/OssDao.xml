@@ -67,4 +67,20 @@
         </foreach>
     </delete>
 
+    <!-- 查询oss表垃圾数据 -->
+    <select id="findOssJunkData" resultType="com.chenchuan.admin.resource.po.OssPo">
+        SELECT
+        <include refid="ossObject"/>
+        FROM oss o
+        WHERE NOT EXISTS (SELECT 1 FROM module_oss_auth moa WHERE o.oss_key = moa.oss_key)
+    </select>
+
+    <!-- 删除oss垃圾数据 -->
+    <delete id="removeOssJunkData" parameterType="java.util.List">
+        DELETE FROM oss WHERE oss_key IN
+        <foreach collection="list" separator="," item="l" open="(" close=")">
+            #{l}
+        </foreach>
+    </delete>
+
 </mapper>

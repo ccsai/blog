@@ -4,6 +4,7 @@ import com.chenchuan.admin.blog.service.ArticleService;
 import com.chenchuan.admin.blog.service.LabelService;
 import com.chenchuan.admin.blog.vo.ArticleVo;
 import com.chenchuan.admin.blog.vo.LabelVo;
+import com.chenchuan.common.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +18,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/admin/blog/article")
-public class ArticleController {
+public class ArticleController extends BaseController {
 
     @Autowired
     private ArticleService articleService;
