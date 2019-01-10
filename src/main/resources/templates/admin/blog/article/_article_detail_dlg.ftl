@@ -23,8 +23,21 @@
             <div style="float: left">
                 排序&nbsp;<input class="easyui-textbox" name="sortNo"
                                data-options="required:true,validType:'checkSortNo'">
+                &nbsp;&nbsp;
             </div>
-            <div style="float: right">
+            <div style="float: left">
+                banner&nbsp;
+                <select class="easyui-combobox" name="banner"
+                        data-options="required:true,panelHeight:'auto',editable:false,width:175">
+                    <option value=""></option>
+                    <option value="1">技术交流</option>
+                    <option value="2">生活日志</option>
+                    <option value="3">兴趣爱好</option>
+                    <option value="4">关于自己</option>
+                </select>
+                &nbsp;&nbsp;
+            </div>
+            <div style="float: left">
                 私有&nbsp;
                 <select class="easyui-combobox" name="isPrivate"
                         data-options="required:true,panelHeight:'auto',editable:false,width:75">

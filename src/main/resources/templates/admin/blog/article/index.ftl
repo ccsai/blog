@@ -27,6 +27,16 @@
                 标签&nbsp;<input type="text" class="easyui-textbox" name="label"
                                data-options="prompt:'标签'"/>
                 &nbsp;&nbsp;
+                banner&nbsp;
+                <select class="easyui-combobox" name="banner"
+                        data-options="panelHeight:'auto',editable:false,width:75">
+                    <option value="">全部</option>
+                    <option value="1">技术交流</option>
+                    <option value="2">生活日志</option>
+                    <option value="3">兴趣爱好</option>
+                    <option value="4">关于自己</option>
+                </select>
+                &nbsp;&nbsp;
                 私有&nbsp;
                 <select class="easyui-combobox" name="isPrivate"
                         data-options="panelHeight:'auto',editable:false,width:75">
@@ -46,8 +56,9 @@
         <thead>
         <tr>
             <th data-options="field:'articleId',hidden:'true'"></th>
-            <th data-options="field:'title',halign:'center',align:'left'" style="width: 20%">标题</th>
-            <th data-options="field:'label',halign:'center',align:'left'" style="width: 20%">标签</th>
+            <th data-options="field:'title',halign:'center',align:'left'" style="width: 15%">标题</th>
+            <th data-options="field:'banner',halign:'center',align:'left',formatter:formatterArticleBanner" style="width: 15%">banner</th>
+            <th data-options="field:'label',halign:'center',align:'left'" style="width: 15%">标签</th>
             <th data-options="field:'isPrivate',align:'center',formatter:formatterArticleIsPrivate" style="width: 10%">
                 私有
             </th>
@@ -55,7 +66,7 @@
             <th data-options="field:'supportNumber',halign:'center',align:'right'" style="width: 10%">被赞次数</th>
             <th data-options="field:'sortNo',halign:'center',align:'right'" style="width: 10%">排序</th>
             <th data-options="field:'articleOperation',align:'center',formatter:articleDatagridOperation"
-                style="width: 20%">操作
+                style="width: 15%">操作
             </th>
         </tr>
         </thead>

@@ -176,7 +176,7 @@ $(function () {
         var form = $('<form id="articlePreview" style="display: none" ' +
             'action="/admin/blog/article/previewArticle"' +
             'target="_blank" method="post">' +
-            '<textarea name="content">'+content+'</textarea>' +
+            '<textarea name="content">' + content + '</textarea>' +
             '</form>');
         $(document.body).append(form);
         form.submit();
@@ -269,6 +269,31 @@ function removeArticleByArticleId(articleId) {
             });
         }
     });
+}
+
+/**
+ * 格式化文章列表banner列
+ * @param value
+ * @return {*}
+ */
+function formatterArticleBanner(value) {
+    //显示值
+    var showValue;
+    switch (value) {
+        case '1':
+            showValue = '技术交流';
+            break;
+        case '2':
+            showValue = '生活日志';
+            break;
+        case '3':
+            showValue = '兴趣爱好';
+            break;
+        case '4':
+            showValue = '关于自己';
+            break;
+    }
+    return showValue;
 }
 
 /**

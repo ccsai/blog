@@ -16,6 +16,8 @@ public class ArticlePo extends BasePo {
 
     private String content;
 
+    private String banner;
+
     private String classId;
 
     private Integer sortNo;
@@ -59,6 +61,14 @@ public class ArticlePo extends BasePo {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getBanner() {
+        return banner;
+    }
+
+    public void setBanner(String banner) {
+        this.banner = banner;
     }
 
     public String getClassId() {

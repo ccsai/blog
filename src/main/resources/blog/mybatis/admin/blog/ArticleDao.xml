@@ -5,6 +5,7 @@
       a.article_id      AS articleId,
       a.title           AS title,
       a.content         AS content,
+      a.banner          AS banner,
       a.class_id        AS classId,
       a.sort_no         AS sortNo,
       a.is_private      AS isPrivate,
@@ -31,6 +32,9 @@
             <if test="title != null and title != ''">
                 AND a.title LIKE '%${title}%'
             </if>
+            <if test="banner != null and banner != ''">
+                AND a.banner = #{banner}
+            </if>
             <if test="isPrivate != null and isPrivate != '' or isPrivate == 0">
                 AND a.is_private = #{isPrivate}
             </if>
@@ -56,6 +60,7 @@
           article_id,
           title,
           content,
+          banner,
           class_id,
           sort_no,
           is_private,
@@ -69,6 +74,7 @@
           #{articleId},
           #{title},
           #{content},
+          #{banner},
           #{classId},
           #{sortNo},
           #{isPrivate},
@@ -115,6 +121,7 @@
         <set>
             <if test="title != null and title != ''">title = #{title},</if>
             <if test="content != null and content != ''">content = #{content},</if>
+            <if test="banner != null and banner != ''">banner = #{banner},</if>
             <if test="classId != null and classId != ''">class_id = #{classId},</if>
             <if test="sortNo != null and sortNo != ''">sort_no = #{sortNo},</if>
             <if test="isPrivate != null and isPrivate != '' or isPrivate == 0">is_private = #{isPrivate},</if>
