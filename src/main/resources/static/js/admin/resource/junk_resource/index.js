@@ -52,6 +52,10 @@ $(function () {
      * oss垃圾数据文件清理
      */
     $(document).on('click', '#clearJunkOssDataBtn', function () {
+        //判断按钮是否禁用
+        if ($(this).linkbutton('options').disabled){
+            return false;
+        }
         $('#junkDataClearNoticeDlg').dialog('open');
         $.ajax({
             url: '/admin/resource/junkResource/removeJunkOssFromOssAndDB',
