@@ -101,6 +101,86 @@ $(function () {
     });
 
     /**
+     * 上传文章列表展示图片
+     */
+    $(document).on('change', '#chooseListPicture', function () {
+        if (this.value == '') {
+            return false;
+        }
+        var formData = new FormData();
+        formData.append("upfile", $('#chooseListPicture')[0].files[0]);
+        $.ajax({
+            url: '/common/ueditor/uploadFileByUE',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.state == "SUCCESS") {
+                    $('#listPicture').textbox('setValue', data.url);
+                } else {
+                    $.messager.alert('错误提示', '上传列表展示图片失败，请稍后重试或联系管理员！', 'error');
+                }
+            },
+            error: function () {
+                $.messager.alert('错误提示', '上传列表展示图片失败，请稍后重试或联系管理员！', 'error');
+            }
+        })
+    });
+
+    /**
+     * 文章列表展示图片url文本框值改变预览图片
+     */
+    $('#listPicture').textbox({
+        onChange: function (newValue) {
+            $('#showListPicture').css({
+                'background': 'url("' + newValue + '") no-repeat',
+                'background-size': '100% 100%',
+            });
+        }
+    });
+
+    /**
+     * 文章轮播图展示
+     */
+    $(document).on('change', '#chooseCarousel', function () {
+        if (this.value == '') {
+            return false;
+        }
+        var formData = new FormData();
+        formData.append("upfile", $('#chooseCarousel')[0].files[0]);
+        $.ajax({
+            url: '/common/ueditor/uploadFileByUE',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.state == "SUCCESS") {
+                    $('#carousel').textbox('setValue', data.url);
+                } else {
+                    $.messager.alert('错误提示', '上传列轮播失败，请稍后重试或联系管理员！', 'error');
+                }
+            },
+            error: function () {
+                $.messager.alert('错误提示', '上传列轮播失败，请稍后重试或联系管理员！', 'error');
+            }
+        })
+    });
+
+    /**
+     * 文章轮播图url文本框值改变预览图片
+     */
+    $('#carousel').textbox({
+        onChange: function (newValue) {
+            $('#showCarousel').css({
+                'background': 'url("' + newValue + '") no-repeat',
+                'background-size': '100% 100%',
+            });
+        }
+    });
+
+    /**
      * 点击保存添加或修改文章
      */
     $(document).on('click', '#articleDetailDlgToolBar .save-btn', function () {
@@ -135,9 +215,28 @@ $(function () {
             }
             //oss key
             var ossKeys = Utils.getOssKeyFromUE(content);
+            //七牛cnd前缀
+            var qiniuCndPrefix = Utils.cdnPrefix;
+            //文章列表展示图片oss
+            var listPicture = $('#listPicture').textbox('getValue');
+            if (listPicture.indexOf(qiniuCndPrefix) == 0) {
+                var listPictureOss = listPicture.replace(qiniuCndPrefix, '');
+                if ($.inArray(listPictureOss, ossKeys) == -1) {
+                    ossKeys.push(listPictureOss);
+                }
+            }
+            //文章轮播图oss
+            var carousel = $('#carousel').textbox('getValue');
+            if (carousel.indexOf(qiniuCndPrefix) == 0) {
+                var carouselOss = carousel.replace(qiniuCndPrefix, '');
+                if ($.inArray(carouselOss, ossKeys) == -1) {
+                    ossKeys.push(carouselOss);
+                }
+            }
             if (ossKeys.length > 0) {
                 data.ossKeys = ossKeys;
             }
+            //保存
             $.ajax({
                 url: url,
                 type: 'post',

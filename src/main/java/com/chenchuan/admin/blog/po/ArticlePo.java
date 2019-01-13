@@ -20,6 +20,10 @@ public class ArticlePo extends BasePo {
 
     private String classId;
 
+    private String listPicture;
+
+    private String carousel;
+
     private Integer sortNo;
 
     private Integer isPrivate;
@@ -77,6 +81,22 @@ public class ArticlePo extends BasePo {
 
     public void setClassId(String classId) {
         this.classId = classId;
+    }
+
+    public String getListPicture() {
+        return listPicture;
+    }
+
+    public void setListPicture(String listPicture) {
+        this.listPicture = listPicture;
+    }
+
+    public String getCarousel() {
+        return carousel;
+    }
+
+    public void setCarousel(String carousel) {
+        this.carousel = carousel;
     }
 
     public Integer getSortNo() {

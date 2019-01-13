@@ -7,6 +7,8 @@
       a.content         AS content,
       a.banner          AS banner,
       a.class_id        AS classId,
+      a.list_picture    AS listPicture,
+      a.carousel        AS carousel,
       a.sort_no         AS sortNo,
       a.is_private      AS isPrivate,
       IFNULL(a.visited_number,0)  AS visitedNumber,
@@ -62,6 +64,8 @@
           content,
           banner,
           class_id,
+          list_picture,
+          carousel,
           sort_no,
           is_private,
           visited_number,
@@ -76,6 +80,8 @@
           #{content},
           #{banner},
           #{classId},
+          #{listPicture},
+          #{carousel},
           #{sortNo},
           #{isPrivate},
           0,
@@ -123,6 +129,8 @@
             <if test="content != null and content != ''">content = #{content},</if>
             <if test="banner != null and banner != ''">banner = #{banner},</if>
             <if test="classId != null and classId != ''">class_id = #{classId},</if>
+            list_picture = #{listPicture},
+            carousel = #{carousel},
             <if test="sortNo != null and sortNo != ''">sort_no = #{sortNo},</if>
             <if test="isPrivate != null and isPrivate != '' or isPrivate == 0">is_private = #{isPrivate},</if>
             <if test="visitedNumber != null and visitedNumber != ''">visited_number = #{visitedNumber},</if>

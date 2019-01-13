@@ -57,6 +57,22 @@
                 </@shiro.lacksPermission>
             </fieldset>
         </div>
+        <div style="padding: 10px 0">
+            列表展示图片选择&nbsp;
+            <input  type="file" id="chooseListPicture">
+            &nbsp;&nbsp;
+            列表展示图片路径&nbsp;
+            <input id="listPicture" class="easyui-textbox" name="listPicture">
+            <div id="showListPicture" style="width: 11.25rem;height: 7.5rem;margin-top: 0.5rem"></div>
+        </div>
+        <div style="padding: 10px 0">
+            轮播展示图片选择&nbsp;
+            <input id="chooseCarousel" type="file">
+            &nbsp;&nbsp;
+            轮播展示图片路径&nbsp;
+            <input id="carousel" class="easyui-textbox" name="carousel">
+            <div id="showCarousel" style="width: 44.375rem;height: 21.875rem;margin-top: 0.5rem"></div>
+        </div>
     </form>
 </div>
 

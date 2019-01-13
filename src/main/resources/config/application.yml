@@ -49,7 +49,7 @@ security:
   hash_iterations: 10 #加密散列次数
   salt_suffix: salt #盐加的后缀
   #游客可访问的路径
-  anon_url_path: /css/**,/img/**,/js/**,/plugin/**,/admin/guest/login/index,/guest/**,/login,/logOut
+  anon_url_path: /css/**,/img/**,/js/**,/plugin/**,/admin/guest/login/index,/g/**,/login,/logOut
 
 
 ## 七牛云配置
