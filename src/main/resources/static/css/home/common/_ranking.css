@@ -1,0 +1,33 @@
+/* 文章排行 */
+#ranking {
+    background: rgba(221, 221, 221, 0.5);
+}
+#ranking:hover{
+    box-shadow: 0.6rem 0.3rem 0.8rem rgba(221, 221, 221, 0.5) inset;
+}
+
+/* 一条排行 */
+#ranking .ranking-row {
+    border-bottom: 0.05rem dashed black;
+    height: 1.5rem;
+}
+
+#ranking .ranking-row:hover {
+    border-bottom: 0.05rem solid black;
+}
+
+/* 标签圆点 */
+#ranking .ranking-circle {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* 排行链接 */
+#ranking .ranking-link {
+    line-height: 100%;
+    color: black;
+}
+
+#ranking .ranking-link:hover {
+    color: #CC3300;
+}

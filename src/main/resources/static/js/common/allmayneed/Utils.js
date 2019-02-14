@@ -4,7 +4,7 @@
 Utils = {
 
     //七牛cdn_prefix
-    cdnPrefix: 'http://pkzoue8vo.bkt.clouddn.com/',
+    cdnPrefix: 'http://pmsw67kco.bkt.clouddn.com/',
 
 
     /**
@@ -73,16 +73,31 @@ Utils = {
             });
         }
         //去除重复的ossKey
-        if (ossKeys.length > 0){
+        if (ossKeys.length > 0) {
             //去重后的ossKeys数组
             var ossKeysToHeavy = [];
-            $.each(ossKeys,function (i,o) {
-                if (ossKeysToHeavy.indexOf(o) == -1){
+            $.each(ossKeys, function (i, o) {
+                if (ossKeysToHeavy.indexOf(o) == -1) {
                     ossKeysToHeavy.push(o);
                 }
             });
             ossKeys = ossKeysToHeavy;
         }
         return ossKeys;
+    },
+
+    /**
+     * 获取url相对路径
+     * @return {string} url相对路径
+     */
+    getUrlRelativePath: function () {
+        var url = document.location.toString();
+        var arrUrl = url.split("//");
+        var start = arrUrl[1].indexOf("/");
+        var relUrl = arrUrl[1].substring(start);//stop省略，截取从start开始到结尾的所有字符
+        if (relUrl.indexOf("?") != -1) {
+            relUrl = relUrl.split("?")[0];
+        }
+        return relUrl;
     }
 }

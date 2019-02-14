@@ -1,0 +1,16 @@
+/* 留言主页 */
+
+/* ueditor */
+#leave-message .leave-message-ue-div {
+    height: 15rem;
+}
+
+#leave-message-ue {
+    height: 70%;
+    width: 99%;
+}
+
+/* 留言图片 */
+#leave-message .leave-message-comtent img {
+    cursor: pointer;
+}

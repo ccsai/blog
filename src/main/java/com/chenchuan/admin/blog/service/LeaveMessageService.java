@@ -19,7 +19,7 @@ public interface LeaveMessageService {
     List<LeaveMessageVo> findLeaveMessageByUserId(Map<String, Object> targetSendUserAndIsReadInfo);
 
     /**
-     * 添加留言
+     * 后台添加留言
      *
      * @param leaveMessageVo
      * @param ossKeys        oss key
@@ -34,4 +34,20 @@ public interface LeaveMessageService {
      * @return 删除状态
      */
     int removeLeaveMessagesByLeaveMessageIds(String leaveMessageIds);
+
+    /**
+     * 获取前台用户留言
+     *
+     * @return 留言集合
+     */
+    List<LeaveMessageVo> findLeaveMessageByUserForHome();
+
+    /**
+     * 前台添加留言
+     *
+     * @param leaveMessageVo
+     * @param ossKeys        oss key
+     * @return 添加状态
+     */
+    int addLeaveMessageByHome(LeaveMessageVo leaveMessageVo, String[] ossKeys);
 }

@@ -53,7 +53,6 @@ public class OssServiceImpl implements OssService {
                     qiniuFileService.deleteFiles(keysArr);
                 }
             }
-            System.out.println(index);
             //（不被1000整除时）最后一组oss的删除
             if (endGroupKeyNumber > 0) {
                 String[] endKeysArr = new String[endGroupKeyNumber];

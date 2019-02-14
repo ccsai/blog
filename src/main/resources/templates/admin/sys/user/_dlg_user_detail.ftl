@@ -22,19 +22,19 @@
             <tr>
                 <td>密码</td>
                 <td>
-                    <input class="easyui-textbox" name="password"/>
+                    <input class="easyui-passwordbox" name="password"/>
                 </td>
             </tr>
             <tr>
-                <td>电话</td>
+                <td>手机</td>
                 <td>
-                    <input class="easyui-textbox" name="phone"/>
+                    <input class="easyui-textbox" name="phone" data-options="required:true"/>
                 </td>
             </tr>
             <tr>
                 <td>邮箱</td>
                 <td>
-                    <input class="easyui-textbox" name="email"/>
+                    <input class="easyui-textbox" name="email" data-options="required:true"/>
                 </td>
             </tr>
             <tr>

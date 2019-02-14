@@ -2,9 +2,13 @@ package com.chenchuan.admin.blog.service.impl;
 
 import com.chenchuan.admin.blog.dao.ArticleCommentDao;
 import com.chenchuan.admin.blog.dao.ArticleDao;
+import com.chenchuan.admin.blog.dao.SupportDao;
+import com.chenchuan.admin.blog.po.ArticlePo;
 import com.chenchuan.admin.blog.service.ArticleService;
 import com.chenchuan.admin.blog.vo.ArticleVo;
+import com.chenchuan.admin.blog.vo.SupportVo;
 import com.chenchuan.admin.resource.dao.OssDao;
+import com.chenchuan.admin.sys.po.UserPo;
 import com.chenchuan.admin.sys.service.UserService;
 import com.chenchuan.common.exception.BaseException;
 import com.chenchuan.common.util.UuidUtil;
@@ -36,6 +40,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private OssDao ossDao;
+
+    @Autowired
+    private SupportDao supportDao;
 
 
     @Override
@@ -138,6 +145,78 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<ArticleVo> findArticleList(ArticleVo articleVo) {
         return articleDao.findArticleList(articleVo);
+    }
+
+    @Override
+    public List<ArticlePo> articleViewRanking() {
+        return articleDao.articleViewRanking();
+    }
+
+    @Override
+    public List<ArticlePo> findArticleListByCarousel() {
+        return articleDao.findArticleListByCarousel();
+    }
+
+    @Override
+    public PageInfo<ArticleVo> findArticleListForHome(ArticleVo articleVo) {
+        PageHelper.startPage(articleVo.getPage(), articleVo.getRows());
+        //文章列表
+        List<ArticleVo> articleList = articleDao.findArticleListForHome(articleVo);
+        return new PageInfo<>(articleList);
+    }
+
+    @Override
+    public ArticleVo findArticleDetailwithLabelCommentByarticleId(String articleId) {
+        //文章详情
+        ArticleVo articleDetail = articleDao.findArticleDetailwithLabelCommentByarticleId(articleId);
+        if (articleDetail == null) {
+            throw new BaseException("该文章不存在");
+        }
+        //计算评论数量
+        if (articleDetail.getArticleCommentList() == null || articleDetail.getArticleCommentList().size() == 0) {
+            articleDetail.setCommentNumber(0);
+        } else {
+            articleDetail.setCommentNumber(articleDetail.getArticleCommentList().size());
+        }
+        return articleDetail;
+    }
+
+    @Override
+    @Transactional
+    public ArticlePo supportArticleByArticleId(ArticleVo articleVo) {
+        //获取登录用户
+        UserPo userPo = userService.getCurrentLoginUserBaseInfo();
+        if (userPo == null) {
+            throw new BaseException("获取用户信息异常");
+        }
+        //判断文章编号是否有值？
+        String articleId = articleVo.getArticleId();
+        if (articleId == null || articleId.equals("")) {
+            throw new BaseException("没有选择文章");
+        }
+        //增加点赞次数
+        articleVo.setSupportNumber(1);
+        int affectRows = articleDao.supportArticleByArticleId(articleVo);
+        if (affectRows <= 0) {
+            throw new BaseException("点赞失败");
+        }
+        //增加点赞记录
+        SupportVo supportVo = new SupportVo();
+        supportVo.setSupportId(UuidUtil.getUuid());
+        supportVo.setModuleId(articleId);
+        supportVo.setModuleType(1);
+        supportVo.setSupportType(1);
+        supportVo.setCreateUser(userPo.getUserId());
+        int supportLogAffectRows = supportDao.addSupportData(supportVo);
+        if (supportLogAffectRows <= 0) {
+            throw new BaseException("点赞失败，点赞记录失败");
+        }
+        //获取赞后的点赞信息
+        ArticlePo articleInfo = articleDao.findSupportNumberByArticleId(articleId);
+        if (articleInfo == null) {
+            throw new BaseException("没有该文章");
+        }
+        return articleInfo;
     }
 
     /**

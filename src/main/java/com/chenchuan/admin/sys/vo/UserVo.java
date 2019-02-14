@@ -17,6 +17,11 @@ public class UserVo extends UserPo {
      */
     private Integer leaveMessageNumber;
 
+    /**
+     * 确认的密码
+     */
+    private String twicePassword;
+
 
     public String getKeyWord() {
         return keyWord;
@@ -32,5 +37,13 @@ public class UserVo extends UserPo {
 
     public void setLeaveMessageNumber(Integer leaveMessageNumber) {
         this.leaveMessageNumber = leaveMessageNumber;
+    }
+
+    public String getTwicePassword() {
+        return twicePassword;
+    }
+
+    public void setTwicePassword(String twicePassword) {
+        this.twicePassword = twicePassword;
     }
 }

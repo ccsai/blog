@@ -1,5 +1,6 @@
 package com.chenchuan.admin.blog.service;
 
+import com.chenchuan.admin.blog.po.ArticlePo;
 import com.chenchuan.admin.blog.vo.ArticleVo;
 import com.github.pagehelper.PageInfo;
 
@@ -57,4 +58,42 @@ public interface ArticleService {
      * @return 文章列表
      */
     List<ArticleVo> findArticleList(ArticleVo articleVo);
+
+    /**
+     * 文章浏览排名
+     *
+     * @return 文章列表
+     */
+    List<ArticlePo> articleViewRanking();
+
+    /**
+     * 首页轮播展示的文章
+     *
+     * @return 文章列表
+     */
+    List<ArticlePo> findArticleListByCarousel();
+
+    /**
+     * 前台文章列表分页展示
+     *
+     * @param articleVo
+     * @return 文章分页列表
+     */
+    PageInfo<ArticleVo> findArticleListForHome(ArticleVo articleVo);
+
+    /**
+     * 根据文章编号查询文章详情（包括评论，标签）
+     *
+     * @param articleId 文章编号
+     * @return 文章详情
+     */
+    ArticleVo findArticleDetailwithLabelCommentByarticleId(String articleId);
+
+    /**
+     * 根据文章编号点赞
+     *
+     * @param articleVo
+     * @return 点赞后的点赞信息
+     */
+    ArticlePo supportArticleByArticleId(ArticleVo articleVo);
 }

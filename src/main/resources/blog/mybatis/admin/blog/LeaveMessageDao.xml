@@ -22,7 +22,8 @@
         <where>
             (lm.target_user = #{targetUser} AND lm.send_user = #{sendUser}
             OR lm.target_user = #{sendUser} AND lm.send_user = #{targetUser})
-            AND u.user_id = #{sendUser}
+            <if test="sendUser != 'manager'">AND u.user_id = #{sendUser}</if>
+            <if test="sendUser == 'manager'">AND u.user_id = lm.create_user</if>
         </where>
         ORDER BY lm.create_time DESC
     </select>

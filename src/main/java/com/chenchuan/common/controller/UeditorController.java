@@ -28,7 +28,7 @@ public class UeditorController extends BaseController {
      *
      * @return
      */
-    @GetMapping("index")
+    @GetMapping("/index")
     public String index() {
         return "/common/depend/_ueditor";
     }

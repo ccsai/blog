@@ -1,5 +1,7 @@
 package com.chenchuan.common.controller;
 
+import com.chenchuan.admin.sys.po.UserPo;
+import com.chenchuan.admin.sys.service.UserService;
 import com.chenchuan.admin.sys.vo.UserVo;
 import com.chenchuan.common.exception.BaseException;
 import com.chenchuan.common.service.LoginService;
@@ -24,13 +26,17 @@ public class LoginController extends BaseController {
     @Autowired
     private LoginService loginService;
 
+    @Autowired
+    private UserService userService;
+
+
     /**
      * 登录
      *
      * @param userVo
      * @return 登录结果
      */
-    @PostMapping("login")
+    @PostMapping("/login")
     @ResponseBody
     public Map<String, Object> login(UserVo userVo) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -43,6 +49,12 @@ public class LoginController extends BaseController {
         } catch (AuthenticationException e) {
             throw new BaseException("用户名或密码错误");
         }
+        //获取登录后的用户信息
+        UserPo userInfo = userService.getCurrentLoginUserBaseInfo();
+        if (userInfo == null) {
+            throw new BaseException("登录异常");
+        }
+        resultMap.put("userInfo", userInfo);
         resultMap.put("resultCode", 1);
         return resultMap;
     }
@@ -57,6 +69,11 @@ public class LoginController extends BaseController {
     public Map<String, Object> logOut() {
         Map<String, Object> resultMap = new HashMap<>();
         loginService.logOut();
+        //验证是否登出成功
+        UserPo userInfo = userService.getCurrentLoginUserBaseInfo();
+        if (userInfo != null) {
+            throw new BaseException("退出帐号异常");
+        }
         resultMap.put("resultCode", 1);
         return resultMap;
     }

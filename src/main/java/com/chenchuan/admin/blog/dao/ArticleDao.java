@@ -1,5 +1,6 @@
 package com.chenchuan.admin.blog.dao;
 
+import com.chenchuan.admin.blog.po.ArticlePo;
 import com.chenchuan.admin.blog.vo.ArticleVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -77,4 +78,50 @@ public interface ArticleDao {
      * @return 影响行数
      */
     int removeArticleByArticleId(String articleId);
+
+    /**
+     * 文章浏览排名
+     *
+     * @return 文章列表
+     */
+    List<ArticlePo> articleViewRanking();
+
+    /**
+     * 首页轮播展示的文章
+     *
+     * @return 文章列表
+     */
+    List<ArticlePo> findArticleListByCarousel();
+
+    /**
+     * 前台文章列表展示
+     *
+     * @param articleVo
+     * @return 文章列表
+     */
+    List<ArticleVo> findArticleListForHome(ArticleVo articleVo);
+
+    /**
+     * 根据文章编号查询文章详情（包括评论，标签）
+     *
+     * @param articleId 文章编号
+     * @return 文章详情
+     */
+    ArticleVo findArticleDetailwithLabelCommentByarticleId(String articleId);
+
+    /**
+     * 根据文章编号点赞
+     *
+     * @param articleVo
+     * @return 影响行数
+     */
+    int supportArticleByArticleId(ArticleVo articleVo);
+
+    /**
+     * 根据文章编号查询点赞次数
+     *
+     * @param articleId 文章编号
+     * @return 文章点赞信息
+     */
+    ArticlePo findSupportNumberByArticleId(String articleId);
 }

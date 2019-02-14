@@ -94,10 +94,11 @@ public class ArticleCommentController extends BaseController {
     }
 
     /**
-     * 添加评论
+     * 前台用户添加评论
      *
      * @param articleCommentVo
-     * @return 添加状态
+     * @param ossKeys
+     * @return 评论状态
      */
     @PostMapping("/addArticleComment")
     @ResponseBody

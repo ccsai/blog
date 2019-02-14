@@ -1,0 +1,34 @@
+/* 公共css */
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+
+/* 背景 */
+body {
+    background: url("../../../img/home/background/bg1.jpg") no-repeat fixed;
+    background-size: cover;
+}
+
+/* 模块标题分隔线 */
+.module-hr{
+    height: 0.3rem;
+    border: none;
+    background: rgb(247, 120, 37);
+    margin: 0.3em 0;
+}
+
+/* 文章主体列表 */
+#main-list {
+    background: rgba(255, 255, 204, 0.5);
+}
+#main-list:hover {
+    box-shadow: 0.6rem 0.3rem 0.8rem rgba(255, 255, 204, 0.5) inset;
+}
+
+/* jquery表单验证信息样式 */
+form .error{
+    color: red;
+    font-size: 0.5rem;
+}

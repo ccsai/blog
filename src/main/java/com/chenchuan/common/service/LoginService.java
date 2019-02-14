@@ -10,7 +10,7 @@ public interface LoginService {
     /**
      * 登录
      *
-     * @return 登录是否成功
+     * @param userVo
      */
     void login(UserVo userVo);
 

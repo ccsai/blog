@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * 用户service实现
@@ -57,20 +58,47 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public int addUser(UserVo userVo) {
-        userVo.setUserId(null);//用于验证用户名重名
+        //数据验证
+        if (userVo.getLoginName() == null || userVo.getLoginName().length() < 1 || userVo.getLoginName().length() > 20) {
+            throw new BaseException("用户名长度应在1到20位之间");
+        }
+        //加密前密码
+        String password = userVo.getPassword();
+        if (password == null || password.equals("")) {
+            throw new BaseException("密码不能为空");
+        } else if (!Pattern.matches(".{6,20}", password)) {
+            throw new BaseException("密码长度应在6到20位之间");
+        }
+        if (userVo.getPhone() == null || userVo.getPhone().equals("")) {
+            throw new BaseException("手机号码不能为空");
+        } else if (!Pattern.matches("^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$", userVo.getPhone())) {
+            throw new BaseException("手机号码格式错误");
+        }
+        if (userVo.getEmail() == null || userVo.getEmail().equals("")) {
+            throw new BaseException("邮箱不能为空");
+        } else if (!Pattern.matches("^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$", userVo.getEmail())) {
+            throw new BaseException("邮箱格式错误");
+        }
+
+        //用于验证用户名重名
+        userVo.setUserId(null);
         //判断输入的用户明是否重复
         int loginNameIsUsed = userDao.findLoginNameNumberByLoginName(userVo);
         if (loginNameIsUsed > 0) {
             throw new BaseException("该用户名已经被占用，请重新输入！");
         }
         //主键
-        userVo.setUserId(UuidUtil.getUuid());
+        String primaryKey = UuidUtil.getUuid();
+        userVo.setUserId(primaryKey);
         //当前登录用户编号
-        String userId = getCurrentLoginUserBaseInfo().getUserId();
-        userVo.setCreateUser(userId);
-        userVo.setModifyUser(userId);
-        //加密前密码
-        String password = userVo.getPassword();
+        UserPo curUser = getCurrentLoginUserBaseInfo();
+        if (curUser == null || curUser.equals("")) {
+            userVo.setCreateUser(primaryKey);
+            userVo.setModifyUser(primaryKey);
+        } else if (curUser != null || !curUser.equals("")) {
+            userVo.setCreateUser(curUser.getUserId());
+            userVo.setModifyUser(curUser.getUserId());
+        }
         //密码加密
         if (password != null && password != "") {
             userVo.setPassword(HashedUtil.getSimpleHash(userVo.getLoginName(), password, securityConfig.getHashAlgorithmName(), securityConfig.getHashIterations()).toString());
@@ -98,6 +126,21 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public int editUserByUserId(UserVo userVo) {
+        //数据验证
+        if (userVo.getLoginName() == null || userVo.getLoginName().length() < 1 || userVo.getLoginName().length() > 20) {
+            throw new BaseException("用户名长度应在1到20位之间");
+        }
+        if (userVo.getPhone() == null || userVo.getPhone().equals("")) {
+            throw new BaseException("手机号码不能为空");
+        } else if (!Pattern.matches("^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$", userVo.getPhone())) {
+            throw new BaseException("手机号码格式错误");
+        }
+        if (userVo.getEmail() == null || userVo.getEmail().equals("")) {
+            throw new BaseException("邮箱不能为空");
+        } else if (!Pattern.matches("^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$", userVo.getEmail())) {
+            throw new BaseException("邮箱格式错误");
+        }
+
         //判断输入的用户明是否重复
         int loginNameIsUsed = userDao.findLoginNameNumberByLoginName(userVo);
         if (loginNameIsUsed > 0) {
@@ -154,5 +197,69 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserVo> findIsHaveNewLeaveMessageByManager(UserVo userVo) {
         return userDao.findIsHaveNewLeaveMessageByManager(userVo);
+    }
+
+    @Override
+    @Transactional
+    public int register(UserVo userVo) {
+        userVo.setLoginType(0);
+        userVo.setStatus(1);
+        //数据验证
+        if (userVo.getPassword() != null && !userVo.getPassword().equals("") && !userVo.getPassword().equals(userVo.getTwicePassword())) {
+            throw new BaseException("两次输入的密码不一致");
+        }
+        //添加用户
+        return addUser(userVo);
+    }
+
+    @Override
+    @Transactional
+    public int modifyUserInfo(UserVo userVo) {
+        //数据验证
+        if (userVo.getPassword() != null && !userVo.getPassword().equals("")) {
+            if (!Pattern.matches(".{6,20}", userVo.getPassword()))
+                throw new BaseException("密码长度应在6到20位之间");
+            if (!userVo.getPassword().equals(userVo.getTwicePassword()))
+                throw new BaseException("两次输入的密码不一致");
+        }
+        return editUserByUserId(userVo);
+    }
+
+    @Override
+    public UserVo findUserByPhoneAndEmail(UserVo userVo) {
+        //找到用户
+        UserVo user = userDao.findUserByPhoneAndEmail(userVo);
+        if (user == null) {
+            throw new BaseException("不存在匹配的用户");
+        }
+        user.setPassword(null);
+        return user;
+    }
+
+    @Override
+    @Transactional
+    public int modifyUserInfoByforgetPwd(UserVo userVo) {
+        //数据验证
+        if (userVo.getUserId() == null || userVo.getUserId().equals("")) {
+            throw new BaseException("请求参数出错");
+        }
+        if (userVo.getLoginName() == null || userVo.getLoginName().equals("")) {
+            throw new BaseException("用户名不能为空");
+        }
+        if (userVo.getPassword() == null || userVo.getPassword().equals("")) {
+            throw new BaseException("密码不能为空");
+        } else if (!Pattern.matches(".{6,20}", userVo.getPassword())) {
+            throw new BaseException("密码长度在6到20位之间");
+        } else if (!userVo.getPassword().equals(userVo.getTwicePassword())) {
+            throw new BaseException("两次输入的密码不相等");
+        }
+        //密码加密
+        userVo.setPassword(HashedUtil.getSimpleHash(userVo.getLoginName(), userVo.getPassword(), securityConfig.getHashAlgorithmName(), securityConfig.getHashIterations()).toString());
+        //修改
+        int result = userDao.editUserByUserId(userVo);
+        if (result <= 0) {
+            throw new BaseException("修改用户名密码失败");
+        }
+        return 1;
     }
 }

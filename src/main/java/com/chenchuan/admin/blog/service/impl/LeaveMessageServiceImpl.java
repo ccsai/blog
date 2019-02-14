@@ -4,6 +4,7 @@ import com.chenchuan.admin.blog.dao.LeaveMessageDao;
 import com.chenchuan.admin.blog.service.LeaveMessageService;
 import com.chenchuan.admin.blog.vo.LeaveMessageVo;
 import com.chenchuan.admin.resource.dao.OssDao;
+import com.chenchuan.admin.sys.po.UserPo;
 import com.chenchuan.admin.sys.service.UserService;
 import com.chenchuan.common.exception.BaseException;
 import com.chenchuan.common.util.UuidUtil;
@@ -69,24 +70,7 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
         String userId = userService.getCurrentLoginUserBaseInfo().getUserId();
         leaveMessageVo.setCreateUser(userId);
         //添加留言
-        int affectRows = leaveMessageDao.addLeaveMessage(leaveMessageVo);
-        if (affectRows <= 0) {
-            throw new BaseException("发送留言失败！<br>请稍后重试或联系管理员！");
-        }
-        //添加留言与oss的关联
-        if (ossKeys != null && ossKeys.length > 0) {
-            List<Map<String, Object>> moduleOssAuths = new ArrayList<>();
-            for (String key : ossKeys) {
-                Map<String, Object> moduleOssAuth = new HashMap<>();
-                moduleOssAuth.put("moduleId", leaveMessageId);
-                moduleOssAuth.put("ossKey", key);
-                moduleOssAuth.put("moduleType", 4);
-                moduleOssAuths.add(moduleOssAuth);
-            }
-            //关联
-            ossDao.addModuleOssAuth(moduleOssAuths);
-        }
-        return 1;
+        return addLeaveMessageToDB(leaveMessageVo, ossKeys);
     }
 
     @Override
@@ -117,6 +101,74 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
             }
             //根据模块信息删除留言oss关联
             ossDao.removeModuleOssAuthByModule(leaveMessageInfos);
+        }
+        return 1;
+    }
+
+    @Override
+    public List<LeaveMessageVo> findLeaveMessageByUserForHome() {
+        //获取登录用户
+        UserPo curUser = userService.getCurrentLoginUserBaseInfo();
+        if (curUser == null) {
+            return null;
+        }
+        //用户编号
+        String targetUser = curUser.getUserId();
+        //留言查询参数
+        Map<String, Object> map = new HashMap<>();
+        map.put("targetUser", targetUser);
+        map.put("sendUser", "manager");
+        List<LeaveMessageVo> leaveMessageList = leaveMessageDao.findLeaveMessageByUserId(map);
+        return leaveMessageList;
+    }
+
+    @Override
+    @Transactional
+    public int addLeaveMessageByHome(LeaveMessageVo leaveMessageVo, String[] ossKeys) {
+        //数据验证
+        if (leaveMessageVo.getMessage() == null || leaveMessageVo.getMessage().equals("")) {
+            throw new BaseException("留言内容不能为空");
+        }
+        //登录用户
+        UserPo curUser = userService.getCurrentLoginUserBaseInfo();
+        if (curUser == null) {
+            throw new BaseException("获取登录用户信息异常");
+        }
+
+        //留言编号
+        leaveMessageVo.setLeaveMessageId(UuidUtil.getUuid());
+        leaveMessageVo.setMessage(leaveMessageVo.getMessage());
+        leaveMessageVo.setTargetUser("manager");
+        leaveMessageVo.setSendUser(curUser.getUserId());
+        leaveMessageVo.setCreateUser(curUser.getUserId());
+        //添加留言
+        return addLeaveMessageToDB(leaveMessageVo, ossKeys);
+    }
+
+    /**
+     * 留言信息入库
+     *
+     * @param leaveMessageVo
+     * @param ossKeys        oss keys
+     * @return 操作状态
+     */
+    private int addLeaveMessageToDB(LeaveMessageVo leaveMessageVo, String[] ossKeys) {
+        int affectRows = leaveMessageDao.addLeaveMessage(leaveMessageVo);
+        if (affectRows <= 0) {
+            throw new BaseException("发送留言失败！<br>请稍后重试或联系管理员！");
+        }
+        //添加留言与oss的关联
+        if (ossKeys != null && ossKeys.length > 0) {
+            List<Map<String, Object>> moduleOssAuths = new ArrayList<>();
+            for (String key : ossKeys) {
+                Map<String, Object> moduleOssAuth = new HashMap<>();
+                moduleOssAuth.put("moduleId", leaveMessageVo.getLeaveMessageId());
+                moduleOssAuth.put("ossKey", key);
+                moduleOssAuth.put("moduleType", 4);
+                moduleOssAuths.add(moduleOssAuth);
+            }
+            //关联
+            ossDao.addModuleOssAuth(moduleOssAuths);
         }
         return 1;
     }

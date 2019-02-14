@@ -4,6 +4,7 @@ import com.chenchuan.admin.blog.dao.ArticleCommentDao;
 import com.chenchuan.admin.blog.service.ArticleCommentService;
 import com.chenchuan.admin.blog.vo.ArticleCommentVo;
 import com.chenchuan.admin.resource.dao.OssDao;
+import com.chenchuan.admin.sys.po.UserPo;
 import com.chenchuan.admin.sys.service.UserService;
 import com.chenchuan.common.exception.BaseException;
 import com.chenchuan.common.util.UuidUtil;
@@ -107,6 +108,44 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         articleCommentVo.setCreateUser(userId);
         articleCommentVo.setModifyUser(userId);
         //添加评论
+        return addArticleCommentToDB(articleCommentVo, ossKeys);
+    }
+
+    @Override
+    @Transactional
+    public int addArticleCommentByHome(ArticleCommentVo articleCommentVo, String[] ossKeys) {
+        //判断是否选择文章
+        if (articleCommentVo.getArticleId() == null || articleCommentVo.getArticleId().equals("")) {
+            throw new BaseException("请选择评论文章！");
+        }
+        //判断是否输入文章评论类容
+        if (articleCommentVo.getComment() == null || articleCommentVo.getComment().equals("")) {
+            throw new BaseException("评论内容不能为空！");
+        }
+        //登录用户信息
+        UserPo curUser = userService.getCurrentLoginUserBaseInfo();
+        if (curUser == null) {
+            throw new BaseException("获取登录用户信息出错！");
+        }
+        //登录用户编号
+        String curUserId = curUser.getUserId();
+        articleCommentVo.setCommentUserId(curUserId);
+        articleCommentVo.setCreateUser(curUserId);
+        articleCommentVo.setModifyUser(curUserId);
+        //文章评论编号
+        articleCommentVo.setCommentId(UuidUtil.getUuid());
+        //添加评论
+        return addArticleCommentToDB(articleCommentVo, ossKeys);
+    }
+
+    /**
+     * 添加文章评论到
+     *
+     * @param articleCommentVo
+     * @param ossKeys
+     * @return 添加状态
+     */
+    private int addArticleCommentToDB(ArticleCommentVo articleCommentVo, String[] ossKeys) {
         int affectRows = articleCommentDao.addarticleComment(articleCommentVo);
         if (affectRows <= 0) {
             throw new BaseException("发表评论失败!");
@@ -116,7 +155,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         if (ossKeys != null && ossKeys.length > 0) {
             for (String ossKey : ossKeys) {
                 Map<String, Object> articleCommentAuth = new HashMap<>();
-                articleCommentAuth.put("moduleId", commentId);
+                articleCommentAuth.put("moduleId", articleCommentVo.getCommentId());
                 articleCommentAuth.put("ossKey", ossKey);
                 articleCommentAuth.put("moduleType", 3);
                 articleCommentOssAuths.add(articleCommentAuth);

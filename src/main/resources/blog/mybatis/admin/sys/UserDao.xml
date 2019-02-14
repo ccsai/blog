@@ -170,4 +170,13 @@
         ORDER BY MAX(lm.create_time) DESC ,CASE WHEN COUNT(lm.send_user) > 0 THEN 1 ELSE 0 END
     </select>
 
+
+    <!-- 找回密码验证（通过手机邮箱查询用户） -->
+    <select id="findUserByPhoneAndEmail" parameterType="com.chenchuan.admin.sys.vo.UserVo"
+            resultType="com.chenchuan.admin.sys.vo.UserVo">
+        SELECT
+        <include refid="userObject"/>
+        FROM `user` u WHERE u.phone = #{phone} AND u.email = #{email}
+    </select>
+
 </mapper>

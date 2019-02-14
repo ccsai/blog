@@ -1,0 +1,54 @@
+/* 标题与文章分隔线 */
+#main-list .list-hr {
+    height: 0.3rem;
+    border: none;
+    background: rgb(247, 120, 37);
+    margin: 0.3em 0;
+}
+
+/* 文章列表 */
+#main-list .article-list-div {
+    height: 12rem;
+    border-bottom: 0.075rem solid grey;
+}
+
+#main-list .article-list-div:hover {
+    background: rgba(255, 255, 204, 0.5);
+}
+
+/* 列表小图标（发表时间、赞） */
+#main-list .article-list-right {
+    position: relative;
+}
+
+#main-list .rticle-list-right-bottom {
+    height: 1.5rem;
+    position: absolute;
+    bottom: 0;
+}
+
+/* 列表超出部分处理 */
+#main-list .article-list-content {
+    isplay: -webkit-box;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+/* 点赞，评论图标 */
+.info-icon:hover {
+    cursor: pointer;
+}
+
+/* 分页器 */
+.pagination {
+    opacity: 0.8;
+}
+
+/* 分页input */
+.pagination-input {
+    height: 1.2rem;
+    width: 4rem;
+}

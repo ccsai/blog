@@ -95,4 +95,12 @@ public interface UserDao {
      * @return 带未读留言的用户集合
      */
     List<UserVo> findIsHaveNewLeaveMessageByManager(UserVo userVo);
+
+    /**
+     * 找回密码验证（通过手机邮箱查询用户）
+     *
+     * @param userVo
+     * @return 对应用户
+     */
+    UserVo findUserByPhoneAndEmail(UserVo userVo);
 }

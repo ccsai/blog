@@ -46,7 +46,17 @@ public interface ArticleCommentService {
      * 添加文章评论
      *
      * @param articleCommentVo
+     * @param ossKeys
      * @return 添加状态
      */
     int addArticleComment(ArticleCommentVo articleCommentVo, String[] ossKeys);
+
+    /**
+     * 前台用户添加文章评论
+     *
+     * @param articleCommentVo
+     * @param ossKeys
+     * @return 添加状态
+     */
+    int addArticleCommentByHome(ArticleCommentVo articleCommentVo, String[] ossKeys);
 }

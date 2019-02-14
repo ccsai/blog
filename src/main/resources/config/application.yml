@@ -49,7 +49,7 @@ security:
   hash_iterations: 10 #加密散列次数
   salt_suffix: salt #盐加的后缀
   #游客可访问的路径
-  anon_url_path: /css/**,/img/**,/js/**,/plugin/**,/admin/guest/login/index,/g/**,/login,/logOut
+  anon_url_path: /css/**,/img/**,/js/**,/plugin/**,/config/ueditor/ueditorConfig/json,/admin/guest/**,/,/g.*/**,/login,/logOut
 
 
 ## 七牛云配置
@@ -58,8 +58,14 @@ qiniu:
   access_key: fxjvFewQRrpZFUpxsGHQ5H6LeeU5nKSmrcEXJSMN
   secret_key: Avn-cR32Zwg_CRNL-8RhMJCzShugy4fS_21gg_Wc
   bucket: blog #空间
-  cdn_prefix: http://pkzoue8vo.bkt.clouddn.com/ #外链访问路径
+  cdn_prefix: http://pmsw67kco.bkt.clouddn.com/ #外链访问路径
   up_expire_seconds: 3600 #上传token过期时间（暂时未使用）
+
+
+## 前端页面信息配置
+page:
+  home:
+    article_rows: 2 #文章分页列表每页显示数量
 
 
 server:

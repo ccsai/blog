@@ -74,4 +74,35 @@ public interface UserService {
      * @return 带未读留言的用户集合
      */
     List<UserVo> findIsHaveNewLeaveMessageByManager(UserVo userVo);
+
+    /**
+     * 前台注册用户
+     *
+     * @param userVo
+     * @return 注册状态
+     */
+    int register(UserVo userVo);
+
+    /**
+     * 前台用户修改信息
+     *
+     * @param userVo
+     * @return 修改状态
+     */
+    int modifyUserInfo(UserVo userVo);
+
+    /**
+     * 找回密码验证（通过手机邮箱查询用户）
+     *
+     * @param userVo
+     * @return 对应用户
+     */
+    UserVo findUserByPhoneAndEmail(UserVo userVo);
+
+    /**
+     * 忘记密码修改信息
+     * @param userVo
+     * @return
+     */
+    int modifyUserInfoByforgetPwd(UserVo userVo);
 }

@@ -150,4 +150,128 @@
     <delete id="removeArticleByArticleId" parameterType="String">
         DELETE FROM article WHERE article_id = #{articleId}
     </delete>
+
+    <!-- 文章浏览排名 -->
+    <select id="articleViewRanking" resultType="com.chenchuan.admin.blog.po.ArticlePo">
+        SELECT
+        <include refid="articleObject"/>
+        FROM article a WHERE a.is_private = 0
+        ORDER BY a.visited_number DESC LIMIT 10
+    </select>
+
+    <!-- 首页轮播展示的文章 -->
+    <select id="findArticleListByCarousel" resultType="com.chenchuan.admin.blog.po.ArticlePo">
+        SELECT
+        <include refid="articleObject"/>
+        FROM article a
+        WHERE a.is_private = 0 AND a.carousel IS NOT NULL AND a.carousel != ''
+    </select>
+
+    <!-- 前台文章列表展示 -->
+    <select id="findArticleListForHome" parameterType="com.chenchuan.admin.blog.vo.ArticleVo"
+            resultType="com.chenchuan.admin.blog.vo.ArticleVo">
+        SELECT
+        <include refid="articleObject"/>,
+        COUNT(ac.is_checked = 2) AS commentNumber
+        FROM article a
+        LEFT JOIN article_label_auth ala
+        ON a.article_id = ala.article_id
+        LEFT JOIN label l
+        ON ala.label_id = l.label_id
+        LEFT JOIN article_comment ac
+        ON a.article_id = ac.article_id
+        <where>
+            a.is_private = 0
+            <if test="banner != null and banner != ''">
+                AND a.banner = #{banner}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (a.title LIKE '%${keyword}%'
+                OR l.label LIKE '%${keyword}%'
+                )
+            </if>
+            <if test="labelId != null and labelId != ''">
+                AND l.label_id = #{labelId}
+            </if>
+        </where>
+        GROUP BY a.article_id
+        ORDER BY a.create_time DESC
+    </select>
+
+    <!-- 根据文章编号查询文章详情（包括评论，标签） -->
+    <resultMap id="findResultOfArticleDetailwithLabelCommentByarticleId" type="com.chenchuan.admin.blog.vo.ArticleVo">
+        <id property="articleId" column="articleId"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="banner" column="banner"/>
+        <result property="classId" column="classId"/>
+        <result property="listPicture" column="listPicture"/>
+        <result property="carousel" column="carousel"/>
+        <result property="sortNo" column="sortNo"/>
+        <result property="isPrivate" column="isPrivate"/>
+        <result property="visitedNumber" column="visitedNumber"/>
+        <result property="supportNumber" column="supportNumber"/>
+        <result property="createUser" column="createUser"/>
+        <result property="createTime" column="createTime"/>
+        <result property="modifyUser" column="modifyUser"/>
+        <result property="modifyTime" column="modifyTime"/>
+        <collection property="labelList" ofType="com.chenchuan.admin.blog.vo.LabelVo">
+            <id column="labelId" property="labelId"/>
+            <result property="label" column="label"/>
+        </collection>
+        <collection property="articleCommentList" ofType="com.chenchuan.admin.blog.vo.ArticleCommentVo">
+            <id property="commentId" column="commentId"/>
+            <result property="comment" column="comment"/>
+            <result property="articleId" column="commentArticleId"/>
+            <result property="isChecked" column="commentIsChecked"/>
+            <result property="supportNumber" column="commentSupportNumber"/>
+            <result property="noSupportNumber" column="commentNoSupportNumber"/>
+            <result property="commentUserId" column="commentUserId"/>
+            <result property="createUser" column="commentCreateUser"/>
+            <result property="createTime" column="commentCreateTime"/>
+            <result property="modifyUser" column="commentModifyUser"/>
+            <result property="modifyTime" column="commentModifyTime"/>
+            <result property="commentUser" column="commentUser"/>
+        </collection>
+    </resultMap>
+    <select id="findArticleDetailwithLabelCommentByarticleId" parameterType="String"
+            resultMap="findResultOfArticleDetailwithLabelCommentByarticleId">
+        SELECT
+        <include refid="articleObject"/>,
+        l.label_id AS labelId,
+        l.label AS label,
+        ac.comment_id AS commentId,
+        ac.`comment` AS `comment`,
+        ac.article_id AS commentArticleId,
+        ac.is_checked AS commentIsChecked,
+        ac.support_number AS commentSupportNumber,
+        ac.no_support_number AS commentNoSupportNumber,
+        ac.comment_user_id AS commentUserId,
+        ac.create_user AS commentCreateUser,
+        ac.create_time AS commentCreateTime,
+        ac.modify_user AS commentModifyUser,
+        ac.modify_time AS commentModifyTime,
+        ac.commentUser AS commentUser
+        FROM article a
+        LEFT JOIN article_label_auth ala
+        ON a.article_id = ala.article_id
+        LEFT JOIN label l
+        ON ala.label_id = l.label_id
+        LEFT JOIN (
+        SELECT ac1.*,CASE ac1.comment_user_id WHEN 'manager' THEN '管理员' ELSE u1.login_name END AS commentUser
+        FROM article_comment ac1 LEFT JOIN `user` u1 ON ac1.comment_user_id = u1.user_id
+        ) ac
+        ON a.article_id = ac.article_id AND ac.is_checked = 2
+        WHERE a.article_id = #{articleId}
+        ORDER BY ac.create_time DESC
+    </select>
+
+    <!-- 根据文章编号点赞 -->
+    <update id="supportArticleByArticleId" parameterType="com.chenchuan.admin.blog.vo.ArticleVo">
+        UPDATE article SET support_number = support_number + #{supportNumber} WHERE article_id = #{articleId}
+    </update>
+    <!-- 根据文章编号查询点赞次数 -->
+    <select id="findSupportNumberByArticleId" parameterType="String" resultType="com.chenchuan.admin.blog.po.ArticlePo">
+        SELECT a.support_number AS supportNumber FROM article a WHERE article_id = #{articleId}
+    </select>
 </mapper>

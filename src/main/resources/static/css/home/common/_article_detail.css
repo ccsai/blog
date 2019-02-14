@@ -1,0 +1,35 @@
+/* 文章详情 */
+
+/* 点赞，评论图标 */
+#article-detail .info-icon:hover {
+    cursor: pointer;
+}
+
+/* 打赏图 */
+#article-detail .qr-code {
+    width: 10rem;
+    height: 10rem;
+}
+
+/* 评论专区 */
+.comment-hr {
+    height: 0.15rem;
+    border: none;
+    background: rgb(247, 120, 37);
+    margin: 0.3em 0;
+}
+
+/* ueditor */
+#article-detail .comment-ue-div {
+    height: 15rem;
+}
+
+#comment-ue {
+    height: 70%;
+    width: 99%;
+}
+
+/* 文章评论图片 */
+#article-detail .article-content img, #article-detail .comment img {
+    cursor: pointer;
+}

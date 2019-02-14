@@ -1,6 +1,7 @@
 package com.chenchuan.admin;
 
 import com.alibaba.fastjson.JSON;
+import com.chenchuan.admin.blog.dao.ArticleDao;
 import com.chenchuan.admin.blog.dao.LeaveMessageDao;
 import com.chenchuan.admin.blog.service.ArticleCommentService;
 import com.chenchuan.admin.blog.service.FriendlyLinkServie;
@@ -85,16 +86,12 @@ public class SysTests {
     @Autowired
     private LeaveMessageDao leaveMessageDao;
 
+    @Autowired
+    private ArticleDao articleDao;
+
     @Test
     public void testPermissionDao() {
-        Map<String,Object> map = new HashMap<>();
-        map.put("targetUser","manager");
-        map.put("sendUser","36dad18b-ded4-42aa-96bc-e45de5afbd18");
-        map.put("isRead",0);
-        LeaveMessageVo leaveMessageVo = new LeaveMessageVo();
-        leaveMessageVo.setSendUser("manager");leaveMessageVo.setTargetUser("36dad18b-ded4-42aa-96bc-e45de5afbd18");
-        leaveMessageVo.setMessage("安达市多");leaveMessageVo.setIsRead(0);leaveMessageVo.setCreateUser("admin");
-        System.out.println(JSON.toJSONString(leaveMessageService.findLeaveMessageByUserId(map)));
+        System.out.println(JSON.toJSONString(articleDao.findArticleDetailwithLabelCommentByarticleId("a6600c3a-1a23-4ee5-a0bb-e480b587febf")));
     }
 
     //@Test

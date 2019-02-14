@@ -1,0 +1,17 @@
+/* 个人名片 */
+#busi-cart {
+    background: rgba(221, 221, 221, 0.5);
+}
+#busi-cart:hover{
+    box-shadow: 0.6rem 0.3rem 0.8rem rgba(221, 221, 221, 0.5) inset;
+}
+
+/* 个人名片小图标 */
+#busi-cart .icon-div {
+    height: 3rem;
+    width: 3rem;
+}
+#busi-cart .icon-div:hover {
+    background: rgba(255, 255, 255,0.5);
+    border: rgb(0, 255, 153) 0.025rem solid;
+}

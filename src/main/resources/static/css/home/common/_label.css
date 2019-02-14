@@ -1,0 +1,7 @@
+/* 本站标签 */
+#label{
+    background: rgba(221, 221, 221, 0.5);
+}
+#label:hover{
+    box-shadow: 0.6rem 0.3rem 0.8rem rgba(221, 221, 221, 0.5) inset;
+}
