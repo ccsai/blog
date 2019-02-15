@@ -1,3 +1,7 @@
+/*
+* 文章详情 js
+* */
+
 $(function () {
 
     //ueditor加载
@@ -85,8 +89,42 @@ $(function () {
         }
     });
 
-    //文章点赞
+    /**
+     * 文章点赞
+     */
     $(document).on('click', '.support-article', function () {
+        //判断用户信息
+        if (userInfo == null) {
+            layer.msg('请登录后点赞', {icon: 2});
+            return false;
+        }
+        //点赞参数
+        var data = {};
+        //文章编号
+        data.articleId = $(this).data('articleId');
+        //赞
+        $.ajax({
+            url: '/b.a/supportArticle',
+            type: 'post',
+            data: data,
+            success: function (data) {
+                if (data.resultCode == -1 || data.resultCode == 0) {
+                    layer.msg(data.notice, {icon: 2});
+                } else if (data.resultCode == 1) {
+                    layer.msg('<span class="text-success">赞 +1</span>', {icon: 1});
+                    $('.article-support-number').html(data.articleInfo.supportNumber);
+                }
+            },
+            error: function () {
+                layer.msg('点赞异常', {icon: 2});
+            }
+        });
+    });
+
+    /**
+     * 文章评论点赞
+     */
+    $(document).on('click', '#article-detail .article-comment-support', function () {
         var that = $(this);
         //判断用户信息
         if (userInfo == null) {
@@ -96,21 +134,55 @@ $(function () {
         //点赞参数
         var data = {};
         //文章编号
-        data.articleId = that.data('articleId');
+        data.commentId = that.data('articleCommentId');
+        //赞
         $.ajax({
-            url: '/b.a/supportArticle',
+            url: '/b.ac/supportByArticleCommentId',
             type: 'post',
             data: data,
             success: function (data) {
                 if (data.resultCode == -1 || data.resultCode == 0) {
                     layer.msg(data.notice, {icon: 2});
                 } else if (data.resultCode == 1) {
-                    layer.msg('<span style="color: red">赞 +1</span>', {icon: 1});
-                    $('.article-support-number').html(data.articleInfo.supportNumber);
+                    layer.msg('<span class="text-success">赞 +1</span>', {icon: 1});
+                    that.find('.article-comment-support-number').html(data.articleCommentInfo.supportNumber);
                 }
             },
             error: function () {
                 layer.msg('点赞异常', {icon: 2});
+            }
+        });
+    });
+
+    /**
+     * 踩文章评论
+     */
+    $(document).on('click', '#article-detail .article-comment-no-support', function () {
+        var that = $(this);
+        //判断用户信息
+        if (userInfo == null) {
+            layer.msg('请登录后点赞', {icon: 2});
+            return false;
+        }
+        //踩评论请求参数
+        var data = {};
+        //文章编号
+        data.commentId = that.data('articleCommentId');
+        //踩
+        $.ajax({
+            url: '/b.ac/noSupportByArticleCommentId',
+            type: 'post',
+            data: data,
+            success: function (data) {
+                if (data.resultCode == -1 || data.resultCode == 0) {
+                    layer.msg(data.notice, {icon: 2});
+                } else if (data.resultCode == 1) {
+                    layer.msg('<span class="text-warning">踩 +1</span>', {icon: 1});
+                    that.find('.article-comment-no-support-number').html(data.articleCommentInfo.noSupportNumber);
+                }
+            },
+            error: function () {
+                layer.msg('踩评论异常', {icon: 2});
             }
         });
     });

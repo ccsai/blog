@@ -1,5 +1,6 @@
 package com.chenchuan.admin.blog.dao;
 
+import com.chenchuan.admin.blog.po.ArticleCommentPo;
 import com.chenchuan.admin.blog.vo.ArticleCommentVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -61,4 +62,36 @@ public interface ArticleCommentDao {
      * @return 影响行数
      */
     int addarticleComment(ArticleCommentVo articleCommentVo);
+
+    /**
+     * 根据文章评论编号点赞
+     *
+     * @param articleCommentVo
+     * @return 影响行数
+     */
+    int supportByArticleCommentId(ArticleCommentVo articleCommentVo);
+
+    /**
+     * 根据文章评论编号查询点赞次数
+     *
+     * @param commentId 评论编号
+     * @return 文章评论点赞信息
+     */
+    ArticleCommentPo findSupportNumberByArticleCommentId(String commentId);
+
+    /**
+     * 根据文章评论编号踩
+     *
+     * @param articleCommentVo
+     * @return 影响行数
+     */
+    int noSupportByArticleCommentId(ArticleCommentVo articleCommentVo);
+
+    /**
+     * 根据文章评论编号查询踩次数
+     *
+     * @param commentId 文章评论编号
+     * @return 文章评论踩信息
+     */
+    ArticleCommentPo findNoSupportNumberByArticleCommentId(String commentId);
 }

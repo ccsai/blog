@@ -1,5 +1,6 @@
 package com.chenchuan.admin.blog.service;
 
+import com.chenchuan.admin.blog.po.ArticleCommentPo;
 import com.chenchuan.admin.blog.vo.ArticleCommentVo;
 import com.github.pagehelper.PageInfo;
 
@@ -59,4 +60,20 @@ public interface ArticleCommentService {
      * @return 添加状态
      */
     int addArticleCommentByHome(ArticleCommentVo articleCommentVo, String[] ossKeys);
+
+    /**
+     * 根据文章评论编号点赞
+     *
+     * @param articleCommentVo
+     * @return 文章评论点赞信息
+     */
+    ArticleCommentPo supportByArticleCommentId(ArticleCommentVo articleCommentVo);
+
+    /**
+     * 根据文章评论编号踩
+     *
+     * @param articleCommentVo
+     * @return 文章评论踩信息
+     */
+    ArticleCommentPo noSupportByArticleCommentId(ArticleCommentVo articleCommentVo);
 }

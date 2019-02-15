@@ -28,7 +28,7 @@
                 <#-- 列表标题分隔线 -->
                     <hr class="module-hr">
 
-                <#-- 文章列表展示 -->
+                <#-- 文章详情展示 -->
                 <#include '../../common/_article_detail.ftl'/>
                 </div>
             </div>

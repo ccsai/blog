@@ -1,3 +1,7 @@
+/*
+* 留言 js
+* */
+
 $(function () {
     //留言banner选中
     $('#banner .link-leave-message').addClass('active');

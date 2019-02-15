@@ -19,7 +19,7 @@ jQuery.validator.addMethod('checkPhone', function (value, element) {
     return false;
 }, '（电话号码格式不正确）');
 
-function getLoginUserInfo(){
+function getLoginUserInfo() {
     $.ajax({
         url: '/admin/guest/findLoginUserInfo',
         type: 'get',

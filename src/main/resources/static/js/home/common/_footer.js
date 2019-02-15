@@ -1,3 +1,7 @@
+/*
+* 网页底部 js
+* */
+
 $(function () {
     //body下内边距
     var bodypb = $('#footer-nav').height() * 0.0625;

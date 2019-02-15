@@ -39,4 +39,36 @@ public class ArticleCommentController extends BaseController {
         map.put("resultCode", articleCommentService.addArticleCommentByHome(articleCommentVo, ossKeys));
         return map;
     }
+
+    /**
+     * 文章评论点赞
+     *
+     * @param articleCommentVo
+     * @return 点赞后的点赞信息
+     */
+    @PostMapping("/supportByArticleCommentId")
+    @ResponseBody
+    public Map<String, Object> supportByArticleCommentId(ArticleCommentVo articleCommentVo) {
+        Map<String, Object> map = new HashMap<>();
+        //点赞
+        map.put("articleCommentInfo", articleCommentService.supportByArticleCommentId(articleCommentVo));
+        map.put("resultCode", 1);
+        return map;
+    }
+
+    /**
+     * 踩文章评论
+     *
+     * @param articleCommentVo
+     * @return 踩评论后的踩信息
+     */
+    @PostMapping("/noSupportByArticleCommentId")
+    @ResponseBody
+    public Map<String, Object> noSupportByArticleCommentId(ArticleCommentVo articleCommentVo) {
+        Map<String, Object> map = new HashMap<>();
+        //点赞
+        map.put("articleCommentInfo", articleCommentService.noSupportByArticleCommentId(articleCommentVo));
+        map.put("resultCode", 1);
+        return map;
+    }
 }

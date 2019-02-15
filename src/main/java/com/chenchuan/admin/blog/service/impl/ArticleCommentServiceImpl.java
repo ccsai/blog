@@ -1,8 +1,11 @@
 package com.chenchuan.admin.blog.service.impl;
 
 import com.chenchuan.admin.blog.dao.ArticleCommentDao;
+import com.chenchuan.admin.blog.dao.SupportDao;
+import com.chenchuan.admin.blog.po.ArticleCommentPo;
 import com.chenchuan.admin.blog.service.ArticleCommentService;
 import com.chenchuan.admin.blog.vo.ArticleCommentVo;
+import com.chenchuan.admin.blog.vo.SupportVo;
 import com.chenchuan.admin.resource.dao.OssDao;
 import com.chenchuan.admin.sys.po.UserPo;
 import com.chenchuan.admin.sys.service.UserService;
@@ -33,6 +36,9 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 
     @Autowired
     private OssDao ossDao;
+
+    @Autowired
+    private SupportDao supportDao;
 
 
     @Override
@@ -136,6 +142,82 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         articleCommentVo.setCommentId(UuidUtil.getUuid());
         //添加评论
         return addArticleCommentToDB(articleCommentVo, ossKeys);
+    }
+
+    @Override
+    @Transactional
+    public ArticleCommentPo supportByArticleCommentId(ArticleCommentVo articleCommentVo) {
+        //获取登录用户
+        UserPo userPo = userService.getCurrentLoginUserBaseInfo();
+        if (userPo == null) {
+            throw new BaseException("获取用户信息异常");
+        }
+        //判断评论编号是否有值
+        String articleCommentId = articleCommentVo.getCommentId();
+        if (articleCommentId == null || articleCommentId.equals("")) {
+            throw new BaseException("没有选择评论");
+        }
+        //增加点赞次数
+        articleCommentVo.setSupportNumber(1);
+        int supportAffectRows = articleCommentDao.supportByArticleCommentId(articleCommentVo);
+        if (supportAffectRows <= 0) {
+            throw new BaseException("点赞失败");
+        }
+        //增加点赞记录
+        SupportVo supportVo = new SupportVo();
+        supportVo.setSupportId(UuidUtil.getUuid());
+        supportVo.setModuleId(articleCommentId);
+        supportVo.setModuleType(2);
+        supportVo.setSupportType(1);
+        supportVo.setCreateUser(userPo.getUserId());
+        int supportLogAffectRows = supportDao.addSupportData(supportVo);
+        if (supportLogAffectRows <= 0) {
+            throw new BaseException("点赞失败，点赞记录失败");
+        }
+        //点赞后的点赞信息
+        ArticleCommentPo articleCommentInfo = articleCommentDao.findSupportNumberByArticleCommentId(articleCommentId);
+        if (articleCommentInfo == null) {
+            throw new BaseException("没有该评论");
+        }
+        return articleCommentInfo;
+    }
+
+    @Override
+    @Transactional
+    public ArticleCommentPo noSupportByArticleCommentId(ArticleCommentVo articleCommentVo) {
+        //获取登录用户
+        UserPo userPo = userService.getCurrentLoginUserBaseInfo();
+        if (userPo == null) {
+            throw new BaseException("获取用户信息异常");
+        }
+        //判断评论编号是否有值
+        String articleCommentId = articleCommentVo.getCommentId();
+        if (articleCommentId == null || articleCommentId.equals("")) {
+            throw new BaseException("没有选择评论");
+        }
+        //增加踩次数
+        articleCommentVo.setNoSupportNumber(1);
+        int noSupprotAffectRows = articleCommentDao.noSupportByArticleCommentId(articleCommentVo);
+        if (noSupprotAffectRows <= 0) {
+            throw new BaseException("踩评论失败");
+        }
+        //增加踩记录
+        SupportVo supportVo = new SupportVo();
+        supportVo.setSupportId(UuidUtil.getUuid());
+        supportVo.setModuleId(articleCommentId);
+        supportVo.setModuleType(2);
+        supportVo.setSupportType(2);
+        supportVo.setCreateUser(userPo.getUserId());
+        int noSupportLogRows = supportDao.addSupportData(supportVo);
+        if (noSupportLogRows <= 0) {
+            throw new BaseException("踩评论失败，踩记录失败");
+        }
+        //踩后的踩信息
+        ArticleCommentPo articleCommentInfo = articleCommentDao.findNoSupportNumberByArticleCommentId(articleCommentId);
+        if (articleCommentInfo == null) {
+            throw new BaseException("没有该评论");
+        }
+        return articleCommentInfo;
     }
 
     /**

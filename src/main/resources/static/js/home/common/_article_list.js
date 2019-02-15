@@ -43,7 +43,7 @@ $(function () {
                 if (data.resultCode == -1 || data.resultCode == 0) {
                     layer.msg(data.notice, {icon: 2});
                 } else if (data.resultCode == 1) {
-                    layer.msg('<span style="color: red">赞 +1</span>', {icon: 1});
+                    layer.msg('<span class="text-success">赞 +1</span>', {icon: 1});
                     that.find('.support-number').html(data.articleInfo.supportNumber);
                 }
             },

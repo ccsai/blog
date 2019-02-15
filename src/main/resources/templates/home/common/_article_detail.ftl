@@ -38,7 +38,8 @@
         </div>
 
         <div class="input-group-append">
-            <button class="btn btn-outline-dark support-article" data-article-id="${(articleDetail.articleId)!}" role="button">
+            <button class="btn btn-outline-dark support-article" data-article-id="${(articleDetail.articleId)!}"
+                    role="button">
                 赞（<span class="article-support-number">${(articleDetail.supportNumber)!0}</span>
                 ）
                 <span class="oi oi-thumb-up text-light" title="赞" aria-hidden="true"></span>
@@ -109,12 +110,14 @@
                         </div>
                         <div class="d-sm-flex justify-content-sm-end">
                             <div>
-                                <a class="btn btn-sm btn-outline-info font-weight-bold">
-                                    赞（${(c.supportNumber)!0}）
+                                <a class="btn btn-sm btn-outline-info font-weight-bold article-comment-support"
+                                   data-article-comment-id="${(c.commentId)!}">
+                                    赞（<span class="article-comment-support-number">${(c.supportNumber)!0}</span>）
                                     <span class="oi oi-thumb-up text-dark" title="赞" aria-hidden="true"></span>
                                 </a>
-                                <a class="btn btn-sm btn-outline-danger font-weight-bold">
-                                    踩（${(c.noSupportNumber)!0}）
+                                <a class="btn btn-sm btn-outline-danger font-weight-bold article-comment-no-support"
+                                   data-article-comment-id="${(c.commentId)!}">
+                                    踩（<span class="article-comment-no-support-number">${(c.noSupportNumber)!0}</span>）
                                     <span class="oi oi-thumb-down text-dark" title="踩" aria-hidden="true"></span>
                                 </a>
                             </div>

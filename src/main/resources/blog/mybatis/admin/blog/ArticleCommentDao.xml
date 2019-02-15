@@ -113,4 +113,23 @@
         )
     </insert>
 
+    <!-- 根据文章评论编号点赞 -->
+    <update id="supportByArticleCommentId" parameterType="com.chenchuan.admin.blog.vo.ArticleCommentVo">
+        UPDATE article_comment SET support_number = support_number + #{supportNumber} WHERE comment_id = #{commentId}
+    </update>
+    <!-- 根据文章评论编号查询点赞次数 -->
+    <select id="findSupportNumberByArticleCommentId" parameterType="String"
+            resultType="com.chenchuan.admin.blog.po.ArticleCommentPo">
+        SELECT ac.support_number AS supportNumber FROM article_comment ac WHERE comment_id = #{commentId}
+    </select>
+
+    <!-- 根据文章评论编号踩 -->
+    <update id="noSupportByArticleCommentId" parameterType="com.chenchuan.admin.blog.vo.ArticleCommentVo">
+        UPDATE article_comment SET no_support_number = no_support_number + #{noSupportNumber} WHERE comment_id = #{commentId}
+    </update>
+    <!-- 根据文章评论编号查询踩次数 -->
+    <select id="findNoSupportNumberByArticleCommentId" parameterType="String"
+            resultType="com.chenchuan.admin.blog.po.ArticleCommentPo">
+        SELECT ac.no_support_number AS noSupportNumber FROM article_comment ac WHERE comment_id = #{commentId}
+    </select>
 </mapper>
