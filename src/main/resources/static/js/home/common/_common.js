@@ -4,6 +4,18 @@
 
 //登录用户信息
 var userInfo = null;
+
+//网页标签列表颜色样式
+var labelColorStyle = [
+    'badge-primary',
+    'badge-secondary',
+    'badge-success',
+    'badge-danger',
+    'badge-warning',
+    'badge-info',
+    'badge-dark'
+];
+
 $(function () {
     //获取登录用户信息
     getLoginUserInfo();

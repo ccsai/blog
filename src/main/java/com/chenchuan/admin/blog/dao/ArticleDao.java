@@ -124,4 +124,12 @@ public interface ArticleDao {
      * @return 文章点赞信息
      */
     ArticlePo findSupportNumberByArticleId(String articleId);
+
+    /**
+     * 根据文章编号增加访问次数
+     *
+     * @param articleVo
+     * @return 影响行数
+     */
+    int addVisitedNumberByArticleId(ArticleVo articleVo);
 }

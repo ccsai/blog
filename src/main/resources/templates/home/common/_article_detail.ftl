@@ -32,7 +32,7 @@
             </div>
             <#list articleDetail.labelList as l>
                 <h4 class="mr-sm-3">
-                    <a href="/g.a/list/label/${(l.labelId)!' '}/page/1" class="badge badge-success">${(l.label)!' '}</a>
+                    <a href="/g.a/list/label/${(l.labelId)!' '}/page/1" class="badge label-href">${(l.label)!' '}</a>
                 </h4>
             </#list>
         </div>

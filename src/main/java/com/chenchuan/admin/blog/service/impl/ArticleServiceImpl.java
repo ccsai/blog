@@ -166,7 +166,16 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @Transactional
     public ArticleVo findArticleDetailwithLabelCommentByarticleId(String articleId) {
+        //增加文章访问次数
+        ArticleVo articleVo = new ArticleVo();
+        articleVo.setArticleId(articleId);
+        articleVo.setVisitedNumber(1);
+        int addVisitedNumberAffectRows = articleDao.addVisitedNumberByArticleId(articleVo);
+        if (addVisitedNumberAffectRows <= 0){
+            throw new BaseException("文章浏览异常");
+        }
         //文章详情
         ArticleVo articleDetail = articleDao.findArticleDetailwithLabelCommentByarticleId(articleId);
         if (articleDetail == null) {

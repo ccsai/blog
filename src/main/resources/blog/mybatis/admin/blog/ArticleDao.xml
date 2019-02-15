@@ -274,4 +274,9 @@
     <select id="findSupportNumberByArticleId" parameterType="String" resultType="com.chenchuan.admin.blog.po.ArticlePo">
         SELECT a.support_number AS supportNumber FROM article a WHERE article_id = #{articleId}
     </select>
+
+    <!-- 根据文章编号增加访问次数 -->
+    <update id="addVisitedNumberByArticleId" parameterType="com.chenchuan.admin.blog.vo.ArticleVo">
+        UPDATE article SET visited_number = visited_number + #{visitedNumber} WHERE article_id = #{articleId}
+    </update>
 </mapper>

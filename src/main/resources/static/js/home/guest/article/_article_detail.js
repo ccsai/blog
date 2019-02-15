@@ -40,6 +40,16 @@ $(function () {
         $('#source-img-modal').modal('hide');
     });
 
+    //获取文章所属标签列表
+    var thisArticleLabelList = $('#article-detail .label-href');
+    //标签数量
+    if (thisArticleLabelList != null && thisArticleLabelList.length > 0) {
+        //改标签随机添加背景色样式
+        $.each(thisArticleLabelList, function (i, l) {
+            $(l).addClass(labelColorStyle[Math.floor(Math.random() * labelColorStyle.length)]);
+        });
+    }
+
     //发表文章评论
     $('#article-comment-form').ajaxForm({
         beforeSubmit: function ($form) {

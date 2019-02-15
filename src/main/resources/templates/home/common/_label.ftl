@@ -6,7 +6,7 @@
         <div class="d-sm-flex flex-sm-wrap">
             <#items as l>
                 <h5 class="mr-sm-3">
-                    <a href="/g.a/list/label/${l.labelId}/page/1" class="badge badge-primary">${l.label}</a>
+                    <a href="/g.a/list/label/${l.labelId}/page/1" class="badge label-href">${l.label}</a>
                 </h5>
             </#items>
         </div>

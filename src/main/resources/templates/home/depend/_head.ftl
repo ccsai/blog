@@ -44,9 +44,11 @@
 <script src="${basePath!}/js/common/allmayneed/Utils.js"></script>
 <#-- 前台公共 js -->
 <script src="${basePath!}/js/home/common/_common.js"></script>
-<#-- 顶部导航js -->
+<#-- 顶部导航 js -->
 <script src="${basePath!}/js/home/common/_nav.js"></script>
-<#-- 网页底部js -->
+<#-- 标签 js -->
+<script src="${basePath!}/js/home/common/_label.js"></script>
+<#-- 网页底部 js -->
 <script src="${basePath!}/js/home/common/_footer.js"></script>
 <#-- 侧边栏 js -->
 <script src="${basePath!}/js/home/common/_side.js"></script>
