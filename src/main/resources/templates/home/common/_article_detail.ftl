@@ -56,13 +56,13 @@
         <div class="d-sm-flex justify-content-sm-center">
             <div class="text-sm-center mr-sm-3">
                 <div class="qr-code">
-                    <img class="w-100 h-100 rounded" src="${basePath!}/img/home/default/article-list.png">
+                    <img class="w-100 h-100 rounded" src="${basePath!}/img/home/pay/wechat-collection.jpg">
                 </div>
                 <span class="font-weight-bold">微信</span>
             </div>
             <div class="text-sm-center ml-sm-3">
                 <div class="qr-code">
-                    <img class="w-100 h-100 rounded" src="${basePath!}/img/home/default/article-list.png">
+                    <img class="w-100 h-100 rounded" src="${basePath!}/img/home/pay/alipay-collection.jpg">
                 </div>
                 <span class="font-weight-bold">支付宝</span>
             </div>
@@ -91,7 +91,7 @@
 <#-- 评论列表 -->
     <div>
         <div class="d-sm-flex flex-column">
-            <h6 class="font-weight-bold">评论（${(articleDetail.commentNumber)!0}）</h6>
+            <h6 class="font-weight-bold">审核通过的评论（${(articleDetail.commentNumber)!0}）</h6>
             <div class="d-sm-flex flex-column">
                 <#list articleDetail.articleCommentList as c>
                 <#-- 一条评论开始 -->

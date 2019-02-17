@@ -5,7 +5,7 @@
             如果网站内容有侵权行为，请及时通知本人删除！
         </div>
         <div class="text-sm-center text-light">
-            @备案。。。。
+            服务器备案中
         </div>
     </nav>
 </footer>

@@ -1,7 +1,7 @@
 spring:
   ## 数据源配置
   datasource:
-    url: jdbc:mysql://localhost:3306/chenchuan_blog
+    url: jdbc:mysql://localhost:3307/chenchuan_blog
 #    url: jdbc:mysql://192.168.2.128:3306/chenchuan_blog
     username: root
     password: 123
