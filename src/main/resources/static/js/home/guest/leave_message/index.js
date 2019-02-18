@@ -26,12 +26,8 @@ $(function () {
      * 留言原图展示
      */
     $(document).on('click', '#leave-message .leave-message-comtent img', function () {
+        $('#source-img-modal .modal-content').css({'overflow': 'auto'});
         $('#source-img-modal .source-img').attr('src', $(this).attr('src'));
-        //获取当前图片宽度
-        var tempImg = new Image();
-        tempImg.src = $(this).attr('src');
-        var curImgWidth = tempImg.width;
-        $('#source-img-modal>.modal-dialog').css({'width': curImgWidth / 0.94 + 'px'});
         $('#source-img-modal').modal('show');
     });
 
@@ -99,7 +95,7 @@ $(window).resize(function () {
     //留言图片过大处理
     resizeLeaveMessageImg();
     //源文件自适应
-    $('#source-img-modal .source-img').css({'width': $('#source-img-modal>.modal-dialog').width() * 0.94});
+    $('#source-img-modal .modal-content').css({'overflow': 'auto'});
 });
 
 
@@ -116,10 +112,10 @@ function resizeLeaveMessageImg() {
     //留言图片处理
     if (lmImgs != null && lmImgs.length > 0) {
         $.each(lmImgs, function (i, lm) {
-            if ($(lm).attr('width') > lmDivWidth) {
+            if (lm.naturalWidth > lmDivWidth) {
                 $(lm).css({'width': lmDivWidth + 'px'});
             }
-            if ($(lm).height() > lmImgMaxHeight) {
+            if (lm.naturalHeight > lmImgMaxHeight) {
                 $(lm).css({'height': lmImgMaxHeight + 'px'});
             }
         });

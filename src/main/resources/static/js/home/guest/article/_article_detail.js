@@ -24,12 +24,8 @@ $(function () {
      * 文章评论图片原图展示
      */
     $(document).on('click', '#article-detail .article-content img, #article-detail .comment img', function () {
+        $('#source-img-modal .modal-content').css({'overflow': 'auto'});
         $('#source-img-modal .source-img').attr('src', $(this).attr('src'));
-        //获取当前图片宽度
-        var tempImg = new Image();
-        tempImg.src = $(this).attr('src');
-        var curImgWidth = tempImg.width;
-        $('#source-img-modal>.modal-dialog').css({'width': curImgWidth / 0.94 + 'px'});
         $('#source-img-modal').modal('show');
     });
 
@@ -205,7 +201,7 @@ $(window).resize(function () {
     //文章和文章评论图片过大处理
     resizeArticleAndCommentImg();
     //源文件自适应
-    $('#source-img-modal .source-img').css({'width': $('#source-img-modal>.modal-dialog').width() * 0.94});
+    $('#source-img-modal .modal-content').css({'overflow': 'auto'});
 });
 
 /**
@@ -217,14 +213,14 @@ function resizeArticleAndCommentImg() {
     //文章容器宽
     var articleDivWidth = $('#article-detail .article-content').width();
     //所有文章图片
-    var articleImgs = $("#article-detail .article-content img");
+    var articleImgs = $('#article-detail .article-content img');
     //文章图片处理
     if (articleImgs != null && articleImgs.length > 0) {
         $.each(articleImgs, function (i, ai) {
-            if ($(ai).attr('width') > articleDivWidth) {
+            if (ai.naturalWidth > articleDivWidth) {
                 $(ai).css({'width': articleDivWidth + 'px'});
             }
-            if ($(ai).height() > articleAndCommentImgMaxHeight) {
+            if (ai.naturalHeight > articleAndCommentImgMaxHeight) {
                 $(ai).css({'height': articleAndCommentImgMaxHeight + 'px'});
             }
         });
@@ -237,11 +233,11 @@ function resizeArticleAndCommentImg() {
     //文章评论图片处理
     if (articleCommentImgs != null && articleCommentImgs.length > 0) {
         $.each(articleCommentImgs, function (j, aci) {
-            if ($(aci).attr('width') > articleCommentDivWidth) {
-                $(aci).css({'width': articleCommentDivWidth});
+            if (aci.naturalWidth > articleCommentDivWidth) {
+                $(aci).css({'width': articleCommentDivWidth + 'px'});
             }
-            if ($(aci).height() > articleAndCommentImgMaxHeight) {
-                $(aci).css({'height': articleAndCommentImgMaxHeight});
+            if (aci.naturalHeight > articleAndCommentImgMaxHeight) {
+                $(aci).css({'height': articleAndCommentImgMaxHeight + 'px'});
             }
         });
     }

@@ -77,8 +77,8 @@
 
                 <#-- 展示原图模态框 -->
                     <div class="modal fade" id="source-img-modal">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
+                        <div class="modal-dialog modal-lg w-100 h-75">
+                            <div class="modal-content w-100 h-100">
                                 <!-- 模态框主体 -->
                                 <div class="modal-body mx-auto">
                                     <img class="source-img" src=""/>
