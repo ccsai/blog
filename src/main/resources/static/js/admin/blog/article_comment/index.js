@@ -1,7 +1,7 @@
 $(function () {
 
     //实例ueditor
-    var ue = UE.getEditor('articleCommentUE', {zIndex: 999999});
+    var ue = UE.getEditor('articleCommentUE', {zIndex: 999999, maximumWords: 5000});
 
     /**
      * 文章评论列表分页查询

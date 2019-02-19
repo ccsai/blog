@@ -1,6 +1,6 @@
 $(function () {
     //加载Ueditor（发送留言）
-    var ue = UE.getEditor('leaveMessageUE', {zIndex: 999999});
+    var ue = UE.getEditor('leaveMessageUE', {zIndex: 999999, maximumWords: 5000});
 
     /**
      * 加载用户分页列表
@@ -23,7 +23,7 @@ $(function () {
         },
         //选中用户加载聊天框和内容
         onSelect: function (rowIndex, rowData) {
-            $('#checkAllLeaveMessageBtn').prop('checked',false);
+            $('#checkAllLeaveMessageBtn').prop('checked', false);
             //获取选中的用户名
             var userName = rowData.loginName;
             var realName = rowData.realName;

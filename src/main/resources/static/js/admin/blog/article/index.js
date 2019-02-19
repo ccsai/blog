@@ -1,6 +1,6 @@
 $(function () {
     //实例ueditor
-    var ue = UE.getEditor('articleUE', {zIndex: 999999, maximumWords: 16000000});
+    var ue = UE.getEditor('articleUE', {zIndex: 999999, maximumWords: 5000000});
 
     /**
      * 加载文章列表

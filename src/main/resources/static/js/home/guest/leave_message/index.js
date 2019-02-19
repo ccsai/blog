@@ -16,7 +16,10 @@ $(function () {
                 'fullscreen'
             ]
         ],
-        zIndex: 0, elementPathEnabled: false, initialFrameWidth: '100%'
+        zIndex: 0,
+        elementPathEnabled: false,
+        initialFrameWidth: '100%',
+        maximumWords: 5000
     });
 
     //留言图片过大处理
