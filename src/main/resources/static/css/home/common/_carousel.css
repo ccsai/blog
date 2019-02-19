@@ -2,3 +2,8 @@
 #carousel img {
     height: 21.875rem;
 }
+
+/* 图片说明字体 */
+#carousel .carousel-caption {
+    color: black;
+}

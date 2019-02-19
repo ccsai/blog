@@ -15,7 +15,7 @@
                         <a href="/g.a/detail/${c.articleId}">
                             <img src="${c.carousel}" class="w-100">
                             <div class="carousel-caption">
-                                <h3>${c.title}</h3>
+                                <h2>${c.title}</h2>
                             </div>
                         </a>
                     </div>
