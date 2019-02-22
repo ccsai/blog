@@ -20,4 +20,9 @@
           NOW()
         )
     </insert>
+
+    <!-- 删除一个月前的赞、踩数据 -->
+    <delete id="removeBeforeLastMonthSupportRecord">
+        DELETE FROM support WHERE create_time &lt; DATE_SUB(NOW(),INTERVAL 2 MONTH)
+    </delete>
 </mapper>

@@ -18,4 +18,10 @@ public interface SupportDao {
      * @return 影响行数
      */
     int addSupportData(SupportVo supportVo);
+
+    /**
+     * 删除一个月前的赞、踩数据
+     * @return
+     */
+    int removeBeforeLastMonthSupportRecord();
 }
