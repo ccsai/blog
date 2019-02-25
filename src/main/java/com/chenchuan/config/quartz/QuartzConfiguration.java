@@ -1,5 +1,6 @@
 package com.chenchuan.config.quartz;
 
+import com.chenchuan.admin.sys.quartz.job.LeaveMessageJob;
 import com.chenchuan.admin.sys.quartz.job.SupportRecodJob;
 import org.quartz.*;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +20,7 @@ public class QuartzConfiguration {
     @Bean
     public JobDetail removeSupportRecordJob() {
         return JobBuilder.newJob(SupportRecodJob.class)
-                .withIdentity("removeSupportRecod")
+                .withIdentity("removeSupportRecordJob")
                 .storeDurably()
                 .build();
     }
@@ -33,8 +34,35 @@ public class QuartzConfiguration {
     public Trigger removeSupportRecordTrigger() {
         return TriggerBuilder.newTrigger()
                 .forJob(removeSupportRecordJob())
-                .withIdentity("removeSupportRecod")
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 1 * ? *"))
+                .withIdentity("removeSupportRecordTrigger")
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 * * ?"))
+                .build();
+    }
+
+    /**
+     * 删除留言记录任务详情
+     *
+     * @return JobDetail详情
+     */
+    @Bean
+    public JobDetail removeLeaveMessageJob() {
+        return JobBuilder.newJob(LeaveMessageJob.class)
+                .withIdentity("removeLeaveMessageJob")
+                .storeDurably()
+                .build();
+    }
+
+    /**
+     * 删除留言记录任务触发器配置
+     *
+     * @return 触发器实例
+     */
+    @Bean
+    public Trigger removeLeaveMessageTrigger() {
+        return TriggerBuilder.newTrigger()
+                .forJob(removeLeaveMessageJob())
+                .withIdentity("removeLeaveMessageTrigger")
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 * * ?"))
                 .build();
     }
 }

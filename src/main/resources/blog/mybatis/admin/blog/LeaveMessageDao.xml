@@ -61,4 +61,8 @@
         <if test="targetUser != 'manager'">target_user = #{targetUser} AND send_user = 'manager'</if>
     </update>
 
+    <!-- 删除一定时间前的留言记录 -->
+    <delete id="removeLeaveMessageBeforeSomeTime">
+        DELETE FROM leave_message WHERE create_time &lt; DATE_SUB(NOW(),INTERVAL 30 DAY)
+    </delete>
 </mapper>

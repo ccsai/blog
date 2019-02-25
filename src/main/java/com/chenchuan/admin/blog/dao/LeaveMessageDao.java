@@ -45,4 +45,11 @@ public interface LeaveMessageDao {
      * @return 影响行数
      */
     int editLeaveMessageIsReadByUserId(Map<String, Object> targetAndSendUser);
+
+    /**
+     * 删除一定时间前的留言记录
+     *
+     * @return 影响行数
+     */
+    int removeLeaveMessageBeforeSomeTime();
 }
