@@ -1,10 +1,12 @@
 spring:
   ## 数据源配置
   datasource:
-    url: jdbc:mysql://localhost:3307/chenchuan_blog
+#    url: jdbc:mysql://localhost:3307/chenchuan_blog
 #    url: jdbc:mysql://192.168.2.128:3306/chenchuan_blog
+    url: jdbc:mysql://47.94.7.101:3306/chenchuan_blog
     username: root
-    password: 123
+#    password: 123
+    password: c1305060207c@2019
     driver-class-name: com.mysql.jdbc.Driver
   ## freemarker配置
   freemarker:
@@ -49,14 +51,14 @@ security:
   hash_iterations: 10 #加密散列次数
   salt_suffix: salt #盐加的后缀
   #游客可访问的路径
-  anon_url_path: /css/**,/img/**,/js/**,/plugin/**,/config/ueditor/ueditorConfig/json,/admin/guest/**,/,/g.*/**,/login,/logOut
+  anon_url_path: /css/**,/img/**,/js/**,/plugin/**,/favicon.ico,/config/ueditor/ueditorConfig/json,/admin/guest/**,/,/g.*/**,/login,/logOut
 
 
 ## 七牛云配置
 qiniu:
   # 密钥
-  access_key: fxjvFewQRrpZFUpxsGHQ5H6LeeU5nKSmrcEXJSMN
-  secret_key: Avn-cR32Zwg_CRNL-8RhMJCzShugy4fS_21gg_Wc
+  access_key: fxjvFewQRArpZFUpxsGHQ5H6LeeU5nKSzmrcEXJSMN
+  secret_key: Avn-cR32ZCwg_CRNL-8RhMJCzShugy4fyS_21gg_Wc
   bucket: blog #空间
   cdn_prefix: http://pmsw67kco.bkt.clouddn.com/ #外链访问路径
   up_expire_seconds: 3600 #上传token过期时间（暂时未使用）
@@ -71,3 +73,4 @@ page:
 server:
   tomcat:
     basedir: ${user.home}/tomcat/tmp #设置tomcat的basedir
+  port: 8081
