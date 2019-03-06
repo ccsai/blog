@@ -1,12 +1,9 @@
 spring:
   ## 数据源配置
   datasource:
-#    url: jdbc:mysql://localhost:3307/chenchuan_blog
-#    url: jdbc:mysql://192.168.2.128:3306/chenchuan_blog
-    url: jdbc:mysql://47.94.7.101:3306/chenchuan_blog
+    url: jdbc:mysql://localhost:3306/chenchuan_blog
     username: root
-#    password: 123
-    password: c1305060207c@2019
+    password: 123
     driver-class-name: com.mysql.jdbc.Driver
   ## freemarker配置
   freemarker:
@@ -57,20 +54,19 @@ security:
 ## 七牛云配置
 qiniu:
   # 密钥
-  access_key: fxjvFewQRArpZFUpxsGHQ5H6LeeU5nKSzmrcEXJSMN
-  secret_key: Avn-cR32ZCwg_CRNL-8RhMJCzShugy4fyS_21gg_Wc
+  access_key: adc
+  secret_key: acd
   bucket: blog #空间
-  cdn_prefix: http://pmsw67kco.bkt.clouddn.com/ #外链访问路径
+  cdn_prefix: http://qiniu.chenchuan.work/ #外链访问路径
   up_expire_seconds: 3600 #上传token过期时间（暂时未使用）
 
 
 ## 前端页面信息配置
 page:
   home:
-    article_rows: 2 #文章分页列表每页显示数量
+    article_rows: 10 #文章分页列表每页显示数量
 
 
 server:
   tomcat:
     basedir: ${user.home}/tomcat/tmp #设置tomcat的basedir
-  port: 8081

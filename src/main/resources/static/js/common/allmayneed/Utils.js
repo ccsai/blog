@@ -4,7 +4,7 @@
 Utils = {
 
     //七牛cdn_prefix
-    cdnPrefix: 'http://pmsw67kco.bkt.clouddn.com/',
+    cdnPrefix: 'http://qiniu.chenchuan.work/',
 
 
     /**

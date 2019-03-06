@@ -78,10 +78,14 @@ public class QiniuFileServiceImpl implements QiniuFileService {
             //解析上传成功的结果
             resultOfPolicy = JSON.parseObject(response.bodyString());
         } catch (QiniuException e) {//异常要删除已经上传的文件
-            deleteFile(resultOfPolicy.getString("key"));
+            if (resultOfPolicy != null) {
+                deleteFile(resultOfPolicy.getString("key"));
+            }
             throw new BaseException("文件上传失败！<br>" + e.response.toString());
         } catch (Exception e) {
-            deleteFile(resultOfPolicy.getString("key"));
+            if (resultOfPolicy != null) {
+                deleteFile(resultOfPolicy.getString("key"));
+            }
             throw new BaseException("文件上传失败！");
         }
         return resultOfPolicy;
