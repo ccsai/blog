@@ -5,6 +5,8 @@ import com.chenchuan.admin.sys.service.UserService;
 import com.chenchuan.admin.sys.vo.UserVo;
 import com.chenchuan.common.exception.BaseException;
 import com.chenchuan.common.service.LoginService;
+import com.chenchuan.common.util.UuidUtil;
+import com.chenchuan.config.oauth.QqOAuthConfig;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +31,9 @@ public class LoginController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private QqOAuthConfig qqOAuthConfig;
 
 
     /**
@@ -57,6 +63,37 @@ public class LoginController extends BaseController {
         resultMap.put("userInfo", userInfo);
         resultMap.put("resultCode", 1);
         return resultMap;
+    }
+
+    /**
+     * qq登录获取Authorization Code
+     *
+     * @param httpServletResponse
+     */
+    @GetMapping("/login/qq")
+    public void loginQQ(HttpServletResponse httpServletResponse) {
+        try {
+            httpServletResponse.sendRedirect(qqOAuthConfig.getGetAuthorizationCodeUri() +
+                    "?response_type=" + qqOAuthConfig.getResponseType() +
+                    "&client_id=" + qqOAuthConfig.getAppId() +
+                    "&redirect_uri=" + qqOAuthConfig.getRedirectUri() +
+                    "&state=" + UuidUtil.getUuid());
+        } catch (Exception e) {
+            throw new BaseException("请求参数异常");
+        }
+    }
+
+    /**
+     * qq登陆回调
+     *
+     * @param code 授权获取的code
+     * @return 登陆成功返回地址
+     */
+    @GetMapping("/login/qq/callback")
+    @ResponseBody
+    public String qqCallbackUri(String code) {
+        loginService.qqLogin(code);
+        return "success";
     }
 
     /**

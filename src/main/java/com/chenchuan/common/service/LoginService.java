@@ -15,6 +15,13 @@ public interface LoginService {
     void login(UserVo userVo);
 
     /**
+     * qq登录
+     *
+     * @param code 获取token的code
+     */
+    void qqLogin(String code);
+
+    /**
      * 登出
      */
     void logOut();

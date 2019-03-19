@@ -1,7 +1,7 @@
 spring:
   ## 数据源配置
   datasource:
-    url: jdbc:mysql://localhost:3306/chenchuan_blog
+    url: jdbc:mysql://localhost:3306/blog
     username: root
     password: 123
     driver-class-name: com.mysql.jdbc.Driver
@@ -48,15 +48,15 @@ security:
   hash_iterations: 10 #加密散列次数
   salt_suffix: salt #盐加的后缀
   #游客可访问的路径
-  anon_url_path: /css/**,/img/**,/js/**,/plugin/**,/favicon.ico,/config/ueditor/ueditorConfig/json,/admin/guest/**,/,/g.*/**,/login,/logOut
+  anon_url_path: /css/**,/img/**,/js/**,/plugin/**,/favicon.ico,/config/ueditor/ueditorConfig/json,/admin/guest/**,/,/g.*/**,/login*/**,/logOut
 
 
 ## 七牛云配置
 qiniu:
   # 密钥
-  access_key: adc
-  secret_key: acd
-  bucket: blog #空间
+  access_key: -------------------------------------
+  secret_key: -------------------------------------
+  bucket: test #空间
   cdn_prefix: http://qiniu.chenchuan.work/ #外链访问路径
   up_expire_seconds: 3600 #上传token过期时间（暂时未使用）
 
@@ -70,3 +70,26 @@ page:
 server:
   tomcat:
     basedir: ${user.home}/tomcat/tmp #设置tomcat的basedir
+
+
+## 第三方登录配置信息
+oauth:
+  qq:
+    app_id: ----------------
+    app_key: --------------------------------
+    # 获取ocde地址
+    get_authorization_code_uri: https://graph.qq.com/oauth2.0/authorize
+    # 获取ocde的参数，固定为code
+    response_type: code
+    # 回调地址
+    redirect_uri: ---------------------------
+    # 获取Access Token地址
+    get_access_token_uri: https://graph.qq.com/oauth2.0/token
+    # 获取Access Token，固定为authorization_code
+    token_grant_type: authorization_code
+    # 刷新Access Token，refresh_token
+    refresh_token_grant_type: refresh_token
+    # 获取openid的地址
+    get_openid_uri: https://graph.qq.com/oauth2.0/me
+    # 获取用户信息地址
+    get_user_info_uri: https://graph.qq.com/user/get_user_info

@@ -46,6 +46,15 @@
                         <a class="forget-pwd-href" href="javascript:void(0)">忘记密码？</a>
                     </div>
                 </div>
+
+                <hr>
+                <div>
+                    <div>
+                        <button class="btn p-0 qq-login-btn">
+                            <img src="${basePath!}/img/home/icon/qqLoginButton.png">
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -192,8 +201,8 @@
             <#-- 设置新密码 -->
                 <div id="forget-pwd-reset">
                     <form id="forget-pwd-reset-form">
-                        <#-- 用户编号 -->
-                            <input type="hidden" name="userId" value="">
+                    <#-- 用户编号 -->
+                        <input type="hidden" name="userId" value="">
                         <div class="form-group">
                             <label for="fpr-name">用户名</label>
                             <div class="input-group">
@@ -260,7 +269,7 @@
             <#-- 修改信息表单 -->
                 <form id="modify-user-info-form">
                     <div class="form-group">
-                        <label for="nui-login-name">用户名</label>
+                        <label for="nui-login-name">用户名<span class="text-warning">（三方登录的用户名修改后下次登录会失效）</span></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">

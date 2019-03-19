@@ -61,6 +61,8 @@ public class UserServiceImpl implements UserService {
         //数据验证
         if (userVo.getLoginName() == null || userVo.getLoginName().length() < 1 || userVo.getLoginName().length() > 20) {
             throw new BaseException("用户名长度应在1到20位之间");
+        } else if (userVo.getLoginName().indexOf("用户_") != -1) {
+            throw new BaseException("该用户名不可用");
         }
         //加密前密码
         String password = userVo.getPassword();
@@ -71,7 +73,7 @@ public class UserServiceImpl implements UserService {
         }
         if (userVo.getPhone() == null || userVo.getPhone().equals("")) {
             throw new BaseException("手机号码不能为空");
-        } else if (!Pattern.matches("^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$", userVo.getPhone())) {
+        } else if (!Pattern.matches("^1[0-9]\\d{9}$", userVo.getPhone())) {
             throw new BaseException("手机号码格式错误");
         }
         if (userVo.getEmail() == null || userVo.getEmail().equals("")) {
@@ -129,10 +131,12 @@ public class UserServiceImpl implements UserService {
         //数据验证
         if (userVo.getLoginName() == null || userVo.getLoginName().length() < 1 || userVo.getLoginName().length() > 20) {
             throw new BaseException("用户名长度应在1到20位之间");
+        } else if (userVo.getLoginName().indexOf("用户_") != -1) {
+            throw new BaseException("该用户名不可用");
         }
         if (userVo.getPhone() == null || userVo.getPhone().equals("")) {
             throw new BaseException("手机号码不能为空");
-        } else if (!Pattern.matches("^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$", userVo.getPhone())) {
+        } else if (!Pattern.matches("^1[0-9]\\d{9}$", userVo.getPhone())) {
             throw new BaseException("手机号码格式错误");
         }
         if (userVo.getEmail() == null || userVo.getEmail().equals("")) {

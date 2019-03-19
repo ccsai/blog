@@ -2,10 +2,15 @@ package com.chenchuan.config.shiro;
 
 import com.chenchuan.admin.sys.dao.PermissionDao;
 import com.chenchuan.admin.sys.po.PermissionPo;
-import com.chenchuan.common.shiro.MyShiroRealm;
+import com.chenchuan.common.shiro.FreeRealm;
+import com.chenchuan.common.shiro.MyModularRealmAuthenticator;
+import com.chenchuan.common.shiro.NormalRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
+import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -14,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,16 +79,40 @@ public class ShiroConfiguration {
     }
 
     /**
-     * 将自定义realm放入容器
+     * 正常登录realm
      *
-     * @return
+     * @return 正常登录realm
      */
     @Bean
-    public MyShiroRealm myShiroRealm() {
-        MyShiroRealm myShiroRealm = new MyShiroRealm();
+    public NormalRealm normalRealm() {
+        NormalRealm normalRealm = new NormalRealm();
         //加密
-        myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher(securityConfig));
-        return myShiroRealm;
+        normalRealm.setCredentialsMatcher(hashedCredentialsMatcher(securityConfig));
+        return normalRealm;
+    }
+
+    /**
+     * 免密登录realm
+     *
+     * @return 免密登录realm
+     */
+    @Bean
+    public FreeRealm freeRealm() {
+        FreeRealm freeRealm = new FreeRealm();
+        return freeRealm;
+    }
+
+    /**
+     * 多realm管理
+     *
+     * @return 多realm管理器
+     */
+    @Bean
+    public ModularRealmAuthenticator modularRealmAuthenticator() {
+        //自定义realm管理器
+        MyModularRealmAuthenticator myModularRealmAuthenticator = new MyModularRealmAuthenticator();
+        myModularRealmAuthenticator.setAuthenticationStrategy(new AtLeastOneSuccessfulStrategy());
+        return myModularRealmAuthenticator;
     }
 
     /**
@@ -93,10 +123,17 @@ public class ShiroConfiguration {
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(myShiroRealm());
+        //多realm管理
+        securityManager.setAuthenticator(modularRealmAuthenticator());
+        List<Realm> realms = new ArrayList<>();
+        realms.add(normalRealm());
+        realms.add(freeRealm());
+        securityManager.setRealms(realms);
+        //缓存
         securityManager.setCacheManager(ehCacheManager(securityConfig));
         return securityManager;
     }
+
 
     /**
      * 凭证匹配器（SimpleAuthenticationInfo处理）

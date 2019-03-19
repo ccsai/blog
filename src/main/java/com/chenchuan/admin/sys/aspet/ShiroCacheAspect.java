@@ -1,6 +1,6 @@
 package com.chenchuan.admin.sys.aspet;
 
-import com.chenchuan.common.shiro.MyShiroRealm;
+import com.chenchuan.common.shiro.NormalRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -38,8 +38,8 @@ public class ShiroCacheAspect {
     public void clearShiroCache(Map<String, Object> result) {
         if (result.get("resultCode") != null && result.get("resultCode").equals(1)) {
             RealmSecurityManager realmSecurityManager = (RealmSecurityManager) SecurityUtils.getSecurityManager();
-            MyShiroRealm myShiroRealm = (MyShiroRealm) realmSecurityManager.getRealms().iterator().next();
-            myShiroRealm.clearCachedAuthorizationInfo();
+            NormalRealm normalRealm = (NormalRealm) realmSecurityManager.getRealms().iterator().next();
+            normalRealm.clearCachedAuthorizationInfo();
         }
     }
 }

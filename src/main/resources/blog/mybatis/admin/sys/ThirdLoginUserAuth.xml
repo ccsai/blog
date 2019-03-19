@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenchuan.admin.sys.dao.ThirdLoginUserAuthDao">
+
+    <!-- 插入第三方登录信息 -->
+    <insert id="addThirdLoginUserInfo" parameterType="com.chenchuan.admin.sys.vo.ThirdLoginUserAuthVo">
+        INSERT INTO third_login_user_auth(
+          thrid_id,
+          user_id,
+          access_token,
+          openid,
+          chat_head,
+          `type`,
+          create_time,
+          modify_time
+        )VALUES (
+          #{thridId},
+          #{userId},
+          #{accessToken},
+          #{openid},
+          #{chatHead},
+          #{type},
+          NOW(),
+          NOW()
+        )
+    </insert>
+</mapper>

@@ -1,6 +1,7 @@
 package com.chenchuan.admin.sys.dao;
 
 import com.chenchuan.admin.sys.po.UserPo;
+import com.chenchuan.admin.sys.vo.ThirdLoginUserAuthVo;
 import com.chenchuan.admin.sys.vo.UserVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,14 @@ public interface UserDao {
      * @return 用户
      */
     UserPo findUserByLoginNameAndPassword(UserVo userVo);
+
+    /**
+     * 根据openid获取第三方登录用户信息
+     *
+     * @param thirdLoginUserAuthVo
+     * @return 用户信息
+     */
+    UserPo findThirdLoginUserByOpenId(ThirdLoginUserAuthVo thirdLoginUserAuthVo);
 
     /**
      * 查询所有用户列表
@@ -103,4 +112,12 @@ public interface UserDao {
      * @return 对应用户
      */
     UserVo findUserByPhoneAndEmail(UserVo userVo);
+
+    /**
+     * 根据openid获取qq用户数量
+     *
+     * @param openid
+     * @return 数量
+     */
+    int findQqUserNumberByOpenid(String openid);
 }

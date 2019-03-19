@@ -1,10 +1,7 @@
 package com.chenchuan.common.shiro;
 
 import com.chenchuan.admin.sys.dao.UserDao;
-import com.chenchuan.admin.sys.po.PermissionPo;
-import com.chenchuan.admin.sys.po.RolePo;
 import com.chenchuan.admin.sys.po.UserPo;
-import com.chenchuan.admin.sys.service.RoleService;
 import com.chenchuan.admin.sys.vo.UserVo;
 import com.chenchuan.config.shiro.SecurityConfig;
 import org.apache.shiro.SecurityUtils;
@@ -13,19 +10,16 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
-import java.util.List;
-
 /**
- * 自定义shiro的realm
+ * 用户名密码登录realm
  */
-public class MyShiroRealm extends AuthorizingRealm {
+public class NormalRealm extends AuthorizingRealm {
 
     @Autowired
     @Lazy
@@ -33,12 +27,11 @@ public class MyShiroRealm extends AuthorizingRealm {
 
     @Autowired
     @Lazy
-    private RoleService roleService;
+    private SecurityConfig securityConfig;
 
     @Autowired
     @Lazy
-    private SecurityConfig securityConfig;
-
+    private AuthorizingRealmMethod authorizingRealmMethod;
 
     /**
      * 授权
@@ -48,27 +41,7 @@ public class MyShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        //权限角色信息
-        SimpleAuthorizationInfo simpleAuthenticationInfo = new SimpleAuthorizationInfo();
-        //获取当前用户
-        UserPo userPo = (UserPo) principalCollection.getPrimaryPrincipal();
-        //当前用户的角色权限
-        UserVo userVo = new UserVo();
-        userVo.setLoginName(userPo.getLoginName());
-        List<RolePo> roleList = roleService.findRolesPermissionsByUser(userVo);
-        //完成授权
-        if (roleList != null && roleList.size() != 0) {
-            for (RolePo r : roleList) {
-                simpleAuthenticationInfo.addRole(r.getRoleName());
-                List<PermissionPo> permissionList = r.getPermissionList();
-                if (permissionList != null && permissionList.size() != 0) {
-                    for (PermissionPo p : permissionList) {
-                        simpleAuthenticationInfo.addStringPermission(p.getUrl() + ":request");
-                    }
-                }
-            }
-        }
-        return simpleAuthenticationInfo;
+        return authorizingRealmMethod.doGetAuthorizationInfo(principalCollection);
     }
 
     /**

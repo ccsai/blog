@@ -360,4 +360,20 @@ $(function () {
             layer.msg('修改用户信息失败', {icon: 2});
         }
     });
+
+    /**
+     * 跳转到qq登录授权界面获取code
+     */
+    $(document).on('click', '#login .qq-login-btn', function () {
+        // 打开小窗，让用户登录，并保留窗口对象以备关闭
+        var authWin = window.open('/login/qq', '_blank', 'width=600,height=400,menubar=no,toolbar=no,location=no')
+        // 轮询是否授权成功，授权成功后关闭小窗，并刷新页面
+        var timerId = setInterval(function () {
+            if ($(authWin.document.body).text() == 'success') {
+                clearInterval(timerId);
+                authWin.close();
+                window.location.reload();
+            }
+        }, 500)
+    });
 });
