@@ -62,8 +62,7 @@ public class FreeRealm extends AuthorizingRealm {
         //验证
         return new SimpleAuthenticationInfo(
                 userPo,
-                userPo.getPassword(),
-                null,
+                "",
                 getName());
     }
 }

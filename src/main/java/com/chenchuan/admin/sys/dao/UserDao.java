@@ -106,14 +106,6 @@ public interface UserDao {
     List<UserVo> findIsHaveNewLeaveMessageByManager(UserVo userVo);
 
     /**
-     * 找回密码验证（通过手机邮箱查询用户）
-     *
-     * @param userVo
-     * @return 对应用户
-     */
-    UserVo findUserByPhoneAndEmail(UserVo userVo);
-
-    /**
      * 根据openid获取qq用户数量
      *
      * @param openid

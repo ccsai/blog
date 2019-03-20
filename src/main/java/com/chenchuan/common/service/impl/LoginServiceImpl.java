@@ -180,7 +180,7 @@ public class LoginServiceImpl implements LoginService {
         //添加用户认证信息
         Subject subject = SecurityUtils.getSubject();
         //收集用户登录凭证
-        MyUsernamePasswordToken usernamePasswordToken = new MyUsernamePasswordToken(loginName, loginPassword, LoginType.FREE.getDesc());
+        MyUsernamePasswordToken usernamePasswordToken = new MyUsernamePasswordToken(loginName, LoginType.FREE.getDesc());
         //认证
         subject.login(usernamePasswordToken);
         //当前登录用户,修改登录时间

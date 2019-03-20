@@ -1,5 +1,5 @@
 /*
-* 登录、注册、找回密码
+* 登录、注册
 * */
 $(function () {
 
@@ -12,15 +12,6 @@ $(function () {
     $('#register').on('show.bs.modal', function () {
         $('#register-form button[type=submit]').attr('disabled', false);
         $('#register-form').resetForm();
-    });
-
-    //忘记密码模态框打开
-    $('#forget-pwd').on('show.bs.modal', function () {
-        //只显示忘记密码表单一
-        $('#forget-pwd-user').show();
-        $('#forget-pwd-reset').hide();
-        $('#forget-pwd-user-form').resetForm();
-        $('#forget-pwd-reset-form').clearForm(true);
     });
 
     //修改用户信息模态框打开
@@ -59,20 +50,10 @@ $(function () {
 
     /**
      * 注册-->登录
-     * 忘记密码-->登录
      */
     $(document).on('click', '.login-href', function () {
         $('#login').modal('show');
         $('#register').modal('hide');
-        $('#forget-pwd').modal('hide');
-    });
-
-    /**
-     * 登录-->忘记密码
-     */
-    $(document).on('click', '.forget-pwd-href', function () {
-        $('#forget-pwd').modal('show');
-        $('#login').modal('hide');
     });
 
     //登录提交
@@ -223,10 +204,6 @@ $(function () {
         },
         errorElement: 'span',
         rules: {
-            loginName: {
-                required: true,
-                rangelength: [1, 20]
-            },
             password: {
                 required: false,
                 rangelength: [6, 20]
@@ -245,10 +222,6 @@ $(function () {
             }
         },
         messages: {
-            loginName: {
-                required: '（用户名不能为空）',
-                rangelength: '（用户名长度为1到20之间）'
-            },
             password: {
                 rangelength: '（密码长度为6到20之间）'
             },
@@ -287,93 +260,13 @@ $(function () {
         }
     });
 
-    //找回用户
-    $('#forget-pwd-user-form').ajaxForm({
-        url: '/g.u/findBackAccount',
-        type: 'get',
-        success: function (data) {
-            if (data.resultCode == -1 || data.resultCode == 0) {
-                layer.msg(data.notice, {icon: 2});
-            } else if (data.resultCode == 1) {
-                $('#forget-pwd-user').hide();
-                $('#forget-pwd-reset').show();
-                $('#forget-pwd-reset-form input[name=loginName]').val(data.userInfo.loginName);
-                $('#forget-pwd-reset-form input[name=userId]').val(data.userInfo.userId);
-            }
-        },
-        error: function () {
-            layer.msg('请求参数错误', {icon: 2});
-        }
-    });
-
-    //忘记密码找回后重新设置密码表单验证
-    $('#forget-pwd-reset-form').validate({
-        errorPlacement: function (error, element) {
-            $(element).closest('form')
-                .find("label[for='" + element.attr("id") + "']")
-                .append(error);
-        },
-        errorElement: 'span',
-        rules: {
-            loginName: {
-                required: true,
-                rangelength: [1, 20]
-            },
-            password: {
-                required: true,
-                rangelength: [6, 20]
-            },
-            twicePassword: {
-                required: true,
-                equalTo: '#fpr-pwd'
-            }
-        },
-        messages: {
-            loginName: {
-                required: '（用户名不能为空）',
-                rangelength: '（用户名长度为1到20之间）'
-            },
-            password: {
-                required: '（密码不能为空）',
-                rangelength: '（密码长度为6到20之间）'
-            },
-            twicePassword: {
-                required: '（密码不能为空）',
-                equalTo: '（两次密码不一致）'
-            }
-        }
-    });
-
-    //找回用户后重置密码
-    $('#forget-pwd-reset-form').ajaxForm({
-        url: '/g.u/modifyUserInfoByForgetPwd',
-        type: 'post',
-        success: function (data) {
-            if (data.resultCode == -1 || data.resultCode == 0) {
-                layer.msg(data.notice, {icon: 2});
-            } else if (data.resultCode == 1) {
-                $('#forget-pwd').modal('hide');
-                layer.msg('找回密码成功', {icon: 1});
-            }
-        },
-        error: function () {
-            layer.msg('修改用户信息失败', {icon: 2});
-        }
-    });
-
     /**
      * 跳转到qq登录授权界面获取code
      */
     $(document).on('click', '#login .qq-login-btn', function () {
-        // 打开小窗，让用户登录，并保留窗口对象以备关闭
-        var authWin = window.open('/login/qq', '_blank', 'width=600,height=400,menubar=no,toolbar=no,location=no')
-        // 轮询是否授权成功，授权成功后关闭小窗，并刷新页面
-        var timerId = setInterval(function () {
-            if ($(authWin.document.body).text() == 'success') {
-                clearInterval(timerId);
-                authWin.close();
-                window.location.reload();
-            }
-        }, 500)
+        //获取当前url作为登录成功的回调地址
+        var thirdLoginBackHref = window.location.pathname + window.location.search;
+        //跳转到登录页面
+        window.location.href = '/login/qq?thirdLoginBackHref=' + thirdLoginBackHref;
     });
 });

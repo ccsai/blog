@@ -182,14 +182,6 @@
     </select>
 
 
-    <!-- 找回密码验证（通过手机邮箱查询用户） -->
-    <select id="findUserByPhoneAndEmail" parameterType="com.chenchuan.admin.sys.vo.UserVo"
-            resultType="com.chenchuan.admin.sys.vo.UserVo">
-        SELECT
-        <include refid="userObject"/>
-        FROM `user` u WHERE u.phone = #{phone} AND u.email = #{email}
-    </select>
-
     <!-- 根据openid获取qq用户数量 -->
     <select id="findQqUserNumberByOpenid" parameterType="String" resultType="Integer">
         SELECT COUNT(1) AS findQqUserNumberByOpenid

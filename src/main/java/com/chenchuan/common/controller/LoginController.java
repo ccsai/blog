@@ -35,6 +35,11 @@ public class LoginController extends BaseController {
     @Autowired
     private QqOAuthConfig qqOAuthConfig;
 
+    /**
+     * 第三方登录返回地址
+     */
+    private String thirdLoginBackHref;
+
 
     /**
      * 登录
@@ -71,7 +76,9 @@ public class LoginController extends BaseController {
      * @param httpServletResponse
      */
     @GetMapping("/login/qq")
-    public void loginQQ(HttpServletResponse httpServletResponse) {
+    public void loginQQ(HttpServletResponse httpServletResponse, String thirdLoginBackHref) {
+        //记录登录成功后的返回地址
+        this.thirdLoginBackHref = thirdLoginBackHref;
         try {
             httpServletResponse.sendRedirect(qqOAuthConfig.getGetAuthorizationCodeUri() +
                     "?response_type=" + qqOAuthConfig.getResponseType() +
@@ -90,10 +97,9 @@ public class LoginController extends BaseController {
      * @return 登陆成功返回地址
      */
     @GetMapping("/login/qq/callback")
-    @ResponseBody
     public String qqCallbackUri(String code) {
         loginService.qqLogin(code);
-        return "success";
+        return "redirect:" + thirdLoginBackHref;
     }
 
     /**
