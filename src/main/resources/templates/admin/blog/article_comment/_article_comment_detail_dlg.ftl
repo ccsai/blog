@@ -8,7 +8,7 @@
         <div style="height: 15%">
             <h1 style="font-size: 20px;margin: 0 0 5px 0">文章：<span class="articleTitle" style="font-size: 20px"></span></h1>
             <div style="float: left">
-                <span>评论者：</span><span class="commentUser" style=";display: inline-block;width: 100px"></span>&emsp;
+                <span>评论者：</span><span class="commentUser" style=";display: inline-block;width: 300px"></span>&emsp;
                 <span class="createTime" style="color: grey"></span>
             </div>
             <div style="float: right;color: grey">

@@ -172,14 +172,12 @@
             resultType="com.chenchuan.admin.blog.vo.ArticleVo">
         SELECT
         <include refid="articleObject"/>,
-        COUNT(ac.is_checked = 2) AS commentNumber
+        (SELECT COUNT(1) FROM article_comment ac WHERE a.article_id = ac.article_id AND ac.is_checked = 2) AS commentNumber
         FROM article a
         LEFT JOIN article_label_auth ala
         ON a.article_id = ala.article_id
         LEFT JOIN label l
         ON ala.label_id = l.label_id
-        LEFT JOIN article_comment ac
-        ON a.article_id = ac.article_id
         <where>
             a.is_private = 0
             <if test="banner != null and banner != ''">
