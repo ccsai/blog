@@ -275,9 +275,10 @@ $(function () {
         var form = $('<form id="articlePreview" style="display: none" ' +
             'action="/admin/blog/article/previewArticle"' +
             'target="_blank" method="post">' +
-            '<textarea name="content">' + content + '</textarea>' +
+            '<textarea name="content"></textarea>' +
             '</form>');
         $(document.body).append(form);
+        form.find('[name=content]').val(content);
         form.submit();
     });
 });
