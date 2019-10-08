@@ -52,7 +52,7 @@
 
 <#-- 文章分页列表 -->
     <table id="articleDatagrid" class="easyui-datagrid" style="width: 100%;height: 100%"
-           data-options="idField:'articleId',pagination:true,toolbar:'articleDatagridToolbar',singleSelect:true,rownumbers:true,pageSize:50,striped:true">
+           data-options="idField:'articleId',pagination:true,toolbar:'articleDatagridToolbar',singleSelect:true,rownumbers:true,pageSize:10,striped:true">
         <thead>
         <tr>
             <th data-options="field:'articleId',hidden:'true'"></th>
