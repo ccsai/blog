@@ -5,7 +5,8 @@
             如果网站内容有侵权行为，请及时通知本人删除！
         </div>
         <div id="beian" class="d-flex flex-sm-row text-sm-center text-light" style="margin:0 auto;">
-            <a target="_blank" href="http://www.miitbeian.gov.cn/">
+            <span>© 2019-2020 chenchuan.work 版权所有</span>
+            <a target="_blank" href="http://www.beian.miit.gov.cn/">
                 <p>渝ICP备19002201号-1</p>
             </a>
             &nbsp;&nbsp;|&nbsp;&nbsp;
